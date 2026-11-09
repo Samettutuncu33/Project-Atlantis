@@ -1,1 +1,10 @@
-
+symbol,name,tone,event_risk,reason
+NVDAUSUSD,NVIDIA,-0.4,high,Board investigation involving CEO; headline risk ongoing
+USATECHIDXUSD,Nasdaq 100 index,0.1,high,Relief rally after tech rout; CPI Nov 10 and NVDA governance news
+USA500IDXUSD,S&P 500 index,0.1,high,Rebound on strong jobs data; CPI Nov 10 key
+LIGHTCMDUSD,WTI crude oil,-0.3,normal,Sharp daily decline; no OPEC/inventory news found
+XAUUSD,Gold,0.2,high,Rebound on softer USD; sensitive to CPI
+EURUSD,Euro / US dollar,0.0,high,US CPI Nov 10; no ECB news found in window
+USDJPY,US dollar / Japanese yen,0.0,high,US CPI Nov 10; no BoJ news found
+BTCUSD,Bitcoin,0.0,normal,Only prediction-market pricing near $75k found; no dated news
+MACRO,MACRO,0.0,high,US Oct CPI Nov 10; Fed easing expectations being tested by strong jobs data

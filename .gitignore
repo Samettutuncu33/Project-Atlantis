@@ -7,3 +7,4 @@ __pycache__/
 .hypothesis/
 data/fetch.log
 data/*.log
+site/

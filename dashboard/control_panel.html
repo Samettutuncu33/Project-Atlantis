@@ -443,7 +443,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
       const sec = Math.max(0, Math.round(((end || runStart) - runStart) / 1000));
       $('hud-elapsed').textContent = runState === 'running' ? `${Math.floor(sec / 60)}m ${String(sec % 60).padStart(2, '0')}s` : '—';
     }
-    const next = new Date(now); next.setUTCMinutes(7, 0, 0); if (next <= now) next.setUTCHours(next.getUTCHours() + 1);
+    const next = new Date(now); next.setUTCMinutes(25, 0, 0); if (next <= now) next.setUTCHours(next.getUTCHours() + 1);
     const m = Math.round((next - now) / 60000);
     $('hud-next').textContent = `${next.toISOString().slice(11, 16)} UTC (in ${m} min)`;
   }

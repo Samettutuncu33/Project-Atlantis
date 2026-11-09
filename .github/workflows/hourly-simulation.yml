@@ -11,9 +11,14 @@ concurrency:
   cancel-in-progress: false
 permissions:
   contents: write
+  pages: write
+  id-token: write
 jobs:
   step:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
     timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
@@ -44,3 +49,13 @@ jobs:
           git commit -qm "hourly simulation $(date -u +%Y-%m-%dT%H:%MZ) [actions]"
           for i in 1 2 3 4; do git pull -q --rebase origin main && git push -q origin main && exit 0; sleep $((i*5)); done
           exit 1
+      - name: Build phone dashboard (GitHub Pages)
+        continue-on-error: true
+        run: python scripts/build_site.py
+      - uses: actions/upload-pages-artifact@v3
+        continue-on-error: true
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4
+        continue-on-error: true

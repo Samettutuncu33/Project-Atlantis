@@ -1,0 +1,29 @@
+n,lesson
+0,"FX · ml_lightgbm: 7460/15131 directional calls correct (49%), Brier 0.2557, weight 2%"
+1,"FX · ml_logistic: 7674/15132 directional calls correct (51%), Brier 0.2525, weight 11%"
+2,"FX · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 37%"
+3,"FX · rule_breakout: 7492/15310 directional calls correct (49%), Brier 0.2548, weight 4%"
+4,"FX · rule_reversal: 7757/15311 directional calls correct (51%), Brier 0.2527, weight 10%"
+5,"FX · rule_trend: 7534/15311 directional calls correct (49%), Brier 0.2616, weight 0%"
+6,FX: currently trusts no_view most (37%).
+7,"Indices · ml_lightgbm: 6907/12517 directional calls correct (55%), Brier 0.2496, weight 11%"
+8,"Indices · ml_logistic: 6996/12519 directional calls correct (56%), Brier 0.2477, weight 26%"
+9,"Indices · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 9%"
+10,"Indices · rule_breakout: 6699/12669 directional calls correct (53%), Brier 0.2502, weight 8%"
+11,"Indices · rule_reversal: 6246/12665 directional calls correct (49%), Brier 0.2547, weight 1%"
+12,"Indices · rule_trend: 6944/12669 directional calls correct (55%), Brier 0.2504, weight 8%"
+13,Indices: currently trusts llm_analyst most (38%).
+14,"Oil · ml_lightgbm: 1299/2510 directional calls correct (52%), Brier 0.2570, weight 6%"
+15,"Oil · ml_logistic: 1320/2510 directional calls correct (53%), Brier 0.2573, weight 6%"
+16,"Oil · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 25%"
+17,"Oil · rule_breakout: 1272/2540 directional calls correct (50%), Brier 0.2509, weight 21%"
+18,"Oil · rule_reversal: 1256/2539 directional calls correct (49%), Brier 0.2546, weight 10%"
+19,"Oil · rule_trend: 1258/2539 directional calls correct (50%), Brier 0.2609, weight 3%"
+20,Oil: currently trusts llm_analyst most (28%).
+21,"Gold · ml_lightgbm: 1380/2510 directional calls correct (55%), Brier 0.2494, weight 16%"
+22,"Gold · ml_logistic: 1400/2510 directional calls correct (56%), Brier 0.2475, weight 23%"
+23,"Gold · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 14%"
+24,"Gold · rule_breakout: 1311/2540 directional calls correct (52%), Brier 0.2504, weight 13%"
+25,"Gold · rule_reversal: 1285/2540 directional calls correct (51%), Brier 0.2540, weight 6%"
+26,"Gold · rule_trend: 1307/2540 directional calls correct (51%), Brier 0.2571, weight 3%"
+27,Gold: currently trusts llm_analyst most (24%).

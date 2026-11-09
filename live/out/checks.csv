@@ -1,7 +1,30 @@
 run_utc,check,status,detail
-2026-11-09T12:07:25+00:00,data_freshness:EURUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
-2026-11-09T12:07:25+00:00,data_freshness:GBPUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
-2026-11-09T12:07:25+00:00,data_freshness:USDJPY,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
-2026-11-09T12:07:25+00:00,data_freshness:AUDUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
-2026-11-09T12:07:25+00:00,hourly_vs_daily_aggregation,OK,"EURUSD Dec-2025, 27 days, max |diff| = 0.000000"
-2026-11-09T12:07:25+00:00,journal_append_only,OK,0 earlier fills reproduced exactly
+2026-11-09T15:53:04+00:00,data_freshness:EURUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:GBPUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:USDJPY,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:AUDUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,hourly_vs_daily_aggregation,OK,"EURUSD Dec-2025, 27 days, max |diff| = 0.000000"
+2026-11-09T15:53:04+00:00,data_freshness:EURUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:GBPUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:USDJPY,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:AUDUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:USDCHF,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:USDCAD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_unavailable:BTCUSD,WARN,BTCUSD skipped this run: BTCUSD 2016 day file missing
+2026-11-09T15:53:04+00:00,data_unavailable:ETHUSD,WARN,ETHUSD skipped this run: ETHUSD 2016 day file missing
+2026-11-09T15:53:04+00:00,data_unavailable:AAPLUSUSD,WARN,AAPLUSUSD skipped this run: AAPLUSUSD 2016 day file missing
+2026-11-09T15:53:04+00:00,data_unavailable:MSFTUSUSD,WARN,MSFTUSUSD skipped this run: MSFTUSUSD 2016 day file missing
+2026-11-09T15:53:04+00:00,data_unavailable:NVDAUSUSD,WARN,NVDAUSUSD skipped this run: NVDAUSUSD 2016 day file missing
+2026-11-09T15:53:04+00:00,data_unavailable:AMZNUSUSD,WARN,AMZNUSUSD skipped this run: AMZNUSUSD 2016 day file missing
+2026-11-09T15:53:04+00:00,data_unavailable:GOOGLUSUSD,WARN,GOOGLUSUSD skipped this run: GOOGLUSUSD 2016 day file missing
+2026-11-09T15:53:04+00:00,data_freshness:USA500IDXUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:USATECHIDXUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:DEUIDXEUR,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:GBRIDXGBP,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:JPNIDXJPY,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:LIGHTCMDUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,data_freshness:XAUUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T15:53:04+00:00,adaptive_history,OK,learned on real outcomes from 2017-01-18 (33061 scored predictions before/through today)
+2026-11-09T15:53:04+00:00,reconciliation:E,OK,engine ledger == independent FIFO recomputation
+2026-11-09T15:53:04+00:00,prediction_ledger_append_only,OK,0 earlier prediction records reproduced exactly; 66187 new
+2026-11-09T15:53:04+00:00,journal_append_only,OK,0 earlier fills reproduced exactly

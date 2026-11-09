@@ -28,6 +28,13 @@ for s in universe()["instruments"]:
 feats = build_features(build_panels(data))
 last = feats.index.get_level_values("ts").max()
 today = feats.xs(last, level="ts")
+ledger = Path("live/predictions.jsonl")
+already = ledger.exists() and any(f'"made_at": "{last.isoformat()}' in line for line in ledger.open())
+target = Path(f"data/llm/{last.date()}.json")
+if already or target.exists():
+    print(f"SKIP: bar {last.date()} already has recorded predictions or an analyst file. "
+          "Writing one now would change history. Do not write a file this run.")
+    raise SystemExit(0)
 print(f"Briefing for bar {last.date()} (write data/llm/{last.date()}.json)\n")
 for s, r in today.iterrows():
     print(f"{s:14s} price {r['mid']:.5g} | 5d {r['ret_5']:+.2f}σ 20d {r['ret_20']:+.2f}σ 60d {r['ret_60']:+.2f}σ "

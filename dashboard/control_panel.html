@@ -67,6 +67,10 @@ details summary { cursor: pointer; font-weight: 600; } details ul { margin: 10px
 .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
 @media (max-width: 760px) { .two { grid-template-columns: 1fr; } }
 a { color: var(--accent); }
+.pf-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.pf { padding: 6px 12px; font-size: 13px; border-radius: 999px; }
+.pf.on { border-color: var(--accent); color: var(--accent); }
+tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
 </style>
 
 <div class="wrap">
@@ -100,6 +104,17 @@ a { color: var(--accent); }
   </div>
 
   <section id="accounts"><h2>Accounts</h2><div class="cards" id="cards"></div></section>
+
+  <section id="portfolio">
+    <h2>Portfolio: what you hold</h2>
+    <div class="pf-bar" role="group" aria-label="Show account">
+      <button type="button" class="pf on" data-acct="">All</button><button type="button" class="pf" data-acct="A">A</button><button type="button" class="pf" data-acct="B">B</button><button type="button" class="pf" data-acct="C">C</button><button type="button" class="pf" data-acct="D">D</button><button type="button" class="pf" data-acct="E">E</button>
+    </div>
+    <div class="wrapx"><table id="t-port"></table></div>
+    <p class="muted" style="margin-top:6px">Cost = what was paid at entry. Value = what closing now at the bid/ask would be worth. Share = position size compared with the account's equity; above 100% means leverage.</p>
+    <h2 style="margin-top:18px">Bought &amp; sold so far</h2>
+    <div class="wrapx"><table id="t-summary"></table></div>
+  </section>
 
   <section id="equity">
     <h2>Equity</h2>
@@ -217,6 +232,7 @@ a { color: var(--accent); }
     }));
     $('legend').replaceChildren(...accts.map((a) => { const s = document.createElement('span'); s.style.setProperty('--sw', color(a.account)); s.textContent = `${a.account} · ${a.name}`; return s; }));
     drawChart(b.equity);
+    renderPortfolio();
     const sig = (s) => [s, /LONG|UP/.test(s) ? 'l pos' : /SHORT|DOWN/.test(s) ? 'l neg' : 'l muted'];
     table($('t-plan'), [['Acct', (r) => r.account, 'l'], ['Instrument', (r) => r.symbol, 'l'], ['Signal', (r) => sig(r.signal_text)], ['Position', (r) => num(r.position_qty)], ['Pending orders', (r) => r.pending_orders, 'l'], ['Executes at', (r) => r.executes_at, 'l'], ['Next decision / reason', (r) => r.next_decision, 'l']], b.plan);
     table($('t-pos'), [['Acct', (r) => r.account, 'l'], ['Instrument', (r) => r.symbol, 'l'], ['Side', (r) => sig(r.side)], ['Units', (r) => num(r.qty)], ['Avg entry', (r) => num(r.avg_entry)], ['Bid', (r) => num(r.mark_bid)], ['Ask', (r) => num(r.mark_ask)], ['Mark time', (r) => ts(r.mark_ts), 'l'], ['Unrealised', (r) => [usd(r.unrealised_usd), r.unrealised_usd < 0 ? 'neg' : 'pos']], ['Notional', (r) => usd(r.notional_usd)], ['Margin', (r) => usd(r.margin_usd)]], b.positions);
@@ -234,6 +250,30 @@ a { color: var(--accent); }
     table($('t-checks'), [['Check', (r) => r.check, 'l'], ['Status', (r) => [r.status, r.status === 'OK' ? 'l pos' : r.status === 'WARN' ? 'l warn' : 'l neg']], ['Detail', (r) => r.detail, 'l']], ch);
   }
   window.addEventListener('resize', () => { if (bundle) drawChart(bundle.equity); });
+
+  let pfAcct = '';
+  function renderPortfolio() {
+    if (!bundle) return;
+    const side = (s) => [s, s === 'LONG' ? 'l pos' : 'l neg'];
+    const pnl = (v) => [usd(v), v > 0 ? 'pos' : v < 0 ? 'neg' : ''];
+    const pos = (bundle.positions || []).filter((p) => !pfAcct || p.account === pfAcct);
+    table($('t-port'), [['Acct', (r) => r.account, 'l'], ['Name', (r) => r.name || r.symbol, 'l'], ['Class', (r) => r.asset_class || '', 'l'], ['Side', (r) => side(r.side)], ['Quantity', (r) => num(Math.abs(r.qty))], ['Avg price', (r) => num(r.avg_entry)], ['Now (bid / ask)', (r) => `${num(r.mark_bid)} / ${num(r.mark_ask)}`], ['Cost', (r) => usd(r.cost_usd)], ['Value', (r) => usd(r.value_usd)], ['P&L', (r) => pnl(r.pnl_usd)], ['P&L %', (r) => [pct(r.pnl_pct, 2), r.pnl_pct > 0 ? 'pos' : r.pnl_pct < 0 ? 'neg' : '']], ['Share of account', (r) => pct(r.weight_pct)], ['Since', (r) => ts(r.opened).slice(0, 10), 'l']], pos,
+      pfAcct ? `Account ${pfAcct} holds nothing right now.` : 'Nothing held yet. The first trading decisions are made at the 00:00 UTC daily close; positions appear after the next scheduled run.');
+    if (pos.length) {
+      const tr = document.createElement('tr'); tr.className = 'total';
+      const tot = (k) => pos.reduce((a, p) => a + (Number(p[k]) || 0), 0);
+      const cells = ['Total', '', '', '', '', '', '', usd(tot('cost_usd')), usd(tot('value_usd')), usd(tot('pnl_usd')), '', '', ''];
+      cells.forEach((c, i) => { const td = document.createElement('td'); td.textContent = c; if (i < 3) td.className = 'l'; if (i === 9) td.className = tot('pnl_usd') < 0 ? 'neg' : 'pos'; tr.append(td); });
+      $('t-port').append(tr);
+    }
+    const sm = (bundle.trades_summary || []).filter((p) => !pfAcct || p.account === pfAcct);
+    table($('t-summary'), [['Acct', (r) => r.account, 'l'], ['Name', (r) => r.name, 'l'], ['Bought', (r) => num(r.bought_units)], ['Avg buy', (r) => num(r.avg_buy_price)], ['Sold', (r) => num(r.sold_units)], ['Avg sell', (r) => num(r.avg_sell_price)], ['Realised P&L', (r) => pnl(r.realised_usd)], ['Commissions', (r) => usd(r.commissions_usd)], ['Trades', (r) => r.trades], ['First', (r) => ts(r.first_trade).slice(0, 10), 'l'], ['Last', (r) => ts(r.last_trade).slice(0, 10), 'l']], sm, 'No trades yet.');
+  }
+  document.querySelectorAll('.pf').forEach((b) => b.addEventListener('click', () => {
+    pfAcct = b.dataset.acct;
+    document.querySelectorAll('.pf').forEach((x) => x.classList.toggle('on', x === b));
+    renderPortfolio();
+  }));
 
   // ---- controls -----------------------------------------------------------
   const btns = [$('b-run'), $('b-pause'), $('b-stop')];

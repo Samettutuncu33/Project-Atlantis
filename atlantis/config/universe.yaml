@@ -71,3 +71,25 @@ instruments:
   JPNIDXJPY: [index_cfd, JPY, 1.0e3, 1.0, 15000, 150000]
   LIGHTCMDUSD: [commodity_cfd, USD, 1.0e3, 0.01, 10, 250]
   XAUUSD: [metal_cfd, USD, 1.0e3, 0.01, 900, 10000]
+
+names:   # display names for the Atlantis Live page
+  EURUSD: Euro / US dollar
+  GBPUSD: British pound / US dollar
+  USDJPY: US dollar / Japanese yen
+  AUDUSD: Australian dollar / US dollar
+  USDCHF: US dollar / Swiss franc
+  USDCAD: US dollar / Canadian dollar
+  BTCUSD: Bitcoin
+  ETHUSD: Ethereum
+  AAPLUSUSD: Apple
+  MSFTUSUSD: Microsoft
+  NVDAUSUSD: NVIDIA
+  AMZNUSUSD: Amazon
+  GOOGLUSUSD: Alphabet (Google)
+  USA500IDXUSD: S&P 500 index
+  USATECHIDXUSD: Nasdaq 100 index
+  DEUIDXEUR: DAX 40 index (Germany)
+  GBRIDXGBP: FTSE 100 index (UK)
+  JPNIDXJPY: Nikkei 225 index (Japan)
+  LIGHTCMDUSD: WTI crude oil
+  XAUUSD: Gold

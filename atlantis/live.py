@@ -185,7 +185,7 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     last_bar = min(d.index[-1] for d in data.values())
     live_started = last_bar >= pd.Timestamp(LIVE_START, tz="UTC")
 
-    rows = {k: [] for k in ("accounts", "equity", "fills", "positions", "plan", "projection")}
+    rows = {k: [] for k in ("accounts", "equity", "fills", "positions", "plan", "projection", "_closed")}
     journal_new = []
     end_of_obs = date(2026, 12, 9)
     horizon = int(np.busday_count(now.date(), end_of_obs)) if now.date() < end_of_obs else 0
@@ -198,6 +198,7 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
             checks.append({"check": f"reconciliation:{spec.id}", "status": "OK" if not breaks else "ERROR",
                            "detail": "; ".join(breaks) or "engine ledger == independent FIFO recomputation"})
             led.check_invariants()
+            rows["_closed"].extend((spec.id, c.symbol, c.pnl_usd_gross - c.conversion_fee_usd) for c in led.closed)
             eq_series = res.equity
             pending = [o for o in br.orders if o.status is Status.PENDING]
             sig = res.signals.loc[res.signals.index[res.signals.index <= last_bar][-1]]
@@ -223,6 +224,7 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
                 rows["positions"].append({
                     "account": spec.id, "symbol": s, "side": "LONG" if qty > 0 else "SHORT",
                     "qty": qty, "avg_entry": round(avg, 6), "mark_bid": marks[s][0], "mark_ask": marks[s][1],
+                    "opened": book[0].opened, "q2u": q2u[s],
                     "mark_ts": quotes.get(s, {}).get("ts", str(br._last_ts)),
                     "unrealised_usd": round(u[s], 2),
                     "notional_usd": round(abs(qty) * mids[s] * q2u[s], 2),
@@ -300,6 +302,7 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
            "trading_mode": CONTROLS().current()["mode"],
            "control_since": CONTROLS().current().get("since"),
            "label": "SIMULATED executions on Dukascopy (non-Saxo) market data"}
+    portfolio_enrich(rows)
     checks = [{"run_utc": run["run_utc"], **c} for c in checks]
     if write:
         OUT.mkdir(parents=True, exist_ok=True)
@@ -342,6 +345,7 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
                              f"({len(res.ledger.resolutions())} scored predictions before/through today)"})
     br, led = res.broker, res.broker.ledger
     wrapped = BacktestResult(res.equity, None, br, None, br.audit, {}, None, None)
+    rows["_closed"].extend(("E", c.symbol, c.pnl_usd_gross - c.conversion_fee_usd) for c in led.closed)
     breaks = reconcile(wrapped)
     led.check_invariants()
     checks.append({"check": "reconciliation:E", "status": "OK" if not breaks else "ERROR",
@@ -368,7 +372,7 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
         rows["positions"].append({
             "account": "E", "symbol": s, "side": "LONG" if qty > 0 else "SHORT", "qty": qty,
             "avg_entry": round(sum(l.qty * l.price for l in book) / qty, 6),
-            "mark_bid": marks[s][0], "mark_ask": marks[s][1],
+            "mark_bid": marks[s][0], "mark_ask": marks[s][1], "opened": book[0].opened, "q2u": q2u[s],
             "mark_ts": quotes.get(s, {}).get("ts", str(br._last_ts)), "unrealised_usd": round(unreal_by[s], 2),
             "notional_usd": round(abs(qty) * mids[s] * q2u[s], 2),
             "margin_usd": round(abs(qty) * mids[s] * q2u[s] * inst.initial_margin, 2)})
@@ -451,6 +455,57 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
         knowhow_path.write_text(json.dumps({"asof": str(res.equity.index[-1].date()), **res.hedge.to_dict(),
                                         "lessons": res.lessons}, indent=1, default=str))
     return checks
+
+
+def portfolio_enrich(rows: dict) -> None:
+    """Human-readable portfolio view: names, cost, value, P&L, share of account, and a
+    per-instrument 'bought & sold' summary. Derived only from the ledger's own numbers."""
+    from atlantis.adaptive import CLASS_NAMES
+    from atlantis.instruments.spec import universe
+    u = universe()
+    names = u.get("names", {})
+    cls = {sym: v[0] for sym, v in u["instruments"].items()}
+    equity = {a["account"]: a["equity"] for a in rows["accounts"]}
+    for p in rows["positions"]:
+        q2u = p.pop("q2u", 1.0)
+        cost = abs(p["qty"]) * p["avg_entry"] * q2u
+        p["name"] = names.get(p["symbol"], p["symbol"])
+        p["asset_class"] = CLASS_NAMES.get(cls.get(p["symbol"], ""), cls.get(p["symbol"], ""))
+        p["cost_usd"] = round(cost, 2)
+        p["pnl_usd"] = p["unrealised_usd"]
+        p["value_usd"] = round(cost + p["unrealised_usd"], 2)
+        p["pnl_pct"] = round(p["unrealised_usd"] / cost, 6) if cost else None
+        eq = equity.get(p["account"])
+        p["weight_pct"] = round(p["notional_usd"] / eq, 6) if eq else None
+    summ: dict = {}
+    for f in rows["fills"]:
+        k = (f["account"], f["symbol"])
+        d = summ.setdefault(k, {"account": k[0], "symbol": k[1], "name": names.get(k[1], k[1]),
+                                "bought_units": 0.0, "buy_value": 0.0, "sold_units": 0.0, "sell_value": 0.0,
+                                "commissions_usd": 0.0, "trades": 0, "realised_usd": 0.0,
+                                "first_trade": f["ts"], "last_trade": f["ts"]})
+        if f["side"] == "BUY":
+            d["bought_units"] += f["qty"]
+            d["buy_value"] += f["qty"] * f["price"]
+        else:
+            d["sold_units"] += f["qty"]
+            d["sell_value"] += f["qty"] * f["price"]
+        d["commissions_usd"] += f["commission_usd"]
+        d["trades"] += 1
+        d["last_trade"] = max(d["last_trade"], f["ts"])
+    for acct, sym, pnl in rows.pop("_closed"):
+        if (acct, sym) in summ:
+            summ[(acct, sym)]["realised_usd"] += pnl
+    out = []
+    for d in summ.values():
+        d["avg_buy_price"] = round(d["buy_value"] / d["bought_units"], 6) if d["bought_units"] else None
+        d["avg_sell_price"] = round(d["sell_value"] / d["sold_units"], 6) if d["sold_units"] else None
+        d["realised_usd"] = round(d["realised_usd"], 2)
+        d["commissions_usd"] = round(d["commissions_usd"], 2)
+        for k in ("buy_value", "sell_value"):
+            d.pop(k)
+        out.append(d)
+    rows["trades_summary"] = sorted(out, key=lambda d: (d["account"], d["symbol"]))
 
 
 def _same(a: dict, b: dict) -> bool:

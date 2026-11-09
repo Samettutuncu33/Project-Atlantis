@@ -1,7 +1,6 @@
 # Scheduled live-simulation run (every 6 hours)
 
 Atlantis Live page (monitoring + start/stop): https://claude.ai/artifact/SG2VmB7APqkgiKyShrSHTD
-(The older dashboard AWBpwhmciFEZQZuu8Tp1TY is retired and is no longer updated.)
 Repository: https://github.com/WildSideMelbourne/project-atlantis (branch `main`)
 
 SIMULATION ONLY. No real orders, ever. From the IBKR connector, use only `search_contracts`,

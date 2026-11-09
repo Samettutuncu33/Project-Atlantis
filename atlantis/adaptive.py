@@ -174,7 +174,7 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
             lab = labels.loc[(t, sym)] if (t, sym) in labels.index else None
             outcome_at = lab["known_at"] if lab is not None else None
             rec = pledger.append({
-                "kind": "prediction", "id": f"{ts[:10]}:{sym}", "made_at": ts, "symbol": sym,
+                "kind": "prediction", "id": f"{ts}:{sym}", "made_at": ts, "symbol": sym,
                 "asset_class": inst.asset_class, "horizon_bars": horizon,
                 "predictor_probs": {k: (None if v is None else round(v, 5)) for k, v in probs.items()},
                 "weights": {k: round(v, 4) for k, v in hedge.weights(inst.asset_class).items()},

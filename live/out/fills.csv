@@ -1,1 +1,2 @@
-
+account,ts,symbol,side,qty,price,bar_bid_open,bar_ask_open,decision_mid,commission_usd,slippage_usd,reason,tag,label,data_source
+F,2026-11-09T18:00:00+00:00,JPNIDXJPY,BUY,0.4,60527.634,60522.315,60527.634,60523.0765,0.0,0.0,market@open,adaptive,SIMULATED,Dukascopy daily bar open (00:00 UTC)

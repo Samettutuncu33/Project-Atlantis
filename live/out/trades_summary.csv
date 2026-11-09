@@ -1,1 +1,2 @@
-
+account,symbol,name,bought_units,sold_units,commissions_usd,trades,realised_usd,first_trade,last_trade,avg_buy_price,avg_sell_price
+F,JPNIDXJPY,Nikkei 225 index (Japan),0.4,0.0,0.0,1,0.0,2026-11-09T18:00:00+00:00,2026-11-09T18:00:00+00:00,60527.634,

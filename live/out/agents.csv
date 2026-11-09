@@ -1,6 +1,6 @@
 agent,role,last,hours_ago,did
-News & market intelligence,daily brief + hourly breaking-news flash,2026-11-09T18:45:42+00:00,0.0,"daily brief 2026-11-06: 7 dated news items, 3 calendar events; no breaking-news flash yet"
+News & market intelligence,daily brief + hourly breaking-news flash,2026-11-09T18:45:42+00:00,1.1,"daily brief 2026-11-06: 7 dated news items, 3 calendar events; no breaking-news flash yet"
 "AI analyst (daily, account E)","reads charts + news, predicts 5 days ahead",,,"no prediction yet · track record: 0 predictions scored, none scored yet"
-"AI analyst (hourly, account F)",reads hourly charts + daily/weekly context + news,,,"no prediction yet · track record: 0 predictions scored, none scored yet"
-Executor (scheduled run),"runs the simulation, checks, publishes, commits",2026-11-09T18:46:03+00:00,0.0,"accounts A–F replayed and reconciled; fills so far: A 0, B 0, C 0, D 0, E 0, F 0"
+"AI analyst (hourly, account F)",reads hourly charts + daily/weekly context + news,2026-11-09T19:52:02+00:00,0.0,"20 predictions for hour 2026-11-09T18 · track record: 0 predictions scored, none scored yet"
+Executor (scheduled run),"runs the simulation, checks, publishes, commits",2026-11-09T19:52:03+00:00,0.0,"accounts A–F replayed and reconciled; fills so far: A 0, B 0, C 0, D 0, E 0, F 1"
 Research loop (researcher → planner → tester),one tested improvement idea per week,2026-11-09,,latest: research/notes/2026-11-09-external-trading-ai-lessons.md

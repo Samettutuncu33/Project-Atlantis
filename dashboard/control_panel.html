@@ -71,6 +71,35 @@ a { color: var(--accent); }
 .pf { padding: 6px 12px; font-size: 13px; border-radius: 999px; }
 .pf.on { border-color: var(--accent); color: var(--accent); }
 tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
+
+/* ---- Command view (HUD) ---- */
+.hud { position: relative; background: radial-gradient(ellipse at 50% 0%, #07131f 0%, #000 70%); border: 1px solid #12324a; border-radius: 14px; padding: 14px 14px 10px; overflow: hidden; }
+.hud::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(77,163,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(77,163,255,.05) 1px, transparent 1px);
+  background-size: 28px 28px; }
+.hud-head { position: relative; display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: baseline; margin-bottom: 6px; }
+.hud-title { font: 600 13px var(--font-mono); letter-spacing: .22em; color: #7cc4ff; text-transform: uppercase; }
+.hud-stat { font: 12px var(--font-mono); color: var(--muted); } .hud-stat b { color: #cfe8ff; font-weight: 600; }
+.hud-flow { position: relative; overflow-x: auto; }
+.hud-flow svg { min-width: 640px; width: 100%; display: block; }
+.hud-flow text { font-family: var(--font-mono); }
+.edge { fill: none; stroke: #1c3a52; stroke-width: 1.6; }
+.edge.on { stroke: #4da3ff; stroke-dasharray: 6 8; }
+@media (prefers-reduced-motion: no-preference) { .edge.on { animation: flow 0.9s linear infinite; } .node.running circle.ring { animation: pulse 1.4s ease-in-out infinite; } }
+@keyframes flow { to { stroke-dashoffset: -28; } }
+@keyframes pulse { 0%,100% { stroke-opacity: 1; stroke-width: 2.5; } 50% { stroke-opacity: .35; stroke-width: 6; } }
+.node circle.core { fill: #06101a; stroke: #24465f; stroke-width: 1.5; }
+.node circle.ring { fill: none; stroke: transparent; stroke-width: 2.5; }
+.node.running circle.core { stroke: #6fd3e8; } .node.running circle.ring { stroke: #6fd3e8; }
+.node.done circle.core { stroke: #4da3ff; } .node.error circle.core { stroke: #ff5c5c; }
+.node .lbl { fill: #cfe8ff; font-size: 11.5px; text-anchor: middle; }
+.node .st { fill: #6d8aa3; font-size: 10px; text-anchor: middle; }
+.node.running .st { fill: #6fd3e8; } .node.error .st { fill: #ff5c5c; }
+.feed { position: relative; margin-top: 8px; border-top: 1px solid #12324a; padding-top: 8px; max-height: 210px; overflow-y: auto;
+  font: 12px/1.55 var(--font-mono); }
+.feed div { display: grid; grid-template-columns: 64px 150px minmax(0,1fr); gap: 10px; color: #a9c7df; }
+.feed .t { color: #4f6f88; } .feed .a { color: #7cc4ff; } .feed .lvl-warn { color: var(--pause); } .feed .lvl-error { color: var(--down); }
+@media (max-width: 560px) { .feed div { grid-template-columns: 52px minmax(0,1fr); } .feed .a { display: none; } }
 </style>
 
 <div class="wrap">
@@ -102,6 +131,18 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
       <p class="muted">Applies from the next daily decision (bars close at 00:00 UTC; the next scheduled run carries it out). Past trades never change.</p>
     </section>
   </div>
+
+  <section id="command" class="hud" aria-label="Live agent command view">
+    <div class="hud-head">
+      <span class="hud-title">◉ Atlantis command</span>
+      <span class="hud-stat">RUN <b id="hud-run">—</b></span>
+      <span class="hud-stat">STATE <b id="hud-state">waiting</b></span>
+      <span class="hud-stat">ELAPSED <b id="hud-elapsed">—</b></span>
+      <span class="hud-stat">NEXT RUN <b id="hud-next">—</b></span>
+    </div>
+    <div class="hud-flow"><svg id="hud-svg" viewBox="0 0 1000 250" role="img" aria-label="Data flow between the Atlantis agents; the active stage is highlighted"></svg></div>
+    <div class="feed" id="feed" aria-live="polite"><div><span class="t">--:--</span><span class="a">system</span><span>Waiting for the first agent report. Agents report here live while a run is working.</span></div></div>
+  </section>
 
   <section id="agents">
     <h2>AI agents: are they working?</h2>
@@ -341,6 +382,82 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
         render(await r.json());
       } catch (e) { $('runline').textContent = `Could not load the latest run data (${e.message}).`; }
     }
+  }, () => {});
+
+
+  // ---- Command view: live pipeline + activity feed -------------------------
+  const STAGES = [
+    { id: 'controls', label: 'Your controls', x: 80, y: 50 },
+    { id: 'market', label: 'Market data', x: 80, y: 125, follows: 'simulation' },
+    { id: 'news', label: 'News agent', x: 80, y: 200 },
+    { id: 'analyst', label: 'AI analyst', x: 290, y: 165 },
+    { id: 'simulation', label: 'Prediction engine', x: 470, y: 110 },
+    { id: 'gate', label: 'Risk gate', x: 630, y: 110, follows: 'simulation' },
+    { id: 'broker', label: 'Sim broker', x: 780, y: 110, follows: 'simulation' },
+    { id: 'publish', label: 'Atlantis Live', x: 920, y: 60 },
+    { id: 'commit', label: 'GitHub memory', x: 920, y: 175 },
+  ];
+  const EDGES = [['controls', 'simulation'], ['market', 'simulation'], ['market', 'analyst'], ['news', 'analyst'],
+    ['analyst', 'simulation'], ['simulation', 'gate'], ['gate', 'broker'], ['broker', 'publish'], ['broker', 'commit']];
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = $('hud-svg');
+  const byId = Object.fromEntries(STAGES.map((st) => [st.id, st]));
+  const edgeEls = EDGES.map(([a, b]) => {
+    const A = byId[a], B = byId[b];
+    const pth = document.createElementNS(NS, 'path');
+    const mx = (A.x + B.x) / 2;
+    pth.setAttribute('d', `M${A.x + 26},${A.y} C${mx},${A.y} ${mx},${B.y} ${B.x - 26},${B.y}`);
+    pth.setAttribute('class', 'edge'); svg.append(pth);
+    return { a, b, el: pth };
+  });
+  const nodeEls = {};
+  for (const st of STAGES) {
+    const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'node');
+    const ring = document.createElementNS(NS, 'circle'); ring.setAttribute('class', 'ring'); ring.setAttribute('cx', st.x); ring.setAttribute('cy', st.y); ring.setAttribute('r', 31);
+    const core = document.createElementNS(NS, 'circle'); core.setAttribute('class', 'core'); core.setAttribute('cx', st.x); core.setAttribute('cy', st.y); core.setAttribute('r', 24);
+    const lbl = document.createElementNS(NS, 'text'); lbl.setAttribute('class', 'lbl'); lbl.setAttribute('x', st.x); lbl.setAttribute('y', st.y + 4); lbl.textContent = st.label.split(' ')[0];
+    const lbl2 = document.createElementNS(NS, 'text'); lbl2.setAttribute('class', 'st'); lbl2.setAttribute('x', st.x); lbl2.setAttribute('y', st.y + 44); lbl2.textContent = st.label;
+    g.append(ring, core, lbl, lbl2); svg.append(g); nodeEls[st.id] = { g, sub: lbl2, label: st.label };
+  }
+  let runStart = null, runState = 'idle';
+  function paintPipeline(run) {
+    const stages = (run && run.stages) || {};
+    const stateOf = (id) => { const st = byId[id]; return stages[st.follows || id] || 'idle'; };
+    for (const st of STAGES) {
+      const state = stateOf(st.id);
+      nodeEls[st.id].g.setAttribute('class', `node ${state}`);
+      const det = run && run.details && run.details[st.follows ? '' : st.id];
+      nodeEls[st.id].sub.textContent = state === 'running' ? `${st.label} · working` : det ? `${st.label} · ${String(det).slice(0, 22)}` : st.label;
+    }
+    for (const e of edgeEls) e.el.setAttribute('class', `edge${stateOf(e.b) === 'running' || (stateOf(e.a) === 'running') ? ' on' : ''}`);
+    runState = (run && run.state) || 'idle';
+    runStart = run && run.started_at ? new Date(run.started_at) : null;
+    $('hud-run').textContent = run && run.run_id ? run.run_id : '—';
+    $('hud-state').textContent = runState === 'running' ? 'AGENTS WORKING' : runState === 'done' ? 'IDLE · last run complete' : runState === 'error' ? 'ERROR · see feed' : 'waiting';
+    $('hud-state').style.color = runState === 'running' ? '#6fd3e8' : runState === 'error' ? 'var(--down)' : '#cfe8ff';
+  }
+  function tick() {
+    const now = new Date();
+    if (runStart) {
+      const end = runState === 'running' ? now : null;
+      const sec = Math.max(0, Math.round(((end || runStart) - runStart) / 1000));
+      $('hud-elapsed').textContent = runState === 'running' ? `${Math.floor(sec / 60)}m ${String(sec % 60).padStart(2, '0')}s` : '—';
+    }
+    const next = new Date(now); next.setUTCMinutes(7, 0, 0); if (next <= now) next.setUTCHours(next.getUTCHours() + 1);
+    const m = Math.round((next - now) / 60000);
+    $('hud-next').textContent = `${next.toISOString().slice(11, 16)} UTC (in ${m} min)`;
+  }
+  paintPipeline(null); tick(); setInterval(tick, 1000);
+  db.doc('pipeline/run').onSnapshot((snap) => { if (snap.exists) paintPipeline(snap.data()); }, () => {});
+  db.collection('activity').orderBy('at', 'desc').limit(60).onSnapshot((snap) => {
+    if (snap.empty) return;
+    $('feed').replaceChildren(...snap.docs.map((d) => {
+      const x = d.data(); const row = document.createElement('div');
+      const t = document.createElement('span'); t.className = 't'; t.textContent = String(x.at || '').slice(11, 16);
+      const a = document.createElement('span'); a.className = 'a'; a.textContent = x.agent || '';
+      const m = document.createElement('span'); m.textContent = x.msg || ''; if (x.level) m.className = `lvl-${x.level}`;
+      row.append(t, a, m); return row;
+    }));
   }, () => {});
 
   db.collection('events').orderBy('pressed_at', 'asc').onSnapshot((snap) => {

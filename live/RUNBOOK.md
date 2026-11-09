@@ -10,6 +10,21 @@ screener-write, account, balance, position or trade tools.
 Accounts: A–D are fixed-rule daily baselines; E is daily adaptive (5-day predictions);
 F is hourly adaptive (4-hour predictions, with daily/weekly context, news and the hourly AI analyst).
 
+## Live reporting to the command view (do this throughout the run)
+The page's command view shows the agents live. Report on the page above with ArtifactData:
+- **At the very start:** `set` doc `run` in collection `pipeline` to
+  `{run_id: "<YYYYMMDDTHH>", state: "running", started_at: "<UTC now>", stages: {controls: "running", news: "idle",
+  analyst: "idle", simulation: "idle", publish: "idle", commit: "idle"}, details: {}}`.
+- **After each stage** (controls, news, analyst, simulation, publish, commit): send ONE ArtifactData `batch` with
+  (a) `update` of `pipeline/run`: the finished stage becomes "done" (or "error"), the next stage "running", and
+  `details.<stage>` gets a short result, e.g. "3 news items", "20 probs", "2 fills, 1 rejected", "page updated";
+  (b) `set` of a new doc in collection `activity`, id `<YYYYMMDDTHHMMSS>-<agent>`, with
+  `{at: "<UTC now>", agent: "<executor|news|analyst|gate|learning>", msg: "<one factual line>", level: "info|warn|error"}`.
+  Good messages: new trades and gate rejections (from live/out/live.json fills and checks), news found or none, predictions
+  written, and newly scored predictions with their hit rate.
+- **At the end:** `update` `pipeline/run` to `state: "done"` (or "error") with `finished_at`.
+Pin every update with `if_version` from your previous write's result. These writes are status only; nothing reads them back into the simulation.
+
 ## Every hour
 0. **Memory:** read the last 60 lines of `knowledge/journal.md`.
 1. Clone the repo, then `pip install -q -e . lightgbm scikit-learn`.

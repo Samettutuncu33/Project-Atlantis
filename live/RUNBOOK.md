@@ -5,8 +5,10 @@
      news brief with web search + daily AI analyst (account E) at 00 UTC; hourly AI analyst (account F) at 00/06/12/18 UTC.
      Every call's real cost goes to `live/api_spend.jsonl`; calls stop when the month would pass $18.
   2. `python -m atlantis.live step` (accounts A–F), then `live/STATUS.md` (readable on GitHub), then commit.
-- **AI runner session on the Claude plan: PAUSED.** If re-enabled, it only syncs the Control Panel and uploads
-  `live/out/live.json` to the page (steps 2 and 6 below); it writes no news or forecast files (the API runner does).
+- **AI runner session on the Claude plan: ON, page sync only** (00:02 / 06:02 / 12:02 / 18:02 UTC). Do ONLY these
+  "Every run" steps: 0, 1, 2 (Control Panel -> live/controls.jsonl), 5 (commit/push controls), 6 (upload live.json +
+  status/latest), 8 (short report). SKIP steps 3, 4 and the whole "00:02 (daily)" section: the API runner in GitHub
+  Actions writes all news and forecast files. Never run `python -m atlantis.live step`. Keep it short.
 
 # Scheduled live-simulation run
 

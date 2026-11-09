@@ -8,3 +8,4 @@ __pycache__/
 data/fetch.log
 data/*.log
 site/
+*.egg-info/

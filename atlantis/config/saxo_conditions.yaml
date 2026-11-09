@@ -1,0 +1,136 @@
+# Saxo Bank trading conditions used by the simulator.
+#
+# Every value carries a `status`:
+#   SAXO_PUBLISHED  - transcribed from a public Saxo page (snapshot in data/saxo_public_snapshots)
+#   REGULATION      - from regulation that binds Saxo's EU retail clients (cited)
+#   ASSUMPTION      - not publicly available; an explicit, documented modelling choice
+#   UNAVAILABLE     - not publicly available; the engine refuses to use it
+#
+# Retrieved: 2026-11-09. Entity: Saxo Bank A/S "International" site. Saxo states
+# that pricing varies by country of residence and account tier.
+meta:
+  retrieved: "2026-11-09"
+  entity: "Saxo Bank A/S (international site, www.home.saxo)"
+  account_tier: Classic
+  account_currency: USD
+
+fx_spot:
+  min_commission_usd:
+    value: 1.0
+    status: SAXO_PUBLISHED
+    source: "https://www.home.saxo/rates-and-conditions/forex/trading-conditions"
+    quote: "There is a minimum commission (transaction fee) of 1 USD charged ... on small notional trade sizes."
+  min_commission_notional_threshold_usd:
+    value: null
+    status: UNAVAILABLE
+    note: >
+      The threshold below which the $1 minimum applies is shown only in a JavaScript
+      table. Conservative modelling choice: with $200 capital every ticket is "small",
+      so the $1 minimum is charged on EVERY FX ticket (see ASSUMPTIONS.md A1).
+  commission_rate:
+    value: 0.0
+    status: ASSUMPTION
+    note: "Classic-tier FX is quoted spread-only on the public site; per-pair rates are JS-only (A2)."
+  spread:
+    status: UNAVAILABLE
+    note: >
+      Saxo spreads per pair are JS-only. The simulator executes at Dukascopy's real
+      bid/ask as a proxy and adds `extra_spread_bps` for sensitivity analysis (A3).
+  extra_spread_bps:
+    value: 0.0
+    status: ASSUMPTION
+  min_trade_size_units:
+    value: 1000
+    status: ASSUMPTION
+    note: "Saxo shows min trade size behind an info button (not public). 1,000 base units assumed (A4); sensitivity-tested."
+  size_increment_units:
+    value: 1
+    status: ASSUMPTION
+  tom_next_markup_pa:
+    value: 0.0075
+    status: SAXO_PUBLISHED
+    source: "https://www.home.saxo/rates-and-conditions/forex/spreads-and-commissions"
+    quote: "Tom/Next Swap Points (Forward Price) Mark-up/down rates +/-0.75% (Classic), from 1 November 2025"
+  tom_next_extra_markup_pa_exotics:
+    value: 0.0030
+    status: SAXO_PUBLISHED
+    applies_to: [MXN, RUB, TRY, ZAR]
+  unrealised_pnl_financing_markup_pa:
+    value: 0.02
+    status: SAXO_PUBLISHED
+    quote: "daily market overnight interest rates plus/minus a mark-up corresponding to +/- 2.00%"
+  interest_rate_differential:
+    status: UNAVAILABLE
+    note: >
+      Requires daily benchmark overnight rates (SOFR, ESTR, SONIA, TONAR, ...).
+      Not yet sourced; carry differential is set to 0 and only the Saxo mark-up
+      cost is charged (A5). This understates carry for high-yielders either way.
+  rollover_time: "17:00 America/New_York"
+  netting: FIFO
+  netting_source: "https://www.home.saxo/rates-and-conditions/forex/trading-conditions"
+  trading_hours: "Sun/Mon 05:04 Sydney to Fri 16:59 New York; non-tradeable 16:59-17:05 NY daily"
+
+currency_conversion:
+  fee_pct:
+    value: 0.0025
+    status: SAXO_PUBLISHED
+    source: "https://www.home.saxo/rates-and-conditions/commissions-charges-and-margin-schedule"
+    quote: "conversions-including trading profits/losses-are executed using the FX spot mid-price ... plus/minus 0.25 percent"
+  applies_to_fx_spot_pnl:
+    value: true
+    status: ASSUMPTION
+    note: "Page wording is ambiguous for FX spot P&L; we apply it to realised non-USD P&L (conservative, A6)."
+
+account:
+  account_fees_eur: {value: 0, status: SAXO_PUBLISHED, note: "opening, maintenance, inactivity, deposit, withdrawal all EUR 0"}
+  min_deposit_eur: {value: 0, status: SAXO_PUBLISHED, note: "Classic tier"}
+  negative_nfe_rate: {value: "Saxo ask + 8%", status: SAXO_PUBLISHED}
+
+margin_retail_esma:
+  # ESMA Decision (EU) 2018/796, retained by Danish FSA for retail CFD/rolling spot FX.
+  source: "ESMA Decision (EU) 2018/796, Art. 1-2; Annex I"
+  status: REGULATION
+  initial_margin:
+    major_fx: 0.0333     # combinations of USD, EUR, JPY, GBP, CAD, CHF
+    other_fx_and_gold: 0.05
+    commodity_ex_gold: 0.10
+  margin_closeout_level: 0.50   # positions closed when equity < 50% of required initial margin
+  negative_balance_protection: true
+
+execution_statistics:
+  status: SAXO_PUBLISHED
+  source: "https://www.home.saxo/rates-and-conditions/forex/orders-and-execution"
+  period: "August 2026"
+  note: >
+    Saxo-published client execution statistics. Pips. 'net' is the average over all
+    orders (negative net improvement = adverse). Used to calibrate the simulated
+    slippage model; these are aggregate statistics, NOT our own fills.
+  market_orders:   # pair: [p_improve, p_zero, p_negative, avg_net_improvement_pips, fill_rate]
+    AUDUSD: [0.180, 0.630, 0.190, 0.0, 1.0]
+    EURGBP: [0.153, 0.705, 0.142, 0.0, 1.0]
+    EURJPY: [0.287, 0.395, 0.318, 0.0, 1.0]
+    EURUSD: [0.181, 0.623, 0.196, 0.0, 1.0]
+    GBPJPY: [0.340, 0.413, 0.247, 0.0, 1.0]
+    GBPUSD: [0.212, 0.567, 0.221, 0.0, 1.0]
+    NZDUSD: [0.158, 0.652, 0.190, 0.0, 1.0]
+    USDCAD: [0.177, 0.630, 0.193, 0.0, 1.0]
+    USDCHF: [0.183, 0.586, 0.231, 0.0, 1.0]
+    USDJPY: [0.278, 0.439, 0.283, 0.0, 1.0]
+    XAGUSD: [0.382, 0.227, 0.391, -3.4, 1.0]
+    XAUUSD: [0.429, 0.133, 0.438, -0.7, 1.0]
+  resting_stop_orders:  # pair: [p_no_slip, p_negative, avg_negative_pips_when_slipped, avg_net_slippage_pips]
+    AUDUSD: [0.891, 0.109, 0.4, 0.0]
+    EURGBP: [0.958, 0.042, 0.7, 0.0]
+    EURJPY: [0.645, 0.355, 0.4, 0.1]
+    EURUSD: [0.890, 0.110, 0.2, 0.0]
+    GBPJPY: [0.594, 0.406, 0.3, 0.1]
+    GBPUSD: [0.695, 0.305, 0.2, 0.1]
+    NZDUSD: [0.946, 0.054, 0.3, 0.0]
+    USDCAD: [0.896, 0.104, 0.3, 0.0]
+    USDCHF: [0.796, 0.204, 0.3, 0.1]
+    USDJPY: [0.819, 0.181, 0.3, 0.0]
+    XAGUSD: [0.087, 0.913, 24.4, 20.3]
+    XAUUSD: [0.244, 0.756, 6.4, 4.7]
+  resting_limit_orders:  # pair: [p_improve, p_zero, avg_improve_pips_when_improved, avg_net_pips]
+    EURUSD: [0.122, 0.878, 0.3, 0.0]
+    XAUUSD: [0.757, 0.243, 6.2, 4.7]

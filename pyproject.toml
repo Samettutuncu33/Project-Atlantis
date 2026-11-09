@@ -1,0 +1,18 @@
+[project]
+name = "atlantis"
+version = "0.1.0"
+description = "PROJECT ATLANTIS - simulation-only quantitative trading research platform"
+requires-python = ">=3.12"
+dependencies = ["numpy", "pandas>=2.2", "pyarrow", "pyyaml", "requests", "scipy", "statsmodels"]
+[project.optional-dependencies]
+dev = ["pytest", "hypothesis", "quantstats", "ruff"]
+[project.scripts]
+atlantis = "atlantis.cli:main"
+[tool.setuptools.packages.find]
+include = ["atlantis*"]
+[tool.setuptools.package-data]
+atlantis = ["config/*.yaml"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+[tool.ruff]
+line-length = 110

@@ -104,8 +104,40 @@ class GradientBoosting(_SkModel):
                                   random_state=7, deterministic=True, n_jobs=1)
 
 
+class LLMAnalyst(Predictor):
+    """Claude reading the charts. FORWARD-ONLY: a scheduled run writes
+    data/llm/<YYYY-MM-DD>.json = {"made_at": ..., "probs": {symbol: P(up 5 bars)}}
+    BEFORE the daily step runs. On dates without such a file it abstains (None),
+    so it can never be scored on history it may already know (no look-ahead)."""
+    name = "llm_analyst"
+
+    def __init__(self, root=None):
+        from pathlib import Path
+        self.root = Path(root) if root else Path(__file__).resolve().parents[3] / "data" / "llm"
+        self._cache: dict = {}
+
+    def for_date(self, ts) -> dict:
+        import json
+        key = str(ts)[:10]
+        if key not in self._cache:
+            p = self.root / f"{key}.json"
+            self._cache[key] = json.loads(p.read_text()).get("probs", {}) if p.exists() else {}
+        return self._cache[key]
+
+    def predict_symbols(self, ts, symbols) -> list:
+        d = self.for_date(ts)
+        out = []
+        for s in symbols:
+            v = d.get(s)
+            out.append(min(max(float(v), 0.02), 0.98) if v is not None else None)
+        return out
+
+    def predict(self, X):
+        raise NotImplementedError("use predict_symbols(ts, symbols)")
+
+
 def default_predictors() -> list[Predictor]:
-    return [TrendRule(), BreakoutRule(), ReversalRule(), Logistic(), GradientBoosting()]
+    return [TrendRule(), BreakoutRule(), ReversalRule(), Logistic(), GradientBoosting(), LLMAnalyst()]
 
 
 def training_set(features: pd.DataFrame, labels: pd.DataFrame, asof: pd.Timestamp,

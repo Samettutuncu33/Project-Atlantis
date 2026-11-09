@@ -86,7 +86,9 @@ class HedgeWeights:
         z = sum(raw.values())
         return {p: v / z for p, v in raw.items()}
 
-    def update(self, cls: str, probs: dict[str, float], outcome: float) -> None:
+    def update(self, cls: str, probs: dict[str, float | None], outcome: float) -> None:
+        """Predictors that abstained (None) are neither rewarded nor penalised."""
+        probs = {k: v for k, v in probs.items() if v is not None}
         for d in (self.cum_loss, self.counts, self.hits, self.directional):
             d.setdefault(cls, {})
         for p, prob in probs.items():
@@ -96,9 +98,11 @@ class HedgeWeights:
                 self.directional[cls][p] = self.directional[cls].get(p, 0) + 1
                 self.hits[cls][p] = self.hits[cls].get(p, 0) + int((prob > 0.5) == (outcome > 0.5))
 
-    def combine(self, cls: str, probs: dict[str, float]) -> float:
+    def combine(self, cls: str, probs: dict[str, float | None]) -> float:
         w = self.weights(cls)
-        return float(sum(w[p] * probs[p] for p in self.predictors))
+        avail = [p for p in self.predictors if probs.get(p) is not None]
+        z = sum(w[p] for p in avail)
+        return float(sum(w[p] * probs[p] for p in avail) / z) if z > 0 else 0.5
 
     def to_dict(self) -> dict:
         return {"predictors": self.predictors, "eta": self.eta, "cum_loss": self.cum_loss,

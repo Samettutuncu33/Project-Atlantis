@@ -65,12 +65,36 @@ ACCOUNTS = [
 ]
 
 
+def frozen_first_year(symbol: str) -> int:
+    """History span is frozen the first time a symbol is used live (live/history_years.json),
+    so later downloads can't change the replay and silently rewrite recorded predictions.
+    To extend history deliberately, delete the entry. That is a new trial, logged in git."""
+    path = LIVE_DIR / "history_years.json"
+    frozen = json.loads(path.read_text()) if path.exists() else {}
+    if symbol not in frozen:
+        frozen[symbol] = cached_first_year(symbol)
+        path.write_text(json.dumps(frozen, indent=1, sort_keys=True))
+    return int(frozen[symbol])
+
+
+def cached_first_year(symbol: str, floor: int = 2016) -> int:
+    """Earliest year from which BOTH sides' yearly files are cached contiguously up to
+    FIRST_YEAR. The adaptive account replays that whole history to build know-how,
+    never downloading during a run, so every run replays the same years."""
+    d = ROOT / "data" / "raw" / "dukascopy_live" / symbol
+    y = FIRST_YEAR
+    while y - 1 >= floor and all((d / str(y - 1) / f"{side}_candles_day_1.bi5").exists()
+                                 for side in ("BID", "ASK")):
+        y -= 1
+    return y
+
+
 def load_data(f: Fetcher, until: date, symbols: list[str] | None = None,
-              strict: bool = True) -> tuple[dict, list[dict]]:
+              strict: bool = True, history: bool = False) -> tuple[dict, list[dict]]:
     data, checks = {}, []
     for s in symbols or UNIVERSE:
         try:
-            df = daily_bid_ask(f, s, FIRST_YEAR, until)
+            df = daily_bid_ask(f, s, frozen_first_year(s) if history else FIRST_YEAR, until)
         except LiveFetchError as e:
             if strict:
                 raise
@@ -284,7 +308,7 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     return {"run": run, "rows": rows, "checks": checks}
 
 
-ADAPTIVE_LEARN_FROM = "2025-12-01"   # first date with 250 bars of history for every feature
+ADAPTIVE_LEARN_FROM = "2017-01-01"   # replay history from here when cached (needs 250 bars of warm-up)
 
 
 def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows: dict,
@@ -294,9 +318,14 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
     from atlantis.instruments.spec import universe
     checks: list[dict] = []
     syms = list(universe()["instruments"])
-    data, dchecks = load_data(f, until, syms, strict=False)
+    data, dchecks = load_data(f, until, syms, strict=False, history=True)
     checks += dchecks
-    res = run_adaptive(data, CAPITAL, start=ADAPTIVE_LEARN_FROM, trade_from=LIVE_START)
+    first = min(d.index[0] for d in data.values())
+    learn_from = max(pd.Timestamp(ADAPTIVE_LEARN_FROM, tz="UTC"), first + pd.Timedelta(days=380))
+    res = run_adaptive(data, CAPITAL, start=str(learn_from.date()), trade_from=LIVE_START)
+    checks.append({"check": "adaptive_history", "status": "OK",
+                   "detail": f"learned on real outcomes from {learn_from.date()} "
+                             f"({len(res.ledger.resolutions())} scored predictions before/through today)"})
     br, led = res.broker, res.broker.ledger
     wrapped = BacktestResult(res.equity, None, br, None, br.audit, {}, None, None)
     breaks = reconcile(wrapped)

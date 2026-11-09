@@ -81,3 +81,20 @@ def test_adaptive_account_end_to_end(fx_data, tmp_path):
     res.broker.ledger.check_invariants()
     assert set(res.hedge.cum_loss) == {"fx_spot"}
     assert abs(sum(res.hedge.weights("fx_spot").values()) - 1) < 1e-9
+
+
+def test_abstaining_predictor_is_ignored_not_penalised():
+    h = HedgeWeights(["a", "llm"], horizon_T=100)
+    for _ in range(50):
+        h.update("fx", {"a": 0.6, "llm": None}, 1.0)
+    assert h.counts["fx"].get("llm", 0) == 0
+    assert h.combine("fx", {"a": 0.6, "llm": None}) == pytest.approx(0.6)
+
+
+def test_llm_analyst_abstains_without_a_forward_file(tmp_path):
+    from atlantis.quant.predict.models import LLMAnalyst
+    import json
+    a = LLMAnalyst(tmp_path)
+    assert a.predict_symbols("2020-01-02T00:00:00+00:00", ["EURUSD"]) == [None]
+    (tmp_path / "2026-11-10.json").write_text(json.dumps({"probs": {"EURUSD": 0.99}}))
+    assert a.predict_symbols("2026-11-10T00:00:00+00:00", ["EURUSD", "BTCUSD"]) == [0.98, None]

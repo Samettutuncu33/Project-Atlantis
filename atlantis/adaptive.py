@@ -133,12 +133,13 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
         today = today[today.index.isin(list(bars))].dropna(subset=["ret_250", "vol20"])
         if today.empty:
             continue
-        raw = {p.name: p.predict(today[FEATURES]) for p in predictors}
+        raw = {p.name: (p.predict_symbols(t, list(today.index)) if hasattr(p, "predict_symbols")
+                        else p.predict(today[FEATURES])) for p in predictors}
         equity = broker.equity()
         mids = dict(broker.last_mids)
         for i, sym in enumerate(today.index):
             inst = instruments[sym]
-            probs = {n: float(raw[n][i]) for n in names}
+            probs = {n: (None if raw[n][i] is None else float(raw[n][i])) for n in names}
             p_raw = hedge.combine(inst.asset_class, probs)
             p_final = calib(p_raw)
             lab = labels.loc[(t, sym)] if (t, sym) in labels.index else None
@@ -146,7 +147,7 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
             rec = pledger.append({
                 "kind": "prediction", "id": f"{ts[:10]}:{sym}", "made_at": ts, "symbol": sym,
                 "asset_class": inst.asset_class, "horizon_bars": HORIZON,
-                "predictor_probs": {k: round(v, 5) for k, v in probs.items()},
+                "predictor_probs": {k: (None if v is None else round(v, 5)) for k, v in probs.items()},
                 "weights": {k: round(v, 4) for k, v in hedge.weights(inst.asset_class).items()},
                 "p_raw": round(p_raw, 5), "p_final": round(p_final, 5), "mid_at_prediction": today.at[sym, "mid"]})
             if outcome_at is not None and pd.notna(outcome_at):

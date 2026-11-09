@@ -1,0 +1,33 @@
+name: Atlantis hourly simulation
+# The trading loop is plain Python: no AI and no API key needed. Runs every hour, free on public repos.
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch: {}
+concurrency:
+  group: atlantis-live
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  step:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -q -e . lightgbm scikit-learn
+      - name: Simulation step (exit 2 = a check failed; outputs still published)
+        run: python -m atlantis.live step || [ $? -eq 2 ]
+      - name: Commit and push results
+        run: |
+          git config user.name "Atlantis bot"
+          git config user.email "atlantis-bot@users.noreply.github.com"
+          git add live/ knowledge/ data/raw/dukascopy_live/ || true
+          git diff --cached --quiet && exit 0
+          git commit -qm "hourly simulation $(date -u +%Y-%m-%dT%H:%MZ) [actions]"
+          for i in 1 2 3 4; do git pull -q --rebase origin main && git push -q origin main && exit 0; sleep $((i*5)); done
+          exit 1

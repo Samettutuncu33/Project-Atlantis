@@ -30,7 +30,7 @@
 <div class="at">
   <header id="top" style="display:grid;gap:var(--cds-gap-sm)">
     <h1>Atlantis Live Simulation</h1>
-    <p>Four virtual $200 accounts trading EURUSD, GBPUSD, USDJPY and AUDUSD under Saxo-calibrated costs. <span class="at-tag">SIMULATED</span> No real orders exist; prices are Dukascopy bid/ask, not Saxo quotes.</p>
+    <p>Five virtual $200 accounts. A–D are fixed-rule baselines on four currency pairs; E, Atlantis Adaptive, trades currencies, crypto, US stocks, stock indices, oil and gold, predicts every instrument daily and learns from how its predictions turn out. <span class="at-tag">SIMULATED</span> No real orders exist; prices are Dukascopy bid/ask, not Saxo quotes.</p>
     <p class="at-muted">Last update <b data-draw="runutc" data-source="run" data-field="run_utc" data-row="0">—</b> · last completed daily bar <b data-draw="lastbar" data-source="run" data-field="last_completed_bar" data-row="0">—</b> · live start <span data-source="run" data-field="live_start" data-row="0" data-draw="livestart">—</span> · <span data-draw="phase">—</span></p>
     <p data-draw="checksline">—</p>
   </header>
@@ -54,6 +54,27 @@
       <thead><tr><th class="l" data-field="account">Account</th><th class="l" data-field="symbol">Pair</th><th class="l" data-field="signal_text">Signal</th><th data-field="position_qty">Position</th><th class="l" data-field="pending_orders">Pending orders</th><th class="l" data-field="executes_at">Executes at</th><th class="l" data-field="next_decision">Next decision</th></tr></thead>
       <tbody data-draw="plan"></tbody>
     </table></div>
+  </section>
+
+  <section id="predictions">
+    <h2>Predictions and how they turned out (account E)</h2>
+    <p class="at-muted">Each day E predicts, for every instrument, the chance its price is higher 5 trading days later. Every prediction is written to a hash-chained ledger before its outcome exists; the outcome is added when it arrives.</p>
+    <p data-draw="calline">—</p>
+    <div class="at-wrap"><table data-source="predictions" data-row-key="id">
+      <thead><tr><th class="l" data-field="made_at">Made (UTC)</th><th class="l" data-field="symbol">Instrument</th><th class="l" data-field="asset_class">Class</th><th data-field="p_up">P(up, 5 days)</th><th class="l" data-field="call">Call</th><th class="l" data-field="status">Status</th><th class="l" data-field="outcome">Outcome</th><th class="l" data-field="correct">Correct?</th><th data-field="fwd_return_pct">Move %</th><th class="l" data-field="hash">Ledger hash</th></tr></thead>
+      <tbody data-draw="predictions"></tbody>
+    </table></div>
+  </section>
+
+  <section id="knowhow">
+    <h2>Know-how: what E has learned</h2>
+    <p class="at-muted">Five predictors compete within each asset class. Weights move toward the predictors whose probabilities scored best (lower Brier score is better; 0.25 is a coin flip). Nobody tunes these by hand.</p>
+    <div class="at-wrap"><table data-source="knowhow" data-row-key="asset_class,predictor">
+      <thead><tr><th class="l" data-field="asset_class">Class</th><th class="l" data-field="predictor">Predictor</th><th data-field="weight">Weight</th><th data-field="scored">Scored</th><th data-field="directional_calls">Up/down calls</th><th data-field="correct">Correct</th><th data-field="hit_rate">Hit rate</th><th data-field="brier">Brier</th></tr></thead>
+      <tbody data-draw="knowhow"></tbody>
+    </table></div>
+    <h3 style="margin:var(--cds-gap-md) 0 var(--cds-gap-xs);font-size:var(--cds-font-size-body)">Lessons</h3>
+    <ul data-draw="lessons" data-source="lessons" style="margin:0;padding-left:1.2em;font-size:var(--cds-font-size-caption)"></ul>
   </section>
 
   <section id="positions">
@@ -113,14 +134,14 @@
 </div>
 
 <script>
-for (const k of ['run', 'accounts', 'equity', 'plan', 'positions', 'fills', 'projection', 'prices', 'checks']) {
+for (const k of ['run', 'accounts', 'equity', 'plan', 'positions', 'fills', 'projection', 'prices', 'checks', 'predictions', 'knowhow', 'lessons', 'calibration']) {
   dash.loader(k, { description: 'Takes the "' + k + '" table from the run snapshot file.', fn: ({ answer }) => (answer && answer[k]) || [] });
 }
 window.atFmt = {
   usd: d3.format('$,.2f'), num: d3.format(',.5~f'), pct: d3.format('.1%'), int: d3.format(','),
   ts: (s) => s ? String(s).replace('T', ' ').replace(/\.\d+/, '').replace(/:00\+00:00$/, '').replace('+00:00', '') : '',
 };
-window.atAccountColor = (id) => dash.colors[['A', 'B', 'C', 'D'].indexOf(id)] || dash.colors[0];
+window.atAccountColor = (id) => dash.colors[['A', 'B', 'C', 'D', 'E'].indexOf(id)] || dash.colors[0];
 window.atRows = (id) => { const d = dash.data(id); return d.status === 'ok' ? d.data : null; };
 window.atTable = (tb, rows, cells) => {
   if (!rows) { tb.replaceChildren(); return; }
@@ -209,6 +230,15 @@ dash.draw('prices', (tb) => {
   const keep = [];
   for (const [, g] of d3.group(rows, (r) => r.symbol)) { const s = [...g].sort((a, b) => (a.ts < b.ts ? 1 : -1)); keep.push(...s.slice(0, 6)); }
   atTable(tb, keep, (r) => [[r.symbol, 'l'], [F.ts(r.ts), 'l'], [r.kind, 'l'], [r.bid_open == null ? '' : F.num(r.bid_open)], [r.ask_open == null ? '' : F.num(r.ask_open)], [F.num(r.bid_close)], [F.num(r.ask_close)]]);
+});
+dash.draw('predictions', (tb) => { const r0 = atRows('predictions'); atTable(tb, r0 && [...r0].reverse().slice(0, 120), (r) => [[F.ts(r.made_at), 'l'], [r.symbol, 'l'], [r.asset_class, 'l'], [F.pct(r.p_up)], [r.call, r.call === 'UP' ? 'l at-ok' : r.call === 'DOWN' ? 'l at-bad' : 'l at-muted'], [r.status, 'l'], [r.outcome ?? '', 'l'], [r.correct == null ? '' : (r.correct ? 'yes' : 'no'), r.correct == null ? 'l' : (r.correct ? 'l at-ok' : 'l at-bad')], [r.fwd_return_pct == null ? '' : r.fwd_return_pct.toFixed(2)], [r.hash, 'l at-muted']]); });
+dash.draw('knowhow', (tb) => atTable(tb, atRows('knowhow'), (r) => [[r.asset_class, 'l'], [r.predictor, 'l'], [F.pct(r.weight)], [F.int(r.scored)], [F.int(r.directional_calls)], [F.int(r.correct)], [r.hit_rate == null ? '' : F.pct(r.hit_rate)], [r.brier == null ? '' : r.brier.toFixed(4)]]));
+dash.draw('lessons', (ul) => { const r = atRows('lessons'); if (!r) { ul.replaceChildren(); return; } ul.replaceChildren(...r.map((x) => { const li = document.createElement('li'); li.textContent = x.lesson; return li; })); });
+dash.draw('calline', (el) => {
+  const c = atRows('calibration');
+  if (!c || !c[0]) { el.textContent = '—'; return; }
+  const x = c[0];
+  el.textContent = `${F.int(x.resolved_total)} predictions resolved so far` + (x.recent_hit_rate == null ? '.' : `; ${F.pct(x.recent_hit_rate)} of the latest resolved up/down calls were right (50% is a coin flip).`) + (x.calibrator_fitted ? ' Probabilities are calibrated on past outcomes.' : ' Calibration starts after 200 resolved predictions.');
 });
 dash.draw('checks', (tb) => atTable(tb, atRows('checks'), (r) => [[r.check, 'l'], [r.status, r.status === 'OK' ? 'l at-ok' : (r.status === 'WARN' ? 'l at-warn' : 'l at-bad')], [r.detail, 'l']]));
 </script>

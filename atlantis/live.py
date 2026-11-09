@@ -65,10 +65,18 @@ ACCOUNTS = [
 ]
 
 
-def load_data(f: Fetcher, until: date) -> tuple[dict, list[dict]]:
+def load_data(f: Fetcher, until: date, symbols: list[str] | None = None,
+              strict: bool = True) -> tuple[dict, list[dict]]:
     data, checks = {}, []
-    for s in UNIVERSE:
-        df = daily_bid_ask(f, s, FIRST_YEAR, until)
+    for s in symbols or UNIVERSE:
+        try:
+            df = daily_bid_ask(f, s, FIRST_YEAR, until)
+        except LiveFetchError as e:
+            if strict:
+                raise
+            checks.append({"check": f"data_unavailable:{s}", "status": "WARN",
+                           "detail": f"{s} skipped this run: {str(e)[:120]}"})
+            continue
         clean, issues = clean_daily(df, s)
         data[s] = clean
         for i in issues:
@@ -233,6 +241,8 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
                 "executes_at": (str(last_bar + pd.Timedelta(days=1))[:16] + " UTC open") if pend else "",
                 "next_decision": nxt})
         rows["projection"].append(projection(spec, data, equity_live, horizon))
+    # ---- Account E: Atlantis Adaptive (multi-asset, self-learning) ---------------------
+    checks += adaptive_section(f, until, now, quotes, rows, journal_new)
     # append-only journal verification
     jpath = LIVE_DIR / "journal.jsonl"
     old = [json.loads(x) for x in jpath.read_text().splitlines()] if jpath.exists() else []
@@ -272,6 +282,131 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
             fh.write(json.dumps({**run, "checks_failed": [c for c in checks if c["status"]
                                                           not in ("OK", "INFO")]}, default=str) + "\n")
     return {"run": run, "rows": rows, "checks": checks}
+
+
+ADAPTIVE_LEARN_FROM = "2025-12-01"   # first date with 250 bars of history for every feature
+
+
+def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows: dict,
+                     journal_new: list) -> list[dict]:
+    from atlantis.adaptive import CLASS_NAMES, run_adaptive
+    from atlantis.engine import BacktestResult
+    from atlantis.instruments.spec import universe
+    checks: list[dict] = []
+    syms = list(universe()["instruments"])
+    data, dchecks = load_data(f, until, syms, strict=False)
+    checks += dchecks
+    res = run_adaptive(data, CAPITAL, start=ADAPTIVE_LEARN_FROM, trade_from=LIVE_START)
+    br, led = res.broker, res.broker.ledger
+    wrapped = BacktestResult(res.equity, None, br, None, br.audit, {}, None, None)
+    breaks = reconcile(wrapped)
+    led.check_invariants()
+    checks.append({"check": "reconciliation:E", "status": "OK" if not breaks else "ERROR",
+                   "detail": "; ".join(breaks) or "engine ledger == independent FIFO recomputation"})
+    # prediction ledger: append-only across runs (hash chain must extend the stored one)
+    ppath = LIVE_DIR / "predictions.jsonl"
+    old = [json.loads(x)["hash"] for x in ppath.read_text().splitlines()] if ppath.exists() else []
+    new = [r["hash"] for r in res.ledger.records]
+    ok = new[:len(old)] == old
+    checks.append({"check": "prediction_ledger_append_only", "status": "OK" if ok else "CRITICAL",
+                   "detail": f"{len(old)} earlier prediction records reproduced exactly; "
+                             f"{len(new) - len(old)} new" if ok else "earlier predictions changed"})
+    if ok:
+        ppath.write_text("".join(json.dumps(r, default=str) + "\n" for r in res.ledger.records))
+    mids = dict(br.last_mids)
+    mids.update({s: (q["bid"] + q["ask"]) / 2 for s, q in quotes.items()})
+    marks = {s: ((quotes[s]["bid"], quotes[s]["ask"]) if s in quotes else br.last_marks[s]) for s in led.lots}
+    q2u = {s: quote_to_usd(br.instruments[s].quote, mids) for s in led.lots}
+    unreal_by = led.unrealised_usd(marks, q2u) if led.lots else {}
+    equity_live = led.cash + sum(unreal_by.values())
+    for s, book in led.lots.items():
+        qty = sum(l.qty for l in book)
+        inst = br.instruments[s]
+        rows["positions"].append({
+            "account": "E", "symbol": s, "side": "LONG" if qty > 0 else "SHORT", "qty": qty,
+            "avg_entry": round(sum(l.qty * l.price for l in book) / qty, 6),
+            "mark_bid": marks[s][0], "mark_ask": marks[s][1],
+            "mark_ts": quotes.get(s, {}).get("ts", str(br._last_ts)), "unrealised_usd": round(unreal_by[s], 2),
+            "notional_usd": round(abs(qty) * mids[s] * q2u[s], 2),
+            "margin_usd": round(abs(qty) * mids[s] * q2u[s] * inst.initial_margin, 2)})
+    eq = res.equity[res.equity.index >= pd.Timestamp(LIVE_START, tz="UTC")]
+    for t, v in eq.items():
+        rows["equity"].append({"ts": t.isoformat(), "account": "E", "equity": round(v, 4), "kind": "daily close"})
+    rows["equity"].append({"ts": now.isoformat(timespec="minutes"), "account": "E",
+                           "equity": round(equity_live, 4), "kind": "live mark"})
+    t = led.totals
+    mdd = M.max_drawdown(pd.concat([pd.Series([CAPITAL]), eq.reset_index(drop=True), pd.Series([equity_live])]))
+    rows["accounts"].append({
+        "account": "E", "name": "Atlantis Adaptive · multi-asset, self-learning", "strategy": "adaptive",
+        "sizing": "half Kelly, edge > cost", "start_capital": CAPITAL, "equity": round(equity_live, 2),
+        "return_pct": round((equity_live / CAPITAL - 1) * 100, 2), "cash": round(led.cash, 2),
+        "unrealised": round(sum(unreal_by.values()), 2), "realised": round(t["realised_gross"], 2),
+        "commissions": round(t["commissions"], 2), "financing": round(t["financing"], 4),
+        "conversion_fees": round(t["conversion_fees"], 4), "spread_cost_est": round(br.stats["spread_cost_usd"], 2),
+        "fills": int(br.stats["fills"]), "rejects": int(br.stats["rejects"]), "open_positions": len(led.lots),
+        "max_drawdown_pct": round(mdd * 100, 2), "halted": bool(br.halted)})
+    for e in br.audit.events:
+        if e["kind"] == "FILL":
+            bar = data[e["symbol"]].loc[pd.Timestamp(e["fill_ts"])]
+            rec = {"account": "E", "ts": e["fill_ts"], "symbol": e["symbol"], "side": "BUY" if e["qty"] > 0 else "SELL",
+                   "qty": abs(e["qty"]), "price": round(e["price"], 6), "bar_bid_open": bar["bid_open"],
+                   "bar_ask_open": bar["ask_open"],
+                   "decision_mid": round(e["decision_mid"], 6) if e["decision_mid"] else None,
+                   "commission_usd": e["commission"], "slippage_usd": round(e["slippage_usd"], 4),
+                   "reason": e["reason"], "tag": e["tag"], "label": "SIMULATED",
+                   "data_source": "Dukascopy daily bar open (00:00 UTC)"}
+            rows["fills"].append(rec)
+            journal_new.append({k: rec[k] for k in ("account", "ts", "symbol", "side", "qty", "price")})
+    # plan: latest decision per instrument
+    last_ts = max((p["ts"] for p in res.proposals), default=None)
+    pend = {o.symbol: o for o in br.orders if o.status is Status.PENDING}
+    for p in res.proposals:
+        if p["ts"] != last_ts:
+            continue
+        o = pend.get(p["symbol"])
+        rows["plan"].append({
+            "account": "E", "symbol": p["symbol"], "signal": p["p"],
+            "signal_text": f"P(up 5d) {p['p']:.0%}", "position_qty": p["current"],
+            "pending_orders": (f"{'BUY' if o.qty > 0 else 'SELL'} {abs(o.qty):g} MARKET (adaptive)" if o else "none"),
+            "executes_at": (str(pd.Timestamp(last_ts) + pd.Timedelta(days=1))[:16] + " UTC open") if o else "",
+            "next_decision": p["reason"] if last_ts >= LIVE_START else "learning only until live start"})
+    # predictions and know-how for the dashboard
+    resol = res.ledger.resolutions()
+    preds = res.ledger.predictions()
+    rows["predictions"] = []
+    for r in preds[-400:]:
+        z = resol.get(r["id"])
+        rows["predictions"].append({
+            "id": r["id"], "made_at": r["made_at"], "symbol": r["symbol"],
+            "asset_class": CLASS_NAMES.get(r["asset_class"], r["asset_class"]),
+            "p_up": r["p_final"], "call": "UP" if r["p_final"] > 0.5 else ("DOWN" if r["p_final"] < 0.5 else "NONE"),
+            "status": "resolved" if z else "open",
+            "outcome": (None if not z else ("UP" if z["outcome_up"] > 0.5 else "DOWN")),
+            "correct": (None if not z or z["hit"] is None else bool(z["hit"])),
+            "fwd_return_pct": None if not z else round(z["fwd_log_return"] * 100, 3),
+            "hash": r["hash"][:12]})
+    rows["knowhow"] = []
+    for cls, w in res.hedge.to_dict()["weights"].items():
+        for name, weight in w.items():
+            n = res.hedge.counts[cls].get(name, 0)
+            dn = res.hedge.directional[cls].get(name, 0)
+            hits = res.hedge.hits[cls].get(name, 0)
+            rows["knowhow"].append({
+                "asset_class": CLASS_NAMES.get(cls, cls), "predictor": name, "weight": round(weight, 4),
+                "scored": n, "directional_calls": dn, "correct": hits,
+                "hit_rate": round(hits / dn, 4) if dn else None,
+                "brier": round(res.hedge.cum_loss[cls][name] / n, 5) if n else None})
+    resolved = [p for p in rows["predictions"] if p["status"] == "resolved"]
+    rows["lessons"] = [{"n": i, "lesson": x} for i, x in enumerate(res.lessons)]
+    rows["calibration"] = [{"resolved_total": len(resol), "calibrator_fitted": res.calibrator.iso is not None,
+                            "recent_hit_rate": round(np.mean([p["correct"] for p in resolved
+                                                              if p["correct"] is not None]), 4)
+                            if resolved else None}]
+    knowhow_path = ROOT / "knowledge" / "knowhow.json"
+    knowhow_path.parent.mkdir(exist_ok=True)
+    knowhow_path.write_text(json.dumps({"asof": str(res.equity.index[-1].date()), **res.hedge.to_dict(),
+                                        "lessons": res.lessons}, indent=1, default=str))
+    return checks
 
 
 def _same(a: dict, b: dict) -> bool:

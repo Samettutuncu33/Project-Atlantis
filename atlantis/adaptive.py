@@ -62,7 +62,10 @@ class AdaptiveResult:
 
 def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: str | None = None,
                  end: str | None = None, ledger_path: Path | None = None,
-                 instruments: dict[str, Instrument] | None = None) -> AdaptiveResult:
+                 instruments: dict[str, Instrument] | None = None,
+                 trade_from: str | None = None) -> AdaptiveResult:
+    """`trade_from`: before this date the account predicts and learns but never trades
+    (warm-up of the know-how on real outcomes); equity stays at `capital`."""
     instruments = instruments or {s: make_instrument(s) for s in data}
     panels = build_panels(data)
     mid = panels["mid_close"]
@@ -149,6 +152,8 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
             if outcome_at is not None and pd.notna(outcome_at):
                 open_preds.append({**rec, "outcome_at": outcome_at, "_up": float(lab["up"]),
                                    "_ret": float(lab["fwd_ret"])})
+            if trade_from is not None and t < pd.Timestamp(trade_from, tz=t.tz):
+                continue
             # 5. decide
             usd_per_unit = mids[sym] * quote_to_usd(inst.quote, mids)
             spread = panels["ask_close"].at[t, sym] - panels["bid_close"].at[t, sym]

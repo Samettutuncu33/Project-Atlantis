@@ -118,7 +118,7 @@ for (const k of ['run', 'accounts', 'equity', 'plan', 'positions', 'fills', 'pro
 }
 window.atFmt = {
   usd: d3.format('$,.2f'), num: d3.format(',.5~f'), pct: d3.format('.1%'), int: d3.format(','),
-  ts: (s) => s ? String(s).replace('T', ' ').replace(/:00(\.000)?\+00:00$/, '').replace('+00:00', '') : '',
+  ts: (s) => s ? String(s).replace('T', ' ').replace(/\.\d+/, '').replace(/:00\+00:00$/, '').replace('+00:00', '') : '',
 };
 window.atAccountColor = (id) => dash.colors[['A', 'B', 'C', 'D'].indexOf(id)] || dash.colors[0];
 window.atRows = (id) => { const d = dash.data(id); return d.status === 'ok' ? d.data : null; };

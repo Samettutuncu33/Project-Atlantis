@@ -1,10 +1,10 @@
 name: Atlantis hourly simulation
-# Trading loop: plain Python, every hour (free on public repos).
+# Trading loop: plain Python. Each run replays every hourly bar since the last run, so results are identical to hourly runs.
 # AI agents: Claude API via the ANTHROPIC_API_KEY repo secret, budget-capped in scripts/ai_api_runner.py.
 # Without the secret the AI steps print SKIP and the simulation still runs.
 on:
   schedule:
-    - cron: "25 * * * *"
+    - cron: "25 */2 * * 1-5"   # every 2 hours Mon-Fri (private repo: ~1,050 of 2,000 free minutes per month)
   workflow_dispatch: {}
 concurrency:
   group: atlantis-live

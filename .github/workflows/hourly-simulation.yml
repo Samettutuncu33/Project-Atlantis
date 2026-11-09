@@ -1,5 +1,7 @@
 name: Atlantis hourly simulation
-# The trading loop is plain Python: no AI and no API key needed. Runs every hour, free on public repos.
+# Trading loop: plain Python, every hour (free on public repos).
+# AI agents: Claude API via the ANTHROPIC_API_KEY repo secret, budget-capped in scripts/ai_api_runner.py.
+# Without the secret the AI steps print SKIP and the simulation still runs.
 on:
   schedule:
     - cron: "25 * * * *"
@@ -19,14 +21,25 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install
-        run: pip install -q -e . lightgbm scikit-learn
+        run: pip install -q -e . lightgbm scikit-learn anthropic
+      - name: AI agents via Claude API (news + daily analyst at 00 UTC; hourly analyst at 00/06/12/18)
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          H=$(date -u +%H)
+          if [ "$H" = "00" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then python scripts/ai_api_runner.py daily; fi
+          case "$H" in 00|06|12|18) python scripts/ai_api_runner.py hourly;; *) [ "${{ github.event_name }}" = "workflow_dispatch" ] && python scripts/ai_api_runner.py hourly || true;; esac
       - name: Simulation step (exit 2 = a check failed; outputs still published)
         run: python -m atlantis.live step || [ $? -eq 2 ]
+      - name: Status page for GitHub (live/STATUS.md)
+        continue-on-error: true
+        run: python scripts/write_status.py
       - name: Commit and push results
         run: |
           git config user.name "Atlantis bot"
           git config user.email "atlantis-bot@users.noreply.github.com"
-          git add live/ knowledge/ data/raw/dukascopy_live/ || true
+          git add live/ knowledge/ data/llm/ data/raw/dukascopy_live/ || true
           git diff --cached --quiet && exit 0
           git commit -qm "hourly simulation $(date -u +%Y-%m-%dT%H:%MZ) [actions]"
           for i in 1 2 3 4; do git pull -q --rebase origin main && git push -q origin main && exit 0; sleep $((i*5)); done

@@ -1,12 +1,12 @@
-# Atlantis runs: who does what (option A, low cost)
+# Atlantis runs: who does what (Claude API mode, from 9 Nov 2026)
 
-- **GitHub Actions, every hour at :25 (free, no AI):** `.github/workflows/hourly-simulation.yml` runs
-  `python -m atlantis.live step` and commits the outputs. The trading loop for accounts A–F lives here.
-- **AI runner session, 4× per day at 00:02 / 06:02 / 12:02 / 18:02 (Claude plan):**
-  - 00:02 = FULL run: the "Every run" steps below, plus the "daily" steps (news brief, daily AI analyst, hourly AI
-    analyst file for the last completed hour, journal). Push before :25 so the simulation uses them.
-  - 06:02, 12:02, 18:02 = LIGHT run: the "Every run" steps only.
-  The AI runner does NOT run `python -m atlantis.live step`; GitHub Actions does.
+- **GitHub Actions, every hour at :25** (`.github/workflows/hourly-simulation.yml`), no Claude plan needed:
+  1. AI agents through the Claude API (repo secret `ANTHROPIC_API_KEY`, `scripts/ai_api_runner.py`):
+     news brief with web search + daily AI analyst (account E) at 00 UTC; hourly AI analyst (account F) at 00/06/12/18 UTC.
+     Every call's real cost goes to `live/api_spend.jsonl`; calls stop when the month would pass $18.
+  2. `python -m atlantis.live step` (accounts A–F), then `live/STATUS.md` (readable on GitHub), then commit.
+- **AI runner session on the Claude plan: PAUSED.** If re-enabled, it only syncs the Control Panel and uploads
+  `live/out/live.json` to the page (steps 2 and 6 below); it writes no news or forecast files (the API runner does).
 
 # Scheduled live-simulation run
 

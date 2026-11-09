@@ -4,7 +4,7 @@ name: Atlantis hourly simulation
 # Without the secret the AI steps print SKIP and the simulation still runs.
 on:
   schedule:
-    - cron: "25 */2 * * 1-5"   # every 2 hours Mon-Fri (private repo: ~1,050 of 2,000 free minutes per month)
+    - cron: "25 * * * 1-5"   # every hour Mon-Fri (public repo: free); weekends have no Saxo trading hours
   workflow_dispatch: {}
 concurrency:
   group: atlantis-live

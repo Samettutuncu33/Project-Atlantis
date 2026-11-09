@@ -69,7 +69,8 @@ def _url(symbol: str, year: int, side: str) -> str:
 
 
 def fetch_year(symbol: str, year: int, side: str, raw_dir: Path,
-               max_attempts: int = 8, session: requests.Session | None = None) -> FetchResult:
+               max_attempts: int = 8, session: requests.Session | None = None,
+               offline: bool = False) -> FetchResult:
     """Download one yearly daily-candle file, caching it on disk.
 
     The feed resets connections frequently, so we retry with exponential
@@ -85,6 +86,8 @@ def fetch_year(symbol: str, year: int, side: str, raw_dir: Path,
             return FetchResult(dest, digest, url, m["retrieved_utc"], True)
         raise FetchError(f"cache corruption: {dest} hash {digest} != {m['sha256']}")
 
+    if offline:
+        raise FetchError(f"offline mode: {dest} not cached")
     s = session or requests.Session()
     last: Exception | None = None
     for attempt in range(max_attempts):
@@ -132,13 +135,29 @@ def parse_day_candles(blob: bytes, symbol: str, year: int) -> pd.DataFrame:
     return df
 
 
-def load_bid_ask(symbol: str, years: list[int], raw_dir: Path) -> tuple[pd.DataFrame, list[dict]]:
+def cached_years(symbol: str, raw_dir: Path) -> list[int]:
+    """Longest run of consecutive years with BOTH sides cached (no holes)."""
+    d = raw_dir / symbol
+    have = {int(p.name[:4]) for p in d.glob("*_BID_day.bi5")} & \
+        {int(p.name[:4]) for p in d.glob("*_ASK_day.bi5")}
+    best: list[int] = []
+    for y in sorted(have):
+        run = [y]
+        while run[-1] + 1 in have:
+            run.append(run[-1] + 1)
+        if len(run) > len(best):
+            best = run
+    return best
+
+
+def load_bid_ask(symbol: str, years: list[int], raw_dir: Path,
+                 offline: bool = False) -> tuple[pd.DataFrame, list[dict]]:
     """Return a daily frame with bid_* and ask_* columns plus provenance records."""
     frames, prov = [], []
     for y in years:
         sides = {}
         for side in ("BID", "ASK"):
-            res = fetch_year(symbol, y, side, raw_dir)
+            res = fetch_year(symbol, y, side, raw_dir, offline=offline)
             sides[side] = parse_day_candles(res.path.read_bytes(), symbol, y)
             prov.append({"symbol": symbol, "year": y, "side": side, "url": res.url,
                          "sha256": res.sha256, "retrieved_utc": res.retrieved_utc,

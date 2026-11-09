@@ -30,12 +30,17 @@ def clean_daily(df: pd.DataFrame, symbol: str) -> tuple[pd.DataFrame, list[Issue
     flat = ((df["bid_open"] == df["bid_close"]) & (df["bid_high"] == df["bid_low"])
             & (df["bid_open"] == df["bid_high"]))
     placeholder = (df["bid_volume"] <= 0) | flat
-    weekend = df.index.dayofweek == 5  # Saturday: FX market closed all day (UTC)
-    drop = placeholder | weekend
-    n = int(drop.sum())
-    if n:
-        issues.append(Issue("INFO", "non_trading_bar_removed", symbol, "",
-                            f"removed {n} weekend/placeholder bars"))
+    saturday = df.index.dayofweek == 5  # FX market closed all day (UTC)
+    # Sunday UTC bars hold only the thin weekly re-open (~21:00-24:00 UTC) with
+    # spreads ~6x normal (measured: EURUSD median 2.3 vs 0.4 pips). They are removed
+    # from the trading calendar (ASSUMPTIONS A13); the weekend gap remains visible
+    # in Monday's open.
+    sunday = df.index.dayofweek == 6
+    drop = placeholder | saturday | sunday
+    for name, m in (("placeholder_bar_removed", placeholder & ~saturday & ~sunday),
+                    ("saturday_bar_removed", saturday), ("sunday_reopen_bar_removed", sunday)):
+        if int(m.sum()):
+            issues.append(Issue("INFO", name, symbol, "", f"removed {int(m.sum())} bars"))
     out = df.loc[~drop].copy()
     issues += check_daily(out, symbol)
     return out, issues
@@ -62,10 +67,13 @@ def check_daily(df: pd.DataFrame, symbol: str) -> list[Issue]:
     flag(df["ask_close"] < df["bid_close"], "ERROR", "crossed_close",
          "ask < bid at close")
     flag(df["ask_open"] < df["bid_open"], "ERROR", "crossed_open", "ask < bid at open")
-    # Spread outliers: > 10x rolling median spread (reported, not removed).
+    # Spread outliers vs the same weekday's trailing median (Friday closes into the
+    # weekend shutdown are structurally wider). Reported, not removed.
     rel_spread = (df["ask_close"] - df["bid_close"]) / df["bid_close"]
-    med = rel_spread.rolling(60, min_periods=20).median()
-    flag(rel_spread > 10 * med, "WARN", "spread_outlier", "spread > 10x 60d median")
+    med = rel_spread.groupby(df.index.dayofweek).transform(
+        lambda x: x.rolling(26, min_periods=8).median().shift(1))
+    flag((rel_spread > 10 * med).fillna(False), "WARN", "spread_outlier",
+         "close spread > 10x trailing same-weekday median")
     # Return outliers: |log return| > 8 robust sigmas.
     mid = (df["ask_close"] + df["bid_close"]) / 2
     r = np.log(mid).diff()

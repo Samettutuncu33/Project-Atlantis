@@ -35,7 +35,9 @@ def sortino(r: pd.Series, rf: float = 0.0) -> float:
     same convention as quantstats): sqrt(mean(min(r,0)^2))."""
     ex = r - rf
     dd = math.sqrt((np.minimum(ex, 0) ** 2).mean())
-    return float(ex.mean() / dd * math.sqrt(P)) if dd > 0 else float("inf")
+    if dd > 0:
+        return float(ex.mean() / dd * math.sqrt(P))
+    return float("inf") if ex.mean() > 0 else float("nan")   # no downside: undefined if flat
 
 
 def drawdown(equity: pd.Series) -> pd.Series:

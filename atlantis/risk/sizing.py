@@ -77,3 +77,17 @@ class VolTargetSizer:
             a = inst.min_size
         a = round(a / inst.size_step) * inst.size_step
         return math.copysign(a, q)
+
+
+@dataclass
+class MinTicketSizer(VolTargetSizer):
+    """Diagnostic profile: trade exactly the minimum ticket in the signal's
+    direction, IGNORING the volatility target. Shows what a $200 account is
+    forced into by Saxo's minimum size. Realised risk is reported, not hidden."""
+
+    def targets(self, signals, vols, equity, usd_per_unit, instruments):
+        out = {}
+        for s, v in signals.items():
+            ok = np.isfinite(v) and v != 0 and np.isfinite(vols.get(s, np.nan))
+            out[s] = math.copysign(instruments[s].min_size, v) if ok else 0.0
+        return out

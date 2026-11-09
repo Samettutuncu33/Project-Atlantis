@@ -1,6 +1,7 @@
 # Scheduled live-simulation run (every 6 hours)
 
-Dashboard: https://claude.ai/artifact/AWBpwhmciFEZQZuu8Tp1TY
+Atlantis Live page (monitoring + start/stop): https://claude.ai/artifact/SG2VmB7APqkgiKyShrSHTD
+(The older dashboard AWBpwhmciFEZQZuu8Tp1TY is retired and is no longer updated.)
 Repository: https://github.com/WildSideMelbourne/project-atlantis (branch `main`)
 
 SIMULATION ONLY. No real orders, ever. From the IBKR connector, use only `search_contracts`,
@@ -26,12 +27,12 @@ screener-write, account, balance, position or trade tools.
    Omit any instrument you have no view on. You will be scored by Brier score against the other predictors.
 3. `python -m atlantis.live step`. Exit code 2 means a check failed. Continue anyway, so the dashboard shows the failure.
    If it crashes, retry once. If it crashes again, stop and report. Never publish stale data as new.
-4. Upload `live/out/live.json` to the dashboard as an asset (Artifact tool, `asset: true`, dashboard url). Note the `/_blob/<id>`.
-5. `python scripts/dashboard_updates.py /_blob/<id> /tmp/dash` writes one update per dataset.
-   Read each `datasets/<id>` document for its version. Then send one ArtifactData `batch` of `update` writes,
-   pinned with `if_version`, each using `file_path` /tmp/dash/<id>.json. A dataset that does not exist yet is created with `set`.
-5b. **Report back to the Control Panel:** ArtifactData `set` doc `latest` in collection `status` on the Control Panel
-   with `{run_utc, last_completed_bar, trading_mode, accounts: [{account, equity}, ...]}`, taken from `live/out/live.json`.
+4. Upload `live/out/live.json` to https://claude.ai/artifact/SG2VmB7APqkgiKyShrSHTD as an asset (Artifact tool, `asset: true`).
+   Note the returned `/_blob/<id>`.
+5. **Publish to the page:** ArtifactData `get` doc `latest` in collection `status` on that page (note its version). Then `set` it,
+   pinned with `if_version`, to `{run_utc, last_completed_bar, trading_mode, live_json: "/_blob/<id>",
+   accounts: [{account, equity}, ...]}`, taken from `live/out/live.json`. The page reloads its data from `live_json`.
+   Delete the previous run's asset only if nothing references it.
 6. **Journal:** append one dated entry to the END of `knowledge/journal.md` with 3–6 factual lines:
    notable moves, which predictors were right or wrong, gate rejections, data problems. Never edit earlier entries.
 7. Commit `live/`, `knowledge/`, `data/llm/`, `data/ibkr/` and `data/raw/dukascopy_live/` with the message `live run <run_utc>`,

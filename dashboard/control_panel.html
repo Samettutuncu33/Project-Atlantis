@@ -1,175 +1,295 @@
-<title>Atlantis Control Panel</title>
+<title>Atlantis Live</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-/* Layout: one narrow column — status first, then the three controls, then the audit trail. */
+/* Layout: one scrolling column on black — state and controls first, then accounts, chart, trades, learning, data, checks. Single dark look by choice; no green. */
 :root {
-  --bg: #f6f7f4; --panel: #ffffff; --fg: #1b1f1c; --muted: #5d665f; --line: #dde2dc;
-  --run: #1f7a4d; --pause: #a86a00; --stop: #b3261e; --accent: #24524a;
+  color-scheme: dark;
+  --bg: #000000; --panel: #0d0f12; --panel2: #14171c; --fg: #eef1f5; --muted: #8b939e; --line: #23272e;
+  --up: #4da3ff; --down: #ff5c5c; --pause: #f2b13d; --accent: #9db8ff; --stop: #ff5c5c;
+  --s1: #4da3ff; --s2: #f2b13d; --s3: #c38bff; --s4: #ff8fb1; --s5: #e8e8e8;
   --font-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #121513; --panel: #1b201d; --fg: #e8ece8; --muted: #9aa49c; --line: #2c332e;
-  --run: #5cc591; --pause: #f0b54a; --stop: #ff8a80; --accent: #8cc7b9; color-scheme: dark } }
-:root[data-theme="dark"] {
-  --bg: #121513; --panel: #1b201d; --fg: #e8ece8; --muted: #9aa49c; --line: #2c332e;
-  --run: #5cc591; --pause: #f0b54a; --stop: #ff8a80; --accent: #8cc7b9; color-scheme: dark }
-body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--font-body); }
-.wrap { max-width: 640px; margin: 0 auto; padding-block: 24px 40px;
+body { background: var(--bg); color: var(--fg); font: 14px/1.5 var(--font-body); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 20px 48px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-  display: grid; gap: 20px; }
-h1 { font: 600 26px/1.15 var(--font-display); margin: 0; letter-spacing: .01em; text-wrap: balance; }
-h2 { font: 600 13px/1.2 var(--font-body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 8px; }
+  display: grid; gap: 28px; }
+h1 { font: 600 28px/1.1 var(--font-display); margin: 0; letter-spacing: .01em; }
+h2 { font: 600 12px/1.2 var(--font-body); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 0 0 10px; }
 p { margin: 0; }
-.muted { color: var(--muted); font-size: 13px; }
-.sim { display: inline-block; font: 600 11px/1.6 var(--font-body); letter-spacing: .06em; padding: 0 6px;
+.muted { color: var(--muted); font-size: 12.5px; }
+.sim { display: inline-block; font: 600 10.5px/1.6 var(--font-body); letter-spacing: .08em; padding: 0 6px;
   border: 1px solid var(--pause); color: var(--pause); border-radius: 4px; vertical-align: 2px; }
-.status { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px;
-  display: grid; gap: 6px; border-left: 6px solid var(--muted); }
-.status[data-mode="RUNNING"] { border-left-color: var(--run); }
+.top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px; align-items: stretch; }
+@media (max-width: 760px) { .top { grid-template-columns: 1fr; } }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; min-width: 0; }
+.status { border-left: 5px solid var(--muted); display: grid; gap: 6px; }
+.status[data-mode="RUNNING"] { border-left-color: var(--up); }
 .status[data-mode="PAUSED"] { border-left-color: var(--pause); }
-.mode { font: 600 34px/1 var(--font-display); letter-spacing: .02em; }
-.status[data-mode="RUNNING"] .mode { color: var(--run); }
+.mode { font: 600 34px/1 var(--font-display); }
+.status[data-mode="RUNNING"] .mode { color: var(--up); }
 .status[data-mode="PAUSED"] .mode { color: var(--pause); }
-.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
-button { font: 600 15px var(--font-body); padding: 14px 12px; border-radius: 10px; border: 1.5px solid var(--line);
-  background: var(--panel); color: var(--fg); cursor: pointer; }
+.controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 460px) { .controls { grid-template-columns: 1fr; } }
+button { font: 600 14px var(--font-body); padding: 12px 8px; border-radius: 10px; border: 1.5px solid var(--line);
+  background: var(--panel2); color: var(--fg); cursor: pointer; }
 button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-button:disabled { opacity: .45; cursor: not-allowed; }
-.b-run { border-color: var(--run); color: var(--run); }
-.b-pause { border-color: var(--pause); color: var(--pause); }
+button:disabled { opacity: .35; cursor: not-allowed; }
+.b-run { border-color: var(--up); color: var(--up); } .b-pause { border-color: var(--pause); color: var(--pause); }
 .b-stop { border-color: var(--stop); color: var(--stop); }
-.confirm { background: var(--panel); border: 1.5px solid var(--stop); border-radius: 10px; padding: 14px; display: grid; gap: 10px; }
-.confirm .row { display: flex; gap: 10px; flex-wrap: wrap; }
-.confirm button { flex: 1 1 140px; padding: 10px; }
-.b-stop-go { background: var(--stop); color: var(--bg); border-color: var(--stop); }
-.msg { font-size: 13px; min-height: 1.5em; }
-.msg.err { color: var(--stop); }
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
-.hist { list-style: none; margin: 0; padding: 0; display: grid; }
-.hist li { display: grid; grid-template-columns: 92px 1fr; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.confirm { border: 1.5px solid var(--stop); border-radius: 10px; padding: 12px; display: grid; gap: 10px; margin-top: 10px; }
+.confirm .row { display: flex; gap: 8px; flex-wrap: wrap; } .confirm button { flex: 1 1 140px; padding: 10px; }
+.b-stop-go { background: var(--stop); color: #000; border-color: var(--stop); }
+.msg { font-size: 12.5px; min-height: 1.4em; margin-top: 8px; } .msg.err { color: var(--stop); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--sw); border-radius: 10px; padding: 14px; display: grid; gap: 4px; min-width: 0; }
+.big { font: 400 30px/1.1 var(--font-display); font-variant-numeric: tabular-nums; }
+.card dl { display: grid; grid-template-columns: auto auto; gap: 1px 10px; margin: 6px 0 0; font-size: 12px; }
+.card dt { color: var(--muted); } .card dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.pos { color: var(--up); } .neg { color: var(--down); } .warn { color: var(--pause); }
+.wrapx { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+th { color: var(--muted); font-weight: 600; background: var(--panel); position: sticky; top: 0; }
+th.l, td.l { text-align: left; }
+.chart { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px; min-height: 240px; }
+.chart svg text { fill: var(--muted); font-size: 11px; font-family: var(--font-body); }
+.tip { position: absolute; pointer-events: none; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font-size: 12px; white-space: nowrap; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; margin: 6px 0 8px; }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; background: var(--sw); vertical-align: -1px; }
+.hist { list-style: none; margin: 0; padding: 0; } .hist li { display: flex; gap: 12px; padding: 5px 0; border-top: 1px solid var(--line); font-size: 12.5px; }
 .hist li:first-child { border-top: 0; }
-.tag { font: 600 12px var(--font-mono); }
-.tag.RUNNING { color: var(--run); } .tag.PAUSED { color: var(--pause); } .tag.FLATTEN { color: var(--stop); }
-.mono { font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; }
-dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; font-size: 14px; }
-dt { color: var(--muted); } dd { margin: 0; font-variant-numeric: tabular-nums; min-width: 0; overflow-wrap: anywhere; }
+.tag { font: 600 11.5px var(--font-mono); } .tag.RUNNING { color: var(--up); } .tag.PAUSED { color: var(--pause); } .tag.FLATTEN { color: var(--stop); }
+.mono { font-family: var(--font-mono); font-size: 12px; }
+details summary { cursor: pointer; font-weight: 600; } details ul { margin: 10px 0 0; padding-left: 1.2em; max-width: 85ch; color: var(--muted); }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 760px) { .two { grid-template-columns: 1fr; } }
 a { color: var(--accent); }
 </style>
 
 <div class="wrap">
   <header style="display:grid;gap:6px">
-    <h1>Atlantis Control Panel</h1>
-    <p class="muted"><span class="sim">SIMULATION</span> Controls the five virtual $200 paper accounts. No real money or broker is involved.</p>
+    <h1>Atlantis Live</h1>
+    <p class="muted"><span class="sim">SIMULATION</span> Five virtual $200 paper accounts with Saxo-calibrated costs. Prices come from Dukascopy (bid/ask), not Saxo. No real money or broker is involved.</p>
+    <p class="muted" id="runline">Waiting for the latest run…</p>
   </header>
 
-  <section class="status" id="status" data-mode="">
-    <h2 style="margin:0">Trading is</h2>
-    <div class="mode" id="mode">Loading…</div>
-    <p id="since" class="muted"></p>
-    <p id="effect" class="muted">A change applies from the next daily decision (each day's bar closes at 00:00 UTC, and the next scheduled run carries it out). Trades already made are never changed.</p>
-  </section>
-
-  <section>
-    <h2>Controls</h2>
-    <div class="controls">
-      <button id="b-run" class="b-run" type="button" disabled>▶ Resume trading</button>
-      <button id="b-pause" class="b-pause" type="button" disabled>⏸ Pause new trades</button>
-      <button id="b-stop" class="b-stop" type="button" disabled>⏹ Stop &amp; close all</button>
-    </div>
-    <div id="confirm" class="confirm" hidden>
-      <p><b>Close every open position at the next open and pause?</b> All five accounts sell or buy back what they hold. Learning and predictions continue.</p>
-      <div class="row">
-        <button id="b-stop-go" class="b-stop-go" type="button">Yes, stop and close all</button>
-        <button id="b-stop-no" type="button">Cancel</button>
+  <div class="top">
+    <section class="box status" id="status" data-mode="">
+      <h2 style="margin:0">Trading is</h2>
+      <div class="mode" id="mode">…</div>
+      <p id="since" class="muted"></p>
+      <p id="checksline" class="muted"></p>
+    </section>
+    <section class="box">
+      <h2>Controls</h2>
+      <div class="controls">
+        <button id="b-run" class="b-run" type="button" disabled>▶ Resume</button>
+        <button id="b-pause" class="b-pause" type="button" disabled>⏸ Pause</button>
+        <button id="b-stop" class="b-stop" type="button" disabled>⏹ Stop &amp; close all</button>
       </div>
-    </div>
-    <p id="msg" class="msg" role="status"></p>
-    <p class="muted"><b>Pause</b>: no new positions; existing ones are kept and can still be reduced. <b>Stop &amp; close all</b>: closes everything at the next open, then stays paused. <b>Resume</b>: normal trading again.</p>
+      <div id="confirm" class="confirm" hidden>
+        <p><b>Close every open position at the next open and pause?</b> Learning and predictions continue.</p>
+        <div class="row"><button id="b-stop-go" class="b-stop-go" type="button">Yes, stop and close all</button><button id="b-stop-no" type="button">Cancel</button></div>
+      </div>
+      <p id="msg" class="msg" role="status"></p>
+      <p class="muted">Applies from the next daily decision (bars close at 00:00 UTC; the next scheduled run carries it out). Past trades never change.</p>
+    </section>
+  </div>
+
+  <section id="accounts"><h2>Accounts</h2><div class="cards" id="cards"></div></section>
+
+  <section id="equity">
+    <h2>Equity</h2>
+    <div class="legend" id="legend"></div>
+    <div class="chart" id="chart"></div>
   </section>
 
-  <section class="card">
-    <h2>Last scheduled run</h2>
-    <dl id="run">
-      <dt>Run</dt><dd id="r-at">No run has reported yet.</dd>
-      <dt>Mode it applied</dt><dd id="r-mode">—</dd>
-      <dt>Account equities</dt><dd id="r-eq">—</dd>
-    </dl>
-    <p class="muted" style="margin-top:8px">Full details: <a href="https://claude.ai/artifact/AWBpwhmciFEZQZuu8Tp1TY" target="_blank" rel="noopener">Atlantis Live Simulation dashboard</a></p>
+  <section id="plan"><h2>Plan: signals and next orders</h2><div class="wrapx"><table id="t-plan"></table></div></section>
+  <section id="positions"><h2>Open positions</h2><div class="wrapx"><table id="t-pos"></table></div></section>
+  <section id="fills"><h2>Every simulated fill <span class="muted">(bar bid/ask for your cross-check)</span></h2><div class="wrapx"><table id="t-fills"></table></div></section>
+
+  <section id="learning">
+    <h2>Account E: predictions and how they turned out</h2>
+    <p class="muted" id="calline" style="margin-bottom:8px"></p>
+    <div class="wrapx" style="max-height:420px"><table id="t-pred"></table></div>
   </section>
 
-  <section class="card">
-    <h2>History of presses</h2>
-    <ul class="hist" id="hist"><li><span class="muted">—</span><span class="muted">No presses yet. Trading has been running since the live start on 9 Nov 2026.</span></li></ul>
-  </section>
+  <div class="two">
+    <section id="knowhow"><h2>Know-how: which predictors E trusts</h2><div class="wrapx" style="max-height:420px"><table id="t-know"></table></div></section>
+    <section id="lessons"><h2>Lessons</h2><div class="box" style="max-height:420px;overflow:auto"><ul class="hist" id="lessons-list"></ul></div></section>
+  </div>
+
+  <section id="projection"><h2>Projection to 9 Dec 2026 <span class="muted">(range of outcomes, not a forecast)</span></h2><div class="wrapx"><table id="t-proj"></table></div></section>
+  <section id="prices"><h2>Prices used <span class="muted">(Dukascopy, not Saxo)</span></h2><div class="wrapx" style="max-height:360px"><table id="t-prices"></table></div></section>
+  <section id="checks"><h2>Automated checks, latest run</h2><div class="wrapx"><table id="t-checks"></table></div></section>
+
+  <section class="box"><h2>History of control presses</h2><ul class="hist" id="hist"><li class="muted">No presses yet. Trading has run since the live start on 9 Nov 2026.</li></ul></section>
+
+  <details class="box">
+    <summary>How it works and what is assumed</summary>
+    <ul>
+      <li>A and C size to a 10% volatility target; at $200 that usually rounds below Saxo's 1,000-unit FX minimum, so they rarely trade. B and D trade the minimum ticket (far more risk).</li>
+      <li>E trades 20 instruments: FX, ETH/BTC, US stocks, indices, oil and gold. It predicts each one daily, learns which predictors work per asset class, and trades only when the expected edge beats costs.</li>
+      <li>Saxo costs: $1 minimum FX commission, 0.75% p.a. Tom/Next mark-up, 0.25% currency conversion, crypto funding 15% p.a. plus the 3.45% mark-up. CFD and minimum-size values are labelled assumptions until the Saxo API arrives.</li>
+      <li>Every run replays all accounts, reconciles them against an independent recomputation, and verifies that no earlier fill or prediction changed.</li>
+    </ul>
+    <p class="muted" style="margin-top:10px">Code and full history: github.com/WildSideMelbourne/project-atlantis</p>
+  </details>
 </div>
 
 <script>
 (async () => {
   const $ = (id) => document.getElementById(id);
-  const fmt = (iso) => { try { return new Date(iso).toISOString().replace('T', ' ').slice(0, 16) + ' UTC'; } catch { return iso; } };
-  const label = { RUNNING: 'Running', PAUSED: 'Paused', FLATTEN: 'Stopped (closing all)' };
-  const btns = [$('b-run'), $('b-pause'), $('b-stop')];
-  let current = 'RUNNING';
+  const usd = (v) => (v == null || isNaN(v)) ? '' : (v < 0 ? '-$' : '$') + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const pct = (v, d = 1) => (v == null || isNaN(v)) ? '' : (v * 100).toFixed(d) + '%';
+  const num = (v) => (v == null || isNaN(v)) ? '' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 5 });
+  const ts = (s) => s ? String(s).replace('T', ' ').replace(/\.\d+/, '').replace(/(:00)?\+00:00$/, '').replace('Z', '') : '';
+  const color = (a) => `var(--s${'ABCDE'.indexOf(a) + 1})`;
+  const label = { RUNNING: 'Running', PAUSED: 'Paused', FLATTEN: 'Stopped' };
 
-  function render(mode, since) {
+  function table(el, cols, rows, empty = 'None yet.') {
+    const thead = document.createElement('tr');
+    for (const c of cols) { const th = document.createElement('th'); th.textContent = c[0]; if (c[2]) th.className = c[2]; thead.append(th); }
+    const out = [thead];
+    if (!rows || !rows.length) { const tr = document.createElement('tr'); const td = document.createElement('td'); td.className = 'l muted'; td.colSpan = cols.length; td.textContent = empty; tr.append(td); out.push(tr); }
+    else for (const r of rows) { const tr = document.createElement('tr'); for (const c of cols) { const td = document.createElement('td'); const v = c[1](r); if (Array.isArray(v)) { td.textContent = v[0] ?? ''; td.className = [c[2], v[1]].filter(Boolean).join(' '); } else { td.textContent = v ?? ''; if (c[2]) td.className = c[2]; } tr.append(td); } out.push(tr); }
+    el.replaceChildren(...out);
+  }
+
+  function drawChart(rows) {
+    const el = $('chart');
+    if (!rows || !rows.length) { el.textContent = 'No equity data yet.'; return; }
+    const W = Math.max(el.clientWidth - 16, 280), H = 230, m = { t: 10, r: 14, b: 26, l: 58 };
+    const pts = rows.map((r) => ({ ...r, t: new Date(r.ts).getTime(), v: +r.equity }));
+    const t0 = Math.min(...pts.map((p) => p.t)), t1 = Math.max(...pts.map((p) => p.t));
+    let lo = Math.min(200, ...pts.map((p) => p.v)), hi = Math.max(200, ...pts.map((p) => p.v));
+    const pad = Math.max((hi - lo) * 0.12, 2); lo -= pad; hi += pad;
+    const x = (t) => m.l + (t1 === t0 ? 0.5 : (t - t0) / (t1 - t0)) * (W - m.l - m.r);
+    const y = (v) => m.t + (hi - v) / (hi - lo) * (H - m.t - m.b);
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', '100%'); svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'Equity of each simulated account, starting at $200');
+    const mk = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.append(e); return e; };
+    for (let i = 0; i <= 4; i++) {
+      const v = lo + (hi - lo) * i / 4, yy = y(v);
+      mk('line', { x1: m.l, x2: W - m.r, y1: yy, y2: yy, stroke: '#1d2128' });
+      const tx = mk('text', { x: m.l - 6, y: yy + 4, 'text-anchor': 'end' }); tx.textContent = '$' + v.toFixed(0);
+    }
+    mk('line', { x1: m.l, x2: W - m.r, y1: y(200), y2: y(200), stroke: '#555b66', 'stroke-dasharray': '4 3' });
+    for (const tt of [t0, t1]) { const tx = mk('text', { x: x(tt), y: H - 6, 'text-anchor': tt === t0 ? 'start' : 'end' }); tx.textContent = new Date(tt).toISOString().slice(0, 10); }
+    const by = {}; for (const p of pts) (by[p.account] ||= []).push(p);
+    const tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true;
+    for (const a of Object.keys(by).sort()) {
+      const s = by[a].sort((p, q) => p.t - q.t);
+      mk('polyline', { points: s.map((p) => `${x(p.t)},${y(p.v)}`).join(' '), fill: 'none', stroke: color(a), 'stroke-width': 2 });
+      for (const p of s) {
+        const c = mk('circle', { cx: x(p.t), cy: y(p.v), r: 4, fill: color(a) });
+        c.addEventListener('mouseenter', () => { tip.hidden = false; tip.textContent = `${a} · ${ts(p.ts)} · ${usd(p.v)} (${p.kind})`; tip.style.left = Math.min(x(p.t) + 10, W - 230) + 'px'; tip.style.top = Math.max(y(p.v) - 30, 0) + 'px'; });
+        c.addEventListener('mouseleave', () => { tip.hidden = true; });
+      }
+    }
+    el.replaceChildren(svg, tip);
+  }
+
+  let bundle = null;
+  function render(b) {
+    bundle = b;
+    const run = (b.run || [])[0] || {};
+    $('runline').textContent = `Last run ${ts(run.run_utc)} UTC · last completed daily bar ${run.last_completed_bar || '—'} · live start ${run.live_start || '—'} · ${run.live_started ? 'decisions after every daily bar' : 'first decision after the first live bar closes'}`;
+    const ch = b.checks || []; const bad = ch.filter((c) => c.status !== 'OK' && c.status !== 'INFO');
+    $('checksline').textContent = bad.length ? `${bad.length} of ${ch.length} checks need attention: ${bad.map((c) => c.check).join(', ')}` : `All ${ch.length} automated checks passed in the latest run.`;
+    $('checksline').className = bad.length ? 'neg' : 'muted';
+    const accts = b.accounts || [];
+    $('cards').replaceChildren(...accts.map((a) => {
+      const d = document.createElement('article'); d.className = 'card'; d.style.setProperty('--sw', color(a.account));
+      const h = document.createElement('div'); h.className = 'muted'; h.textContent = `${a.account} · ${a.name}`;
+      const big = document.createElement('div'); big.className = 'big'; big.textContent = usd(a.equity);
+      const r = document.createElement('div'); r.textContent = `${a.return_pct >= 0 ? '+' : ''}${Number(a.return_pct).toFixed(2)}% since start`; r.className = a.return_pct > 0 ? 'pos' : a.return_pct < 0 ? 'neg' : 'muted';
+      const dl = document.createElement('dl');
+      for (const [k, v] of [['Cash', usd(a.cash)], ['Unrealised', usd(a.unrealised)], ['Realised', usd(a.realised)], ['Commissions', usd(a.commissions)], ['Financing', usd(a.financing)], ['Fills', a.fills], ['Rejected', a.rejects], ['Open positions', a.open_positions], ['Max drawdown', Number(a.max_drawdown_pct).toFixed(2) + '%']]) { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd); }
+      d.append(h, big, r, dl);
+      if (a.halted) { const w = document.createElement('div'); w.className = 'neg'; w.textContent = 'Halted: equity below one minimum commission.'; d.append(w); }
+      return d;
+    }));
+    $('legend').replaceChildren(...accts.map((a) => { const s = document.createElement('span'); s.style.setProperty('--sw', color(a.account)); s.textContent = `${a.account} · ${a.name}`; return s; }));
+    drawChart(b.equity);
+    const sig = (s) => [s, /LONG|UP/.test(s) ? 'l pos' : /SHORT|DOWN/.test(s) ? 'l neg' : 'l muted'];
+    table($('t-plan'), [['Acct', (r) => r.account, 'l'], ['Instrument', (r) => r.symbol, 'l'], ['Signal', (r) => sig(r.signal_text)], ['Position', (r) => num(r.position_qty)], ['Pending orders', (r) => r.pending_orders, 'l'], ['Executes at', (r) => r.executes_at, 'l'], ['Next decision / reason', (r) => r.next_decision, 'l']], b.plan);
+    table($('t-pos'), [['Acct', (r) => r.account, 'l'], ['Instrument', (r) => r.symbol, 'l'], ['Side', (r) => sig(r.side)], ['Units', (r) => num(r.qty)], ['Avg entry', (r) => num(r.avg_entry)], ['Bid', (r) => num(r.mark_bid)], ['Ask', (r) => num(r.mark_ask)], ['Mark time', (r) => ts(r.mark_ts), 'l'], ['Unrealised', (r) => [usd(r.unrealised_usd), r.unrealised_usd < 0 ? 'neg' : 'pos']], ['Notional', (r) => usd(r.notional_usd)], ['Margin', (r) => usd(r.margin_usd)]], b.positions);
+    table($('t-fills'), [['Time (UTC)', (r) => ts(r.ts), 'l'], ['Acct', (r) => r.account, 'l'], ['Instrument', (r) => r.symbol, 'l'], ['Side', (r) => [r.side, r.side === 'BUY' ? 'l pos' : 'l neg']], ['Units', (r) => num(r.qty)], ['Fill price', (r) => num(r.price)], ['Bar bid open', (r) => num(r.bar_bid_open)], ['Bar ask open', (r) => num(r.bar_ask_open)], ['Decision mid', (r) => num(r.decision_mid)], ['Commission', (r) => usd(r.commission_usd)], ['Rule', (r) => `${r.tag}: ${r.reason}`, 'l']], (b.fills || []).slice().reverse());
+    const cal = (b.calibration || [])[0];
+    $('calline').textContent = cal ? `${Number(cal.resolved_total).toLocaleString()} predictions scored so far` + (cal.recent_hit_rate == null ? '.' : `; ${pct(cal.recent_hit_rate)} of the latest resolved up/down calls were right (50% is a coin flip).`) + ' Each prediction is recorded in a hash-chained ledger before its outcome exists.' : '';
+    table($('t-pred'), [['Made (UTC)', (r) => ts(r.made_at), 'l'], ['Instrument', (r) => r.symbol, 'l'], ['Class', (r) => r.asset_class, 'l'], ['P(up, 5 days)', (r) => pct(r.p_up)], ['Call', (r) => sig(r.call)], ['Status', (r) => r.status, 'l'], ['Outcome', (r) => r.outcome || '', 'l'], ['Correct?', (r) => r.correct == null ? '' : [r.correct ? 'yes' : 'no', r.correct ? 'l pos' : 'l neg']], ['Move %', (r) => r.fwd_return_pct == null ? '' : Number(r.fwd_return_pct).toFixed(2)], ['Ledger hash', (r) => r.hash, 'l muted']], (b.predictions || []).slice().reverse().slice(0, 200));
+    table($('t-know'), [['Class', (r) => r.asset_class, 'l'], ['Predictor', (r) => r.predictor, 'l'], ['Weight', (r) => pct(r.weight)], ['Scored', (r) => num(r.scored)], ['Hit rate', (r) => r.hit_rate == null ? '' : pct(r.hit_rate)], ['Brier', (r) => r.brier == null ? '' : Number(r.brier).toFixed(4)]], b.knowhow);
+    const ll = b.lessons || [];
+    $('lessons-list').replaceChildren(...(ll.length ? ll : [{ lesson: 'None yet.' }]).map((x) => { const li = document.createElement('li'); li.textContent = x.lesson; return li; }));
+    table($('t-proj'), [['Acct', (r) => r.account, 'l'], ['Trading days', (r) => r.horizon_trading_days], ['Equity now', (r) => usd(r.equity_now)], ['5th pct', (r) => usd(r.p5)], ['Median', (r) => usd(r.p50)], ['95th pct', (r) => usd(r.p95)], ['P(≥ 2×)', (r) => pct(r.p_double)], ['P(lose half)', (r) => pct(r.p_lose_half)], ['Note', (r) => r.note || '', 'l muted']], b.projection);
+    const pr = []; const grp = {}; for (const r of (b.prices || [])) (grp[r.symbol] ||= []).push(r);
+    for (const s of Object.keys(grp)) pr.push(...grp[s].sort((p, q) => (p.ts < q.ts ? 1 : -1)).slice(0, 4));
+    table($('t-prices'), [['Instrument', (r) => r.symbol, 'l'], ['Time (UTC)', (r) => ts(r.ts), 'l'], ['Kind', (r) => r.kind, 'l'], ['Bid open', (r) => num(r.bid_open)], ['Ask open', (r) => num(r.ask_open)], ['Bid close / last', (r) => num(r.bid_close)], ['Ask close / last', (r) => num(r.ask_close)]], pr);
+    table($('t-checks'), [['Check', (r) => r.check, 'l'], ['Status', (r) => [r.status, r.status === 'OK' ? 'l pos' : r.status === 'WARN' ? 'l warn' : 'l neg']], ['Detail', (r) => r.detail, 'l']], ch);
+  }
+  window.addEventListener('resize', () => { if (bundle) drawChart(bundle.equity); });
+
+  // ---- controls -----------------------------------------------------------
+  const btns = [$('b-run'), $('b-pause'), $('b-stop')];
+  let current = 'RUNNING', canEdit = false;
+  function renderMode(mode, since) {
     current = mode;
     const shown = mode === 'FLATTEN' ? 'PAUSED' : mode;
     $('status').dataset.mode = shown;
-    $('mode').textContent = mode === 'FLATTEN' ? 'Stopped' : label[mode];
-    $('since').textContent = since ? `Since ${fmt(since)}` + (mode === 'FLATTEN' ? ' — positions close at the next open, then trading stays paused.' : '') : 'Running since the live start.';
-    $('b-run').disabled = shown === 'RUNNING';
-    $('b-pause').disabled = shown === 'PAUSED';
-    $('b-stop').disabled = false;
+    $('mode').textContent = label[mode] || mode;
+    $('since').textContent = since ? `Since ${ts(since)} UTC` + (mode === 'FLATTEN' ? ' · positions close at the next open, then trading stays paused.' : '') : 'Running since the live start (9 Nov 2026).';
+    $('b-run').disabled = !canEdit || shown === 'RUNNING';
+    $('b-pause').disabled = !canEdit || shown === 'PAUSED';
+    $('b-stop').disabled = !canEdit;
   }
-
   const db = await claude.use('db');
   const user = await claude.use('user');
-  if (!db) {
-    $('mode').textContent = 'Unavailable';
-    $('msg').textContent = 'Sign in to claude.ai to see and change the trading state.';
-    return;
-  }
-  const canEdit = user ? await user.canEdit() : false;
+  if (!db) { $('mode').textContent = 'Unavailable'; $('runline').textContent = 'Sign in to claude.ai to see the live simulation.'; return; }
+  canEdit = user ? await user.canEdit() : false;
   const myId = user ? await user.id() : '';
+  renderMode('RUNNING', null);
+
+  let loadedBlob = null;
+  db.doc('status/latest').onSnapshot(async (s) => {
+    if (!s.exists) return;
+    const d = s.data();
+    if (d.live_json && d.live_json !== loadedBlob) {
+      try {
+        const r = await fetch(d.live_json);
+        if (!r.ok) throw new Error(String(r.status));
+        loadedBlob = d.live_json;
+        render(await r.json());
+      } catch (e) { $('runline').textContent = `Could not load the latest run data (${e.message}).`; }
+    }
+  }, () => {});
 
   db.collection('events').orderBy('pressed_at', 'asc').onSnapshot((snap) => {
-    const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    if (docs.length) { const last = docs[docs.length - 1]; render(last.mode, last.pressed_at); }
-    else render('RUNNING', null);
-    if (!canEdit) btns.forEach((b) => (b.disabled = true));
-    const ul = $('hist');
+    const docs = snap.docs.map((x) => ({ id: x.id, ...x.data() }));
+    if (docs.length) { const last = docs[docs.length - 1]; renderMode(last.mode, last.pressed_at); } else renderMode('RUNNING', null);
     if (!docs.length) return;
-    ul.replaceChildren(...docs.slice().reverse().map((d) => {
+    $('hist').replaceChildren(...docs.slice().reverse().map((x) => {
       const li = document.createElement('li');
-      const t = document.createElement('span'); t.className = `tag ${d.mode}`; t.textContent = d.mode === 'FLATTEN' ? 'STOP+CLOSE' : d.mode;
-      const w = document.createElement('span'); w.className = 'mono'; w.textContent = fmt(d.pressed_at);
-      li.append(t, w);
-      return li;
+      const t = document.createElement('span'); t.className = `tag ${x.mode}`; t.textContent = x.mode === 'FLATTEN' ? 'STOP+CLOSE' : x.mode;
+      const w = document.createElement('span'); w.className = 'mono'; w.textContent = ts(x.pressed_at) + ' UTC';
+      li.append(t, w); return li;
     }));
   }, (e) => { $('msg').className = 'msg err'; $('msg').textContent = `Could not read the trading state (${e.code}).`; });
 
-  db.doc('status/latest').onSnapshot((s) => {
-    if (!s.exists) return;
-    const d = s.data();
-    $('r-at').textContent = fmt(d.run_utc) + (d.last_completed_bar ? ` · bar ${d.last_completed_bar}` : '');
-    $('r-mode').textContent = d.trading_mode ? label[d.trading_mode] || d.trading_mode : '—';
-    $('r-eq').textContent = Array.isArray(d.accounts) ? d.accounts.map((a) => `${a.account} $${Number(a.equity).toFixed(2)}`).join(' · ') : '—';
-  }, () => {});
-
   async function press(mode) {
-    $('msg').className = 'msg'; $('msg').textContent = 'Saving…';
-    btns.forEach((b) => (b.disabled = true));
+    $('msg').className = 'msg'; $('msg').textContent = 'Saving…'; btns.forEach((b) => (b.disabled = true));
     try {
       await db.collection('events').add({ mode, pressed_at: new Date().toISOString(), by: myId || '' });
-      $('msg').textContent = mode === 'RUNNING' ? 'Saved: trading resumes from the next daily decision.'
-        : mode === 'PAUSED' ? 'Saved: no new trades from the next daily decision.'
-        : 'Saved: all positions close at the next open, then trading stays paused.';
+      $('msg').textContent = mode === 'RUNNING' ? 'Saved: trading resumes from the next daily decision.' : mode === 'PAUSED' ? 'Saved: no new trades from the next daily decision.' : 'Saved: all positions close at the next open, then trading stays paused.';
     } catch (e) {
       $('msg').className = 'msg err';
-      $('msg').textContent = e && e.code === 'permission_denied' ? 'Only the dashboard owner can change trading.' : `Not saved (${(e && e.code) || 'error'}). Try again.`;
-      render(current, null);
+      $('msg').textContent = e && e.code === 'permission_denied' ? 'Only the owner can change trading.' : `Not saved (${(e && e.code) || 'error'}). Try again.`;
+      renderMode(current, null);
     }
   }
   $('b-run').onclick = () => press('RUNNING');

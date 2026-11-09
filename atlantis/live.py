@@ -312,6 +312,7 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     portfolio_enrich(rows)
     from atlantis.intel.news import bundle_rows
     rows.update(bundle_rows(ROOT / "knowledge" / "intel"))
+    rows["agents"] = agents_rows(rows, now)
     checks = [{"run_utc": run["run_utc"], **c} for c in checks]
     if write:
         OUT.mkdir(parents=True, exist_ok=True)
@@ -501,6 +502,61 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
         knowhow_path.write_text(json.dumps({"asof": str(res.equity.index[-1].date()), **res.hedge.to_dict(),
                                         "lessons": res.lessons}, indent=1, default=str))
     return checks
+
+
+def agents_rows(rows: dict, now: datetime) -> list[dict]:
+    """What each AI agent last did, read from the files it writes, so the page shows whether it is working."""
+    def latest(pattern: str):
+        files = sorted(p for p in ROOT.glob(pattern) if p.name != ".gitkeep")
+        return files[-1] if files else None
+
+    def made_at(p):
+        try:
+            return json.loads(p.read_text()).get("made_at")
+        except Exception:
+            return None
+
+    def age(ts):
+        if not ts:
+            return None
+        return round((pd.Timestamp(now) - pd.Timestamp(ts)).total_seconds() / 3600, 1)
+
+    def score(acct):
+        k = [r for r in rows.get("knowhow", []) if r["account"] == acct and r["predictor"] == "llm_analyst"]
+        sc = sum(r["scored"] for r in k)
+        hits = [r["hit_rate"] for r in k if r["hit_rate"] is not None]
+        return f"{sc} predictions scored" + (f", hit rate {sum(hits) / len(hits):.0%}" if hits else ", none scored yet")
+
+    out = []
+    brief, flash = latest("knowledge/intel/*.json"), latest("knowledge/intel/flash/*.json")
+    b = json.loads(brief.read_text()) if brief else {}
+    out.append({"agent": "News & market intelligence", "role": "daily brief + hourly breaking-news flash",
+                "last": made_at(flash) or b.get("made_at"), "hours_ago": age(made_at(flash) or b.get("made_at")),
+                "did": (f"daily brief {brief.stem}: {len(b.get('items', []))} dated news items, "
+                        f"{len(b.get('calendar', []))} calendar events" if brief else "no brief yet")
+                       + (f"; latest flash {flash.stem}" if flash else "; no breaking-news flash yet")})
+    d = latest("data/llm/*.json")
+    dj = json.loads(d.read_text()) if d else {}
+    out.append({"agent": "AI analyst (daily, account E)", "role": "reads charts + news, predicts 5 days ahead",
+                "last": dj.get("made_at"), "hours_ago": age(dj.get("made_at")),
+                "did": (f"{len(dj.get('probs', {}))} predictions for bar {d.stem}" if d else "no prediction yet")
+                       + f" · track record: {score('E')}"})
+    h = latest("data/llm/hourly/*.json")
+    hj = json.loads(h.read_text()) if h else {}
+    out.append({"agent": "AI analyst (hourly, account F)", "role": "reads hourly charts + daily/weekly context + news",
+                "last": hj.get("made_at"), "hours_ago": age(hj.get("made_at")),
+                "did": (f"{len(hj.get('probs', {}))} predictions for hour {h.stem}" if h else "no prediction yet")
+                       + f" · track record: {score('F')}"})
+    fills = {a["account"]: a["fills"] for a in rows["accounts"]}
+    out.append({"agent": "Executor (scheduled run)", "role": "runs the simulation, checks, publishes, commits",
+                "last": now.isoformat(timespec="seconds"), "hours_ago": 0.0,
+                "did": f"accounts A–F replayed and reconciled; fills so far: "
+                       + ", ".join(f"{k} {v}" for k, v in fills.items())})
+    r = latest("research/results/*.md") or latest("research/notes/*.md")
+    out.append({"agent": "Research loop (researcher → planner → tester)", "role": "one tested improvement idea per week",
+                "last": r.stem[:10] if r else None, "hours_ago": None,
+                "did": f"latest: {r.relative_to(ROOT)}" if r else "first run Saturday 10:23 UTC"})
+    return out
 
 
 def portfolio_enrich(rows: dict) -> None:

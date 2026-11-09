@@ -89,6 +89,20 @@ def test_abstaining_predictor_is_ignored_not_penalised():
         h.update("fx", {"a": 0.6, "llm": None}, 1.0)
     assert h.counts["fx"].get("llm", 0) == 0
     assert h.combine("fx", {"a": 0.6, "llm": None}) == pytest.approx(0.6)
+    # sleeping expert is charged the ensemble's loss -> same cumulative loss, equal weight
+    w = h.weights("fx")
+    assert w["llm"] == pytest.approx(w["a"])
+
+
+def test_never_scored_predictor_cannot_dominate():
+    """Regression: an abstaining predictor must not win weight by never being wrong."""
+    h = HedgeWeights(["no_view", "noisy", "llm"])
+    rng = np.random.default_rng(3)
+    for _ in range(3000):
+        y = float(rng.random() < 0.5)
+        h.update("fx", {"no_view": 0.5, "noisy": float(rng.uniform(0.35, 0.65)), "llm": None}, y)
+    w = h.weights("fx")
+    assert w["no_view"] > w["llm"] > w["noisy"] or w["no_view"] > 0.5
 
 
 def test_llm_analyst_abstains_without_a_forward_file(tmp_path):

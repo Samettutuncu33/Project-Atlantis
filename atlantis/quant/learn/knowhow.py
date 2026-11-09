@@ -75,6 +75,13 @@ class HedgeWeights:
     hits: dict[str, dict[str, int]] = field(default_factory=dict)
     directional: dict[str, dict[str, int]] = field(default_factory=dict)
 
+    rounds: dict[str, int] = field(default_factory=dict)
+
+    def eta_for(self, cls: str) -> float:
+        """Anytime learning rate eta_t = sqrt(8 ln N / t) (Cesa-Bianchi & Lugosi 2006, ch. 2)."""
+        t = max(self.rounds.get(cls, 0), 1)
+        return math.sqrt(8 * math.log(len(self.predictors)) / t)
+
     @property
     def eta(self) -> float:
         return math.sqrt(8 * math.log(len(self.predictors)) / self.horizon_T)
@@ -82,16 +89,24 @@ class HedgeWeights:
     def weights(self, cls: str) -> dict[str, float]:
         L = self.cum_loss.get(cls, {})
         m = min((L.get(p, 0.0) for p in self.predictors), default=0.0)
-        raw = {p: math.exp(-self.eta * (L.get(p, 0.0) - m)) for p in self.predictors}
+        eta = self.eta_for(cls)
+        raw = {p: math.exp(-eta * (L.get(p, 0.0) - m)) for p in self.predictors}
         z = sum(raw.values())
         return {p: v / z for p, v in raw.items()}
 
     def update(self, cls: str, probs: dict[str, float | None], outcome: float) -> None:
-        """Predictors that abstained (None) are neither rewarded nor penalised."""
-        probs = {k: v for k, v in probs.items() if v is not None}
+        """Sleeping experts (Freund, Schapire, Singer & Warmuth 1997): a predictor that
+        abstained (None) is charged the ensemble's own loss for that round, so abstaining
+        neither helps nor hurts its weight relative to the mixture."""
+        ens_loss = brier(self.combine(cls, probs), outcome)
+        probs_awake = {k: v for k, v in probs.items() if v is not None}
         for d in (self.cum_loss, self.counts, self.hits, self.directional):
             d.setdefault(cls, {})
-        for p, prob in probs.items():
+        self.rounds[cls] = self.rounds.get(cls, 0) + 1
+        for p in self.predictors:
+            if p not in probs_awake:
+                self.cum_loss[cls][p] = self.cum_loss[cls].get(p, 0.0) + ens_loss
+        for p, prob in probs_awake.items():
             self.cum_loss[cls][p] = self.cum_loss[cls].get(p, 0.0) + brier(prob, outcome)
             self.counts[cls][p] = self.counts[cls].get(p, 0) + 1
             if prob != 0.5:
@@ -105,7 +120,8 @@ class HedgeWeights:
         return float(sum(w[p] * probs[p] for p in avail) / z) if z > 0 else 0.5
 
     def to_dict(self) -> dict:
-        return {"predictors": self.predictors, "eta": self.eta, "cum_loss": self.cum_loss,
+        return {"predictors": self.predictors, "eta": {c: self.eta_for(c) for c in self.rounds},
+                "rounds": self.rounds, "cum_loss": self.cum_loss,
                 "counts": self.counts, "hits": self.hits, "directional": self.directional,
                 "weights": {c: self.weights(c) for c in self.cum_loss}}
 
@@ -143,6 +159,7 @@ def lessons(h: HedgeWeights, class_names: dict[str, str]) -> list[str]:
             dn = h.directional.get(cls, {}).get(p, 0)
             rate = f"{hits / dn:.0%}" if dn else "n/a"
             out.append(f"{class_names.get(cls, cls)} · {p}: {hits}/{dn} directional calls correct "
-                       f"({rate}), Brier {h.cum_loss[cls][p] / counts[p]:.4f}, weight {w[p]:.0%}")
+                       f"({rate}), Brier {h.cum_loss[cls][p] / max(h.rounds.get(cls, 1), 1):.4f}, "
+                       f"weight {w[p]:.0%}")
         out.append(f"{class_names.get(cls, cls)}: currently trusts {best} most ({w[best]:.0%}).")
     return out

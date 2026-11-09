@@ -54,6 +54,15 @@ class ReversalRule(Predictor):
         return 0.5 - 0.1 * np.tanh(X["ret_5"].fillna(0).to_numpy())
 
 
+class NoView(Predictor):
+    """Always 50%. The honest benchmark: Brier exactly 0.25. If no predictor beats it in
+    an asset class, the Hedge weights shift here and the account stops trading that class."""
+    name = "no_view"
+
+    def predict(self, X):
+        return np.full(len(X), 0.5)
+
+
 class _SkModel(Predictor):
     trainable = True
     min_rows = 500
@@ -137,7 +146,8 @@ class LLMAnalyst(Predictor):
 
 
 def default_predictors() -> list[Predictor]:
-    return [TrendRule(), BreakoutRule(), ReversalRule(), Logistic(), GradientBoosting(), LLMAnalyst()]
+    return [NoView(), TrendRule(), BreakoutRule(), ReversalRule(), Logistic(), GradientBoosting(),
+            LLMAnalyst()]
 
 
 def training_set(features: pd.DataFrame, labels: pd.DataFrame, asof: pd.Timestamp,

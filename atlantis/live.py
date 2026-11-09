@@ -73,8 +73,12 @@ def frozen_first_year(symbol: str) -> int:
     frozen = json.loads(path.read_text()) if path.exists() else {}
     if symbol not in frozen:
         frozen[symbol] = cached_first_year(symbol)
-        path.write_text(json.dumps(frozen, indent=1, sort_keys=True))
+        if _WRITE_STATE:
+            path.write_text(json.dumps(frozen, indent=1, sort_keys=True))
     return int(frozen[symbol])
+
+
+_WRITE_STATE = True
 
 
 def cached_first_year(symbol: str, floor: int = 2016) -> int:
@@ -154,6 +158,8 @@ def projection(spec: AccountSpec, data: dict, equity_now: float, days: int) -> d
 
 
 def step(now: datetime | None = None, write: bool = True) -> dict:
+    global _WRITE_STATE
+    _WRITE_STATE = write
     now = now or datetime.now(UTC)
     until = (now - timedelta(days=1)).date()
     f = Fetcher(ROOT / "data" / "raw" / "dukascopy_live", now=now)
@@ -266,7 +272,7 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
                 "next_decision": nxt})
         rows["projection"].append(projection(spec, data, equity_live, horizon))
     # ---- Account E: Atlantis Adaptive (multi-asset, self-learning) ---------------------
-    checks += adaptive_section(f, until, now, quotes, rows, journal_new)
+    checks += adaptive_section(f, until, now, quotes, rows, journal_new, write)
     # append-only journal verification
     jpath = LIVE_DIR / "journal.jsonl"
     old = [json.loads(x) for x in jpath.read_text().splitlines()] if jpath.exists() else []
@@ -312,7 +318,7 @@ ADAPTIVE_LEARN_FROM = "2017-01-01"   # replay history from here when cached (nee
 
 
 def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows: dict,
-                     journal_new: list) -> list[dict]:
+                     journal_new: list, write: bool = True) -> list[dict]:
     from atlantis.adaptive import CLASS_NAMES, run_adaptive
     from atlantis.engine import BacktestResult
     from atlantis.instruments.spec import universe
@@ -340,7 +346,7 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
     checks.append({"check": "prediction_ledger_append_only", "status": "OK" if ok else "CRITICAL",
                    "detail": f"{len(old)} earlier prediction records reproduced exactly; "
                              f"{len(new) - len(old)} new" if ok else "earlier predictions changed"})
-    if ok:
+    if ok and write:
         ppath.write_text("".join(json.dumps(r, default=str) + "\n" for r in res.ledger.records))
     mids = dict(br.last_mids)
     mids.update({s: (q["bid"] + q["ask"]) / 2 for s, q in quotes.items()})
@@ -433,7 +439,8 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
                             if resolved else None}]
     knowhow_path = ROOT / "knowledge" / "knowhow.json"
     knowhow_path.parent.mkdir(exist_ok=True)
-    knowhow_path.write_text(json.dumps({"asof": str(res.equity.index[-1].date()), **res.hedge.to_dict(),
+    if write:
+        knowhow_path.write_text(json.dumps({"asof": str(res.equity.index[-1].date()), **res.hedge.to_dict(),
                                         "lessons": res.lessons}, indent=1, default=str))
     return checks
 

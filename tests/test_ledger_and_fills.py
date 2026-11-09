@@ -103,10 +103,36 @@ def test_limit_touch_is_not_a_fill():
     assert try_fill(o, b2, EURUSD).price == pytest.approx(1.0950)
 
 
-def test_metals_refused_until_saxo_min_size_known():
-    from atlantis.instruments.spec import UnavailableDataError
-    with pytest.raises(UnavailableDataError):
-        make_instrument("XAUUSD")
+def test_multi_asset_instruments_carry_their_assumptions():
+    xau = make_instrument("XAUUSD")
+    assert xau.asset_class == "metal_cfd" and xau.min_size == 1 and xau.initial_margin == 0.05
+    assert any("A15" in n for n in xau.assumptions)
+    btc = make_instrument("BTCUSD")
+    assert btc.initial_margin == 0.50 and btc.financing_long_pa == pytest.approx(0.1845)
+    nvda = make_instrument("NVDAUSUSD")
+    assert nvda.quote == "USD" and nvda.initial_margin == 0.20
+    dax = make_instrument("DEUIDXEUR")
+    assert dax.quote == "EUR" and dax.min_size == 0.1
+
+
+def test_golden_crypto_fill_and_financing():
+    """Buy 0.01 BTC at ask 80,010; hold 1 night; sell at bid 81,000.
+    P&L = 0.01 * 990 = 9.90; commission 2 x $1 (A14).
+    Financing night 1: long 18.45% p.a. on notional 0.01*80,005 (mid) = 800.05 -> 800.05*0.1845/360
+    plus 2% on |unrealised| at the close: long valued at bid 80,000 -> -0.10 -> 0.10*0.02/360."""
+    from atlantis.gate.sim.costs import CostModel as CM
+    btc = make_instrument("BTCUSD")
+    # $1,000 account: 0.01 BTC needs 50% x $800 = $400 ESMA margin, more than a $200 account has.
+    b = Broker({"BTCUSD": btc}, Ledger(1000.0), CM.saxo_classic(), AuditLog())
+    t0, t1, t2 = (f"2024-01-0{i}T00:00:00+00:00" for i in (1, 2, 3))
+    b.process_bar(t0, {"BTCUSD": Bar(t0, 80000, 80000, 80000, 80000, 80010, 80010, 80010, 80010)})
+    b.submit(t0, "BTCUSD", 0.01)
+    b.process_bar(t1, {"BTCUSD": Bar(t1, 80000, 80000, 80000, 80000, 80010, 80010, 80010, 80010)})
+    b.submit(t1, "BTCUSD", -0.01)
+    b.process_bar(t2, {"BTCUSD": Bar(t2, 81000, 81000, 81000, 81000, 81010, 81010, 81010, 81010)})
+    fin = 800.05 * 0.1845 / 360 + 0.10 * 0.02 / 360
+    assert b.ledger.totals["financing"] == pytest.approx(fin, rel=1e-9)
+    assert b.ledger.cash == pytest.approx(1000 + 9.90 - 2.0 - fin, rel=1e-12)
 
 
 def test_xauusd_market_order_uses_saxo_published_slippage():

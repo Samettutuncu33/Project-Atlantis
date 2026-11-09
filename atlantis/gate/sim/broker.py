@@ -124,7 +124,8 @@ class Broker:
         unreal = self.ledger.unrealised_usd(self.last_marks, q2u)
         for sym in list(self.ledger.lots):
             notional = self.notional_usd(sym, self.ledger.position(sym), self.last_mids)
-            cost = self.costs.financing(notional, unreal[sym], days)
+            cost = self.costs.financing(notional, unreal[sym], days, self.instruments[sym],
+                                        self.ledger.position(sym) > 0)
             self.ledger.charge(ts, "financing", cost, f"{sym} rollover x{days}d")
 
     def _fill_orders(self, ts: str, bars: dict[str, Bar], mids: dict[str, float]) -> None:
@@ -162,7 +163,7 @@ class Broker:
         notional = abs(qty) * price * q2u
         tid = o.id
         self.ledger.apply_fill(ts, inst, qty, price, tid, q2u)
-        comm = self.costs.commission(notional)
+        comm = self.costs.commission(notional, inst)
         self.ledger.charge(ts, "commissions", comm, f"{o.symbol} order {o.id}")
         o.filled_qty += qty
         o.transition(Status.FILLED if abs(o.remaining) < 1e-9 else Status.PARTIAL)

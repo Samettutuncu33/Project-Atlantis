@@ -28,12 +28,15 @@ class CostModel:
             cost_multiplier=cost_multiplier,
         )
 
-    def commission(self, notional_usd: float) -> float:
+    def commission(self, notional_usd: float, inst=None) -> float:
         # Assumption A1: every $200-account ticket is "small" -> $1 minimum applies.
-        return self.cost_multiplier * max(self.commission_rate * abs(notional_usd),
-                                          self.min_commission_usd)
+        rate = self.commission_rate if inst is None or inst.commission_rate is None else inst.commission_rate
+        mn = self.min_commission_usd if inst is None or inst.commission_min_usd is None \
+            else inst.commission_min_usd
+        return self.cost_multiplier * max(rate * abs(notional_usd), mn)
 
-    def financing(self, notional_usd: float, unrealised_usd: float, days: float) -> float:
+    def financing(self, notional_usd: float, unrealised_usd: float, days: float,
+                  inst=None, long: bool = True) -> float:
         """Overnight cost for holding a position `days` calendar days.
 
         Interest-rate differential is UNAVAILABLE (A5) and set to zero; only Saxo's
@@ -41,6 +44,10 @@ class CostModel:
         """
         if days <= 0:
             return 0.0
-        rate_cost = (self.tom_next_markup_pa * abs(notional_usd)
-                     + self.unrealised_financing_markup_pa * abs(unrealised_usd))
+        if inst is not None and inst.financing_long_pa is not None:
+            pa = inst.financing_long_pa if long else inst.financing_short_pa
+            rate_cost = pa * abs(notional_usd) + inst.financing_unrealised_pa * abs(unrealised_usd)
+        else:
+            rate_cost = (self.tom_next_markup_pa * abs(notional_usd)
+                         + self.unrealised_financing_markup_pa * abs(unrealised_usd))
         return self.cost_multiplier * rate_cost * days / self.day_count

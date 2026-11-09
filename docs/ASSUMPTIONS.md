@@ -31,3 +31,13 @@ This file explains each `ASSUMPTION` and `UNAVAILABLE` item. Where something is 
 - **Saxo per-instrument spreads, minimum sizes and commission tables.** Saxo's pages load these via an internal pricing service. We do not script calls to that service.
 - **Equity, ETF and CFD conditions** (commissions, exchange fees, borrow costs). Those asset classes are deferred until the data can be sourced.
 - **Our own real executions.** None exist, and all fills are simulated.
+
+## Multi-asset assumptions (Phase 3)
+| ID | Item | What we do |
+|----|------|-----------|
+| A14 | Crypto FX commission | The FX $1 minimum commission is assumed to apply to crypto FX as well. |
+| A15 | Minimum sizes for non-FX instruments | 0.01 coin for crypto, 1 share for stocks, 0.1 for indices, 1 barrel for oil, 1 oz for gold. **Consequence:** 0.01 BTC needs $400 of ESMA margin, so BTC can't be traded from $200; 1 oz of gold needs $207. Both will be replaced by Saxo's real figures in Phase 2. |
+| A16 | CFD commissions | Stock CFDs: 0.05%, minimum $1 (Saxo publishes "from $1" for US cash stocks only). Index, commodity and metal CFDs: spread-only. |
+| A17 | CFD financing | 3% p.a. mark-up; the benchmark rate is UNAVAILABLE and set to 0. Metals use the FX rates. |
+| A18 | Oil CFD | No financing: the futures roll is already in the price. |
+Published by Saxo and used as is: crypto FX funding of 15% p.a. on longs, plus the Classic tier's 3.45% mark-up. Regulation (ESMA) and used as is: margins of 50% crypto, 20% stocks, 5% major indices and gold, 10% oil.

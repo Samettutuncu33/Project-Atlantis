@@ -1,0 +1,73 @@
+# ATLANTIS multi-asset universe. Prices: Dukascopy bid/ask (NOT Saxo).
+# Price scale (`point`) verified 2026-11-09 against September 2026 medians:
+#   BTC $82,180 · ETH $2,440 · AAPL $343 · MSFT $530 · NVDA $220 · S&P500 7,724 · DAX 25,321 · WTI $95.79
+#
+# Status of every cost/size field: SAXO_PUBLISHED | REGULATION | ASSUMPTION (see docs/ASSUMPTIONS.md A14-A18)
+# ESMA retail margin (Decision (EU) 2018/796): major FX 3.33%, other FX/gold/major indices 5%,
+# other commodities 10%, single equities 20%, cryptocurrencies 50%.
+
+classes:
+  fx_spot:        # existing FX model; costs from saxo_conditions.yaml fx_spot
+    commission: {min_usd: 1.0, rate: 0.0, status: SAXO_PUBLISHED}
+    financing_pa: {long: 0.0075, short: 0.0075, unrealised: 0.02, status: SAXO_PUBLISHED}
+  crypto_fx:
+    margin: {value: 0.50, status: REGULATION}
+    commission: {min_usd: 1.0, rate: 0.0, status: ASSUMPTION, note: "A14: FX $1 minimum assumed to apply to crypto FX"}
+    financing_pa:
+      long: 0.1845      # 15% crypto funding + 3.45% Classic mark-up
+      short: 0.0345     # 0% funding for shorts, minus the mark-up
+      unrealised: 0.02
+      status: SAXO_PUBLISHED
+      source: "https://www.home.saxo/rates-and-conditions/forex/spreads-and-commissions"
+    min_size: {value: 0.01, status: ASSUMPTION, note: "A15: crypto FX min size not public"}
+    step: 0.01
+  stock_cfd:
+    margin: {value: 0.20, status: REGULATION}
+    commission: {min_usd: 1.0, rate: 0.0005, status: ASSUMPTION,
+                 note: "A16: Saxo publishes 'from $1' for US cash stocks; CFD rate 0.05% assumed"}
+    financing_pa: {long: 0.03, short: 0.03, unrealised: 0.0, status: ASSUMPTION,
+                   note: "A17: CFD mark-up over benchmark not public; benchmark itself UNAVAILABLE"}
+    min_size: {value: 1, status: ASSUMPTION, note: "A15: 1 share"}
+    step: 1
+  index_cfd:
+    margin: {value: 0.05, status: REGULATION}
+    commission: {min_usd: 0.0, rate: 0.0, status: ASSUMPTION, note: "A16: index CFDs spread-only"}
+    financing_pa: {long: 0.03, short: 0.03, unrealised: 0.0, status: ASSUMPTION, note: "A17"}
+    min_size: {value: 0.1, status: ASSUMPTION, note: "A15"}
+    step: 0.1
+  commodity_cfd:
+    margin: {value: 0.10, status: REGULATION}
+    commission: {min_usd: 0.0, rate: 0.0, status: ASSUMPTION, note: "A16"}
+    financing_pa: {long: 0.0, short: 0.0, unrealised: 0.0, status: ASSUMPTION,
+                   note: "A18: futures-based CFDs carry the roll in the price, not as financing"}
+    min_size: {value: 1, status: ASSUMPTION, note: "A15: 1 barrel"}
+    step: 1
+  metal_cfd:
+    margin: {value: 0.05, status: REGULATION}
+    commission: {min_usd: 0.0, rate: 0.0, status: ASSUMPTION, note: "A16"}
+    financing_pa: {long: 0.0075, short: 0.0075, unrealised: 0.02, status: ASSUMPTION, note: "A17: FX metal rates"}
+    min_size: {value: 1, status: ASSUMPTION, note: "A15: 1 oz"}
+    step: 1
+
+instruments:
+  # symbol: [class, quote ccy, point, tick, plausible_low, plausible_high]
+  EURUSD: [fx_spot, USD, 1.0e5, 0.0001, 0.7, 1.8]
+  GBPUSD: [fx_spot, USD, 1.0e5, 0.0001, 0.9, 2.2]
+  USDJPY: [fx_spot, JPY, 1.0e3, 0.01, 70, 200]
+  AUDUSD: [fx_spot, USD, 1.0e5, 0.0001, 0.4, 1.2]
+  USDCHF: [fx_spot, CHF, 1.0e5, 0.0001, 0.6, 1.4]
+  USDCAD: [fx_spot, CAD, 1.0e5, 0.0001, 0.8, 1.7]
+  BTCUSD: [crypto_fx, USD, 1.0e1, 0.1, 5000, 400000]
+  ETHUSD: [crypto_fx, USD, 1.0e1, 0.1, 200, 20000]
+  AAPLUSUSD: [stock_cfd, USD, 1.0e3, 0.01, 50, 1500]
+  MSFTUSUSD: [stock_cfd, USD, 1.0e3, 0.01, 100, 2000]
+  NVDAUSUSD: [stock_cfd, USD, 1.0e3, 0.01, 10, 1500]
+  AMZNUSUSD: [stock_cfd, USD, 1.0e3, 0.01, 50, 1500]
+  GOOGLUSUSD: [stock_cfd, USD, 1.0e3, 0.01, 50, 1500]
+  USA500IDXUSD: [index_cfd, USD, 1.0e3, 0.1, 2000, 20000]
+  USATECHIDXUSD: [index_cfd, USD, 1.0e3, 0.1, 5000, 80000]
+  DEUIDXEUR: [index_cfd, EUR, 1.0e3, 0.1, 8000, 60000]
+  GBRIDXGBP: [index_cfd, GBP, 1.0e3, 0.1, 4000, 25000]
+  JPNIDXJPY: [index_cfd, JPY, 1.0e3, 1.0, 15000, 150000]
+  LIGHTCMDUSD: [commodity_cfd, USD, 1.0e3, 0.01, 10, 250]
+  XAUUSD: [metal_cfd, USD, 1.0e3, 0.01, 900, 10000]

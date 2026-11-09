@@ -49,6 +49,19 @@ PLAUSIBLE_RANGE: dict[str, tuple[float, float]] = {
 }
 
 
+def _extend_from_universe() -> None:
+    """Price scales of non-FX instruments come from config/universe.yaml."""
+    import yaml
+    from pathlib import Path as _P
+    u = yaml.safe_load((_P(__file__).resolve().parents[2] / "config" / "universe.yaml").read_text())
+    for sym, (_cls, _q, point, _tick, lo, hi) in u["instruments"].items():
+        POINT.setdefault(sym, float(point))
+        PLAUSIBLE_RANGE.setdefault(sym, (float(lo), float(hi)))
+
+
+_extend_from_universe()
+
+
 class FetchError(RuntimeError):
     pass
 

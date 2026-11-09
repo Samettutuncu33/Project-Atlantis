@@ -27,10 +27,24 @@ class Instrument:
     min_size: float           # base units
     size_step: float
     assumptions: tuple[str, ...] = field(default_factory=tuple)
+    # Per-class Saxo cost parameters (None -> the FX CostModel defaults apply)
+    commission_min_usd: float | None = None
+    commission_rate: float | None = None
+    financing_long_pa: float | None = None
+    financing_short_pa: float | None = None
+    financing_unrealised_pa: float | None = None
 
     @property
     def pnl_ccy(self) -> str:
         return self.quote
+
+
+UNIVERSE_PATH = CONDITIONS_PATH.parent / "universe.yaml"
+
+
+@lru_cache(maxsize=1)
+def universe() -> dict:
+    return yaml.safe_load(UNIVERSE_PATH.read_text())
 
 
 @lru_cache(maxsize=1)
@@ -47,6 +61,20 @@ def _pip(base: str, quote: str) -> tuple[float, tuple[str, ...]]:
 
 
 def make_instrument(symbol: str) -> Instrument:
+    u = universe()
+    spec = u["instruments"].get(symbol)
+    if spec is not None and spec[0] != "fx_spot":
+        cls, quote, _point, tick = spec[0], spec[1], spec[2], spec[3]
+        k = u["classes"][cls]
+        notes = tuple(f"{name}: {v.get('note', v.get('status'))}" for name, v in k.items()
+                      if isinstance(v, dict) and v.get("status") == "ASSUMPTION")
+        return Instrument(symbol, cls, symbol[:-3], quote, tick, float(k["margin"]["value"]),
+                          float(k["min_size"]["value"]), float(k["step"]), notes,
+                          commission_min_usd=float(k["commission"]["min_usd"]),
+                          commission_rate=float(k["commission"]["rate"]),
+                          financing_long_pa=float(k["financing_pa"]["long"]),
+                          financing_short_pa=float(k["financing_pa"]["short"]),
+                          financing_unrealised_pa=float(k["financing_pa"]["unrealised"]))
     c = conditions()
     base, quote = symbol[:3], symbol[3:]
     m = c["margin_retail_esma"]["initial_margin"]

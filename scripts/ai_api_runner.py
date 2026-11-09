@@ -181,9 +181,10 @@ def main(mode: str) -> None:
         return
     print(f"month spend so far ${month_spend():.2f} of ${BUDGET:.2f}")
     if mode == "daily":
-        target, _ = briefing("scripts/analyst_brief.py")
-        if target:
-            news(Path(target).stem)
+        _, text = briefing("scripts/analyst_brief.py")
+        m = re.search(r"bar (\d{4}-\d{2}-\d{2})", text)
+        if m:                       # the news brief runs even when the analyst file for that bar exists
+            news(m.group(1))
         analyst("daily_analyst", "scripts/analyst_brief.py", "5 trading days after the briefing bar")
     elif mode == "hourly":
         analyst("hourly_analyst", "scripts/analyst_brief_hourly.py", "4 hours after the briefing bar")

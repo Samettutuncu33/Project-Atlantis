@@ -228,10 +228,9 @@ def _side_hourly(f: Fetcher, symbol: str, side: str, start: date, now: datetime)
     last_complete = now.replace(minute=0, second=0, microsecond=0)
     while h < last_complete:
         rel = f"{symbol}/{h.year}/{h.month - 1:02d}/{h.day:02d}/{h.hour:02d}h_ticks.bi5"
-        try:
-            payload = f.get(rel, h + timedelta(hours=1))
-        except LiveFetchError:
-            payload = None
+        # A download failure must not silently drop an hour: that would change history between runs.
+        # LiveFetchError propagates; the run stops and the next scheduled run retries.
+        payload = f.get(rel, h + timedelta(hours=1))
         if payload:
             parts.append(_ticks_hour(payload, h, symbol, side))
         h += timedelta(hours=1)

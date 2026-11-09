@@ -32,3 +32,15 @@ def test_portfolio_enrich_golden():
     assert s["avg_buy_price"] == 180.0 and s["avg_sell_price"] == 190.0
     assert s["realised_usd"] == 10.0 and s["commissions_usd"] == 2.0 and s["trades"] == 2
     assert "_closed" not in rows
+
+
+def test_incomplete_market_data_stops_the_adaptive_accounts(monkeypatch):
+    """A symbol that fails to download must not be skipped silently: that would change the replayed
+    history and the append-only prediction ledger. The run stops instead; the next run retries."""
+    import pytest
+    from atlantis import live
+    monkeypatch.setattr(live, "load_data", lambda *a, **k: ({}, [{"check": "data_unavailable:BTCUSD",
+                                                                   "status": "WARN", "detail": "BTCUSD skipped"}]))
+    for acct, hourly in (("E", False), ("F", True)):
+        with pytest.raises(RuntimeError, match="incomplete market data"):
+            live.adaptive_section(None, None, None, {}, {}, [], write=False, acct=acct, hourly=hourly)

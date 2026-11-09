@@ -363,6 +363,9 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
                 checks.append({"check": f"hourly_data_unavailable:{s_}", "status": "WARN", "detail": str(e)[:120]})
                 continue
             data[s_] = h[h.index.dayofweek < 5]            # Saxo hours: no weekend bars
+        missing = [c["detail"] for c in checks if c["check"].startswith(("data_unavailable", "hourly_data_unavailable"))]
+        if missing:   # a skipped instrument would change the replayed history; stop instead, next run retries
+            raise RuntimeError(f"account {acct}: incomplete market data this run, nothing recorded: {missing[:3]}")
         learn_from = pd.Timestamp(INTRADAY_LEARN_FROM, tz="UTC")
         live_start = INTRADAY_START
         res = run_adaptive(data, CAPITAL, start=INTRADAY_LEARN_FROM, trade_from=INTRADAY_START,
@@ -370,6 +373,9 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
                            context_daily=daily, llm_root=ROOT / "data" / "llm" / "hourly", llm_key_len=13,
                            strategy_id="intraday")
     else:
+        missing = [c["detail"] for c in checks if c["check"].startswith("data_unavailable")]
+        if missing:   # a skipped instrument would change the replayed history; stop instead, next run retries
+            raise RuntimeError(f"account {acct}: incomplete market data this run, nothing recorded: {missing[:3]}")
         first = min(d.index[0] for d in data.values())
         learn_from = max(pd.Timestamp(ADAPTIVE_LEARN_FROM, tz="UTC"), first + pd.Timedelta(days=380))
         live_start = LIVE_START
@@ -398,9 +404,15 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
         recs = [{"kind": "checkpoint", "hash": tip, "warmup_records": cut}] + recs[cut:]
     new = [r["hash"] for r in recs]
     ok = new[:len(old)] == old
+    if ok:
+        detail = f"{len(old)} earlier prediction records reproduced exactly; {len(new) - len(old)} new"
+    else:   # name the first record that differs, so the cause can be traced
+        i = next((k for k, (a, b) in enumerate(zip(old, new)) if a != b), min(len(old), len(new)))
+        r = recs[i] if i < len(recs) else {}
+        detail = (f"earlier predictions changed: first difference at record {i} of {len(old)} "
+                  f"({r.get('kind', '?')} {r.get('id') or r.get('prediction_id') or ''}); stored ledger kept")
     checks.append({"check": f"prediction_ledger_append_only:{acct}", "status": "OK" if ok else "CRITICAL",
-                   "detail": f"{len(old)} earlier prediction records reproduced exactly; "
-                             f"{len(new) - len(old)} new" if ok else "earlier predictions changed"})
+                   "detail": detail})
     if ok and write:
         ppath.write_text("".join(json.dumps(r, default=str) + "\n" for r in recs))
     mids = dict(br.last_mids)

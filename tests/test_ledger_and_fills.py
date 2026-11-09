@@ -103,8 +103,15 @@ def test_limit_touch_is_not_a_fill():
     assert try_fill(o, b2, EURUSD).price == pytest.approx(1.0950)
 
 
+def test_metals_refused_until_saxo_min_size_known():
+    from atlantis.instruments.spec import UnavailableDataError
+    with pytest.raises(UnavailableDataError):
+        make_instrument("XAUUSD")
+
+
 def test_xauusd_market_order_uses_saxo_published_slippage():
-    xau = make_instrument("XAUUSD")
+    from atlantis.instruments.spec import Instrument
+    xau = Instrument("XAUUSD", "fx_metal", "XAU", "USD", 0.01, 0.05, 1, 1)
     o = Order(1, "XAUUSD", 1, OrderType.MARKET)
     b = Bar("t", 2000, 2010, 1990, 2005, 2000.3, 2010.3, 1990.3, 2005.3)
     f = try_fill(o, b, xau)

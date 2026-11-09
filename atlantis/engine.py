@@ -73,7 +73,7 @@ def run_backtest(data: dict[str, pd.DataFrame], strategy: Strategy, capital: flo
                  sizer: VolTargetSizer | None = None, costs: CostModel | None = None,
                  extra_spread_bps: float = 0.0, carver_buffer: float = 0.10,
                  instruments: dict[str, Instrument] | None = None,
-                 verify_causality: bool = True) -> BacktestResult:
+                 verify_causality: bool = True, rebalance_on_start: bool = False) -> BacktestResult:
     sizer = sizer or VolTargetSizer()
     costs = costs or CostModel.saxo_classic()
     instruments = instruments or {s: make_instrument(s) for s in data}
@@ -97,6 +97,7 @@ def run_backtest(data: dict[str, pd.DataFrame], strategy: Strategy, capital: flo
     stop_orders: dict[str, object] = {}
     stopped_dir: dict[str, float] = {}
     prev_month = None
+    first = True
     for t in idx:
         ts = t.isoformat()
         bars = {}
@@ -119,8 +120,10 @@ def run_backtest(data: dict[str, pd.DataFrame], strategy: Strategy, capital: flo
             instruments[s].quote, mids) if ledger.position(s) else 0.0 for s in data}})
         if broker.halted:
             continue
-        month_change = prev_month is not None and t.month != prev_month
+        month_change = (prev_month is not None and t.month != prev_month) or \
+            (rebalance_on_start and first)
         prev_month = t.month
+        first = False
         if strategy.rebalance == "M" and not month_change:
             continue
         s_t = sig.loc[t].copy()

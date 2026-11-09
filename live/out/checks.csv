@@ -1,0 +1,7 @@
+run_utc,check,status,detail
+2026-11-09T12:07:25+00:00,data_freshness:EURUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T12:07:25+00:00,data_freshness:GBPUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T12:07:25+00:00,data_freshness:USDJPY,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T12:07:25+00:00,data_freshness:AUDUSD,OK,last completed bar 2026-11-06 (2d before 2026-11-08)
+2026-11-09T12:07:25+00:00,hourly_vs_daily_aggregation,OK,"EURUSD Dec-2025, 27 days, max |diff| = 0.000000"
+2026-11-09T12:07:25+00:00,journal_append_only,OK,0 earlier fills reproduced exactly

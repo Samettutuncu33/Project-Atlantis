@@ -1,0 +1,214 @@
+<meta name="dash-one-writer">
+<style>
+.at { display: grid; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.at h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.at h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0 0 var(--cds-gap-xs); }
+.at p { margin: 0; max-width: 72ch; }
+.at-muted { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.at-tag { display: inline-block; font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); letter-spacing: .04em; padding: 0 6px; border-radius: 4px; border: 1px solid var(--color-warn); color: var(--color-warn); }
+.at-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: var(--cds-gap-md); }
+.at-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-xs); min-width: 0; }
+.at-card .at-big { font-family: var(--font-anthropic-serif); font-size: 2rem; font-variant-numeric: tabular-nums; }
+.at-card dl { display: grid; grid-template-columns: auto auto; gap: 2px var(--cds-gap-sm); margin: var(--cds-gap-xs) 0 0; font-size: var(--cds-font-size-caption); }
+.at-card dt { color: var(--color-fg-muted); } .at-card dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.at-ok { color: var(--color-ok); } .at-bad { color: var(--color-bad); } .at-warn { color: var(--color-warn); }
+.at-wrap { overflow-x: auto; }
+.at table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.at th, .at td { padding: 4px 8px; border-bottom: 1px solid var(--color-border-line); text-align: right; white-space: nowrap; }
+.at th { color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); }
+.at th.l, .at td.l { text-align: left; }
+.at-chart { position: relative; min-height: 260px; }
+.at-chart svg text { fill: var(--cds-text-secondary); font-size: var(--cds-font-size-caption); }
+.at-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: var(--cds-radius); padding: 6px 8px; font-size: var(--cds-font-size-caption); white-space: nowrap; }
+.at-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); }
+.at-legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; background: var(--sw); vertical-align: -1px; }
+[data-dash-source-state=refreshing] { opacity: .5; }
+.at details summary { cursor: pointer; font-weight: var(--cds-font-weight-medium); }
+.at details ul { margin: var(--cds-gap-sm) 0 0; padding-left: 1.2em; max-width: 80ch; }
+</style>
+
+<div class="at">
+  <header id="top" style="display:grid;gap:var(--cds-gap-sm)">
+    <h1>Atlantis Live Simulation</h1>
+    <p>Four virtual $200 accounts trading EURUSD, GBPUSD, USDJPY and AUDUSD under Saxo-calibrated costs. <span class="at-tag">SIMULATED</span> No real orders exist; prices are Dukascopy bid/ask, not Saxo quotes.</p>
+    <p class="at-muted">Last update <b data-draw="runutc" data-source="run" data-field="run_utc" data-row="0">—</b> · last completed daily bar <b data-draw="lastbar" data-source="run" data-field="last_completed_bar" data-row="0">—</b> · live start <span data-source="run" data-field="live_start" data-row="0" data-draw="livestart">—</span> · <span data-draw="phase">—</span></p>
+    <p data-draw="checksline">—</p>
+  </header>
+
+  <section id="accounts">
+    <h2>Accounts</h2>
+    <div class="at-cards" data-draw="cards" data-source="accounts"></div>
+  </section>
+
+  <section id="equity">
+    <h2>Equity, each account</h2>
+    <p class="at-muted">Daily closes after each completed bar, plus the latest mark at the most recent tick. Starting capital $200.</p>
+    <div class="at-legend" data-draw="legend"></div>
+    <div class="at-chart" data-draw="eqchart" data-source="equity"></div>
+  </section>
+
+  <section id="plan">
+    <h2>Plan: signals and next orders</h2>
+    <p class="at-muted">Signal = what the strategy wants (LONG / SHORT / FLAT). Pending orders fill at the next 00:00 UTC open, at ask for buys and bid for sells. Conservative accounts round sizes below 500 units to zero.</p>
+    <div class="at-wrap"><table data-source="plan" data-row-key="account,symbol">
+      <thead><tr><th class="l" data-field="account">Account</th><th class="l" data-field="symbol">Pair</th><th class="l" data-field="signal_text">Signal</th><th data-field="position_qty">Position</th><th class="l" data-field="pending_orders">Pending orders</th><th class="l" data-field="executes_at">Executes at</th><th class="l" data-field="next_decision">Next decision</th></tr></thead>
+      <tbody data-draw="plan"></tbody>
+    </table></div>
+  </section>
+
+  <section id="positions">
+    <h2>Open positions</h2>
+    <div class="at-wrap"><table data-source="positions" data-row-key="account,symbol">
+      <thead><tr><th class="l" data-field="account">Account</th><th class="l" data-field="symbol">Pair</th><th class="l" data-field="side">Side</th><th data-field="qty">Units</th><th data-field="avg_entry">Avg entry</th><th data-field="mark_bid">Bid</th><th data-field="mark_ask">Ask</th><th class="l" data-field="mark_ts">Mark time (UTC)</th><th data-field="unrealised_usd">Unrealised $</th><th data-field="notional_usd">Notional $</th><th data-field="margin_usd">Margin $</th></tr></thead>
+      <tbody data-draw="positions"></tbody>
+    </table></div>
+  </section>
+
+  <section id="fills">
+    <h2>Every simulated fill</h2>
+    <p class="at-muted">For your cross-check: each fill shows the daily bar's opening bid and ask it executed against (00:00 UTC). Buys pay the ask, sells receive the bid; commission is Saxo's $1 minimum per ticket.</p>
+    <div class="at-wrap"><table data-source="fills" data-row-key="account,ts">
+      <thead><tr><th class="l" data-field="ts">Time (UTC)</th><th class="l" data-field="account">Account</th><th class="l" data-field="symbol">Pair</th><th class="l" data-field="side">Side</th><th data-field="qty">Units</th><th data-field="price">Fill price</th><th data-field="bar_bid_open">Bar bid open</th><th data-field="bar_ask_open">Bar ask open</th><th data-field="decision_mid">Decision mid</th><th data-field="commission_usd">Commission $</th><th class="l" data-field="reason">Rule</th></tr></thead>
+      <tbody data-draw="fills"></tbody>
+    </table></div>
+  </section>
+
+  <section id="projection">
+    <h2>Projection to 9 Dec 2026</h2>
+    <p class="at-muted">Block bootstrap of each account's own 2026 backtest returns, started from today's equity. A range of outcomes, not a forecast.</p>
+    <div class="at-wrap"><table data-source="projection" data-row-key="account">
+      <thead><tr><th class="l" data-field="account">Account</th><th data-field="horizon_trading_days">Trading days</th><th data-field="equity_now">Equity now $</th><th data-field="p5">5th pct $</th><th data-field="p50">Median $</th><th data-field="p95">95th pct $</th><th data-field="p_double">P(≥ 2×)</th><th data-field="p_lose_half">P(lose half)</th><th data-field="hist_ann_vol">Hist. vol</th><th class="l" data-field="note">Note</th></tr></thead>
+      <tbody data-draw="projection"></tbody>
+    </table></div>
+  </section>
+
+  <section id="prices">
+    <h2>Prices used <span class="at-muted">(Dukascopy, not Saxo)</span></h2>
+    <p class="at-muted">Latest tick and the last five completed daily bars per pair. Compare these with your own chart; small differences against Saxo are expected because the venues differ.</p>
+    <div class="at-wrap"><table data-source="prices" data-row-key="symbol,ts">
+      <thead><tr><th class="l" data-field="symbol">Pair</th><th class="l" data-field="ts">Time (UTC)</th><th class="l" data-field="kind">Kind</th><th data-field="bid_open">Bid open</th><th data-field="ask_open">Ask open</th><th data-field="bid_close">Bid close / last</th><th data-field="ask_close">Ask close / last</th></tr></thead>
+      <tbody data-draw="prices"></tbody>
+    </table></div>
+  </section>
+
+  <section id="checks">
+    <h2>Automated checks, this run</h2>
+    <div class="at-wrap"><table data-source="checks" data-row-key="check">
+      <thead><tr><th class="l" data-field="check">Check</th><th class="l" data-field="status">Status</th><th class="l" data-field="detail">Detail</th></tr></thead>
+      <tbody data-draw="checks"></tbody>
+    </table></div>
+  </section>
+
+  <details id="method">
+    <summary>How the simulation works and what is assumed</summary>
+    <ul>
+      <li>Accounts A and C size positions to a 10% annual volatility target. At $200 most targets fall below Saxo's 1,000-unit minimum and round to zero, so these accounts may never trade.</li>
+      <li>Accounts B and D trade exactly the 1,000-unit minimum ticket whenever there is a signal. That is far more risk than the volatility target: roughly 20× leverage with four pairs open.</li>
+      <li>Trend 12m: long if the pair rose over the last 12 months, short if it fell; re-sized monthly (Moskowitz, Ooi &amp; Pedersen 2012). Breakout 55/20: enter on a 55-day high or low, exit on the opposite 20-day channel, 2× ATR stop.</li>
+      <li>Saxo costs used: $1 minimum commission per FX ticket, 0.75% p.a. Tom/Next mark-up, 2% p.a. on unrealised P&amp;L, 0.25% currency conversion. Spreads are Dukascopy's real bid/ask because Saxo's are not public.</li>
+      <li>Every run replays all accounts from the live start and confirms that each earlier fill is reproduced exactly. The ledger is reconciled against an independent recomputation every run.</li>
+      <li>Retail margin per ESMA (3.33% majors, 5% AUD pairs), close-out at 50% margin, negative balance protection.</li>
+    </ul>
+  </details>
+</div>
+
+<script>
+for (const k of ['run', 'accounts', 'equity', 'plan', 'positions', 'fills', 'projection', 'prices', 'checks']) {
+  dash.loader(k, { description: 'Takes the "' + k + '" table from the run snapshot file.', fn: ({ answer }) => (answer && answer[k]) || [] });
+}
+window.atFmt = {
+  usd: d3.format('$,.2f'), num: d3.format(',.5~f'), pct: d3.format('.1%'), int: d3.format(','),
+  ts: (s) => s ? String(s).replace('T', ' ').replace(/:00(\.000)?\+00:00$/, '').replace('+00:00', '') : '',
+};
+window.atAccountColor = (id) => dash.colors[['A', 'B', 'C', 'D'].indexOf(id)] || dash.colors[0];
+window.atRows = (id) => { const d = dash.data(id); return d.status === 'ok' ? d.data : null; };
+window.atTable = (tb, rows, cells) => {
+  if (!rows) { tb.replaceChildren(); return; }
+  if (!rows.length) { const tr = document.createElement('tr'); const td = document.createElement('td'); td.className = 'l at-muted'; td.colSpan = 12; td.textContent = 'None yet.'; tr.append(td); tb.replaceChildren(tr); return; }
+  tb.replaceChildren(...rows.map((r) => { const tr = document.createElement('tr'); for (const [v, cls] of cells(r)) { const td = document.createElement('td'); if (cls) td.className = cls; td.textContent = v ?? ''; tr.append(td); } return tr; }));
+};
+</script>
+
+<script>
+const F = window.atFmt;
+const one = (field, fmt) => (el) => { const r = atRows('run'); el.textContent = r && r[0] ? (fmt ? fmt(r[0][field]) : r[0][field]) : '—'; };
+dash.draw('runutc', one('run_utc', F.ts));
+dash.draw('lastbar', one('last_completed_bar'));
+dash.draw('livestart', one('live_start'));
+dash.draw('phase', (el) => {
+  const r = atRows('run');
+  el.textContent = !r || !r[0] ? '—' : r[0].live_started ? 'live: decisions are being made after each daily bar' : 'waiting for the first live daily bar to complete';
+});
+dash.draw('checksline', (el) => {
+  const c = atRows('checks');
+  if (!c) { el.textContent = '—'; return; }
+  const bad = c.filter((x) => x.status !== 'OK' && x.status !== 'INFO');
+  el.className = bad.length ? 'at-bad' : 'at-ok';
+  el.textContent = bad.length ? `${bad.length} of ${c.length} automated checks need attention: ${bad.map((b) => b.check).join(', ')}.` : `All ${c.length} automated checks passed this run.`;
+});
+
+dash.draw('cards', (el) => {
+  const rows = atRows('accounts');
+  if (!rows) { el.textContent = '—'; return; }
+  el.replaceChildren(...rows.map((a) => {
+    const card = document.createElement('article'); card.className = 'at-card'; card.id = 'acct-' + a.account;
+    card.style.borderTop = `3px solid ${atAccountColor(a.account)}`;
+    const mk = (tag, field, text, cls) => { const e = document.createElement(tag); e.dataset.source = 'accounts'; e.dataset.field = field; e.dataset.where = 'account=' + a.account; e.textContent = text; if (cls) e.className = cls; return e; };
+    const h = document.createElement('div'); h.className = 'at-muted'; h.textContent = `Account ${a.account} · ${a.name}`;
+    const big = mk('div', 'equity', F.usd(a.equity), 'at-big');
+    const ret = mk('div', 'return_pct', `${a.return_pct >= 0 ? '+' : ''}${a.return_pct.toFixed(2)}% since start`, a.return_pct > 0 ? 'at-ok' : a.return_pct < 0 ? 'at-bad' : 'at-muted');
+    const dl = document.createElement('dl');
+    for (const [label, field, fmt] of [['Cash', 'cash', F.usd], ['Unrealised', 'unrealised', F.usd], ['Realised', 'realised', F.usd], ['Commissions', 'commissions', F.usd], ['Financing', 'financing', F.usd], ['Fills', 'fills', F.int], ['Rejected orders', 'rejects', F.int], ['Open positions', 'open_positions', F.int], ['Max drawdown', 'max_drawdown_pct', (v) => v.toFixed(2) + '%']]) {
+      const dt = document.createElement('dt'); dt.textContent = label; dl.append(dt, mk('dd', field, fmt(a[field])));
+    }
+    card.append(h, big, ret, dl);
+    if (a.halted) { const w = document.createElement('div'); w.className = 'at-bad'; w.textContent = 'Account halted: equity below one minimum commission.'; card.append(w); }
+    return card;
+  }));
+});
+
+dash.draw('legend', (el) => {
+  const rows = atRows('accounts');
+  if (!rows) { el.replaceChildren(); return; }
+  el.replaceChildren(...rows.map((a) => { const s = document.createElement('span'); s.style.setProperty('--sw', atAccountColor(a.account)); s.textContent = `${a.account} · ${a.name}`; return s; }));
+});
+
+dash.draw('eqchart', (el) => {
+  const rows = atRows('equity');
+  if (!rows) { el.textContent = dash.data('equity').status === 'error' ? 'Failed to load' : '—'; return; }
+  const W = Math.max(el.clientWidth, 280), H = 260, m = { t: 12, r: 16, b: 28, l: 56 };
+  const pts = rows.map((r) => ({ ...r, t: new Date(r.ts), v: +r.equity }));
+  const x = d3.scaleUtc().domain(d3.extent(pts, (d) => d.t)).range([m.l, W - m.r]);
+  const ext = d3.extent([...pts.map((d) => d.v), 200]);
+  const pad = Math.max((ext[1] - ext[0]) * 0.1, 2);
+  const y = d3.scaleLinear().domain([ext[0] - pad, ext[1] + pad]).nice().range([H - m.b, m.t]);
+  const svg = d3.create('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Equity of each simulated account over time, starting at $200');
+  svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(Math.max(2, Math.floor(W / 120))).tickSizeOuter(0)).call((g) => g.selectAll('line,path').style('stroke', 'var(--cds-chart-axis)'));
+  svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickFormat(d3.format('$,.0f')).tickSize(-(W - m.l - m.r))).call((g) => { g.select('.domain').remove(); g.selectAll('line').style('stroke', 'var(--cds-chart-grid)'); });
+  svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(200)).attr('y2', y(200)).style('stroke', 'var(--cds-chart-reference)').style('stroke-dasharray', '4 3');
+  const by = d3.group(pts, (d) => d.account);
+  for (const [acct, s] of by) {
+    s.sort((a, b) => a.t - b.t);
+    svg.append('path').datum(s).attr('fill', 'none').style('stroke', atAccountColor(acct)).attr('stroke-width', 2).attr('d', d3.line().x((d) => x(d.t)).y((d) => y(d.v)));
+    svg.append('g').selectAll('circle').data(s).join('circle').attr('cx', (d) => x(d.t)).attr('cy', (d) => y(d.v)).attr('r', 3.5).style('fill', atAccountColor(acct))
+      .on('mouseenter', (ev, d) => { tip.hidden = false; tip.textContent = `Account ${d.account} · ${F.ts(d.ts)} · ${F.usd(d.v)} (${d.kind})`; const [px, py] = d3.pointer(ev, el); tip.style.left = Math.min(px + 10, el.clientWidth - 220) + 'px'; tip.style.top = (py - 34) + 'px'; })
+      .on('mouseleave', () => { tip.hidden = true; });
+  }
+  const tip = document.createElement('div'); tip.className = 'at-tip'; tip.hidden = true;
+  el.replaceChildren(svg.node(), tip);
+});
+
+const signalCls = (s) => s === 'LONG' ? 'l at-ok' : s === 'SHORT' ? 'l at-bad' : 'l at-muted';
+dash.draw('plan', (tb) => atTable(tb, atRows('plan'), (r) => [[r.account, 'l'], [r.symbol, 'l'], [r.signal_text, signalCls(r.signal_text)], [F.int(r.position_qty)], [r.pending_orders, 'l'], [r.executes_at, 'l'], [r.next_decision, 'l']]));
+dash.draw('positions', (tb) => atTable(tb, atRows('positions'), (r) => [[r.account, 'l'], [r.symbol, 'l'], [r.side, signalCls(r.side === 'LONG' ? 'LONG' : 'SHORT')], [F.int(r.qty)], [F.num(r.avg_entry)], [F.num(r.mark_bid)], [F.num(r.mark_ask)], [F.ts(r.mark_ts), 'l'], [F.usd(r.unrealised_usd), r.unrealised_usd < 0 ? 'at-bad' : 'at-ok'], [F.usd(r.notional_usd)], [F.usd(r.margin_usd)]]));
+dash.draw('fills', (tb) => { const r0 = atRows('fills'); atTable(tb, r0 && [...r0].reverse(), (r) => [[F.ts(r.ts), 'l'], [r.account, 'l'], [r.symbol, 'l'], [r.side, r.side === 'BUY' ? 'l at-ok' : 'l at-bad'], [F.int(r.qty)], [F.num(r.price)], [F.num(r.bar_bid_open)], [F.num(r.bar_ask_open)], [r.decision_mid == null ? '' : F.num(r.decision_mid)], [F.usd(r.commission_usd)], [`${r.tag}: ${r.reason}`, 'l']]); });
+dash.draw('projection', (tb) => atTable(tb, atRows('projection'), (r) => [[r.account, 'l'], [r.horizon_trading_days], [F.usd(r.equity_now)], [F.usd(r.p5)], [F.usd(r.p50)], [F.usd(r.p95)], [F.pct(r.p_double)], [F.pct(r.p_lose_half)], [r.hist_ann_vol == null ? '' : F.pct(r.hist_ann_vol)], [r.note || '', 'l']]));
+dash.draw('prices', (tb) => {
+  const rows = atRows('prices');
+  if (!rows) { tb.replaceChildren(); return; }
+  const keep = [];
+  for (const [, g] of d3.group(rows, (r) => r.symbol)) { const s = [...g].sort((a, b) => (a.ts < b.ts ? 1 : -1)); keep.push(...s.slice(0, 6)); }
+  atTable(tb, keep, (r) => [[r.symbol, 'l'], [F.ts(r.ts), 'l'], [r.kind, 'l'], [r.bid_open == null ? '' : F.num(r.bid_open)], [r.ask_open == null ? '' : F.num(r.ask_open)], [F.num(r.bid_close)], [F.num(r.ask_close)]]);
+});
+dash.draw('checks', (tb) => atTable(tb, atRows('checks'), (r) => [[r.check, 'l'], [r.status, r.status === 'OK' ? 'l at-ok' : (r.status === 'WARN' ? 'l at-warn' : 'l at-bad')], [r.detail, 'l']]));
+</script>

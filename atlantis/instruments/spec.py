@@ -59,6 +59,10 @@ def make_instrument(symbol: str) -> Instrument:
         margin = m["major_fx"] if {base, quote} <= ESMA_MAJORS else m["other_fx_and_gold"]
     pip, notes = _pip(base, quote)
     fx = c["fx_spot"]
+    if cls == "fx_metal":
+        # The 1,000-unit FX assumption (A4) is meaningless for metals (1,000 oz of gold).
+        # Saxo's metal minimum is not public -> refuse rather than guess.
+        raise UnavailableDataError(f"{symbol}: Saxo minimum trade size for metals is unavailable")
     if fx["min_trade_size_units"]["status"] == "UNAVAILABLE":
         raise UnavailableDataError(f"{symbol}: min trade size unavailable")
     notes = notes + ("A4: min trade size 1000 units (assumption)",)

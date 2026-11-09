@@ -1,0 +1,14 @@
+{
+ "run_utc": "2026-11-09T12:07:25+00:00",
+ "live_start": "2026-11-09",
+ "last_completed_bar": "2026-11-06",
+ "live_started": false,
+ "universe": [
+  "EURUSD",
+  "GBPUSD",
+  "USDJPY",
+  "AUDUSD"
+ ],
+ "files_used": 158,
+ "label": "SIMULATED executions on Dukascopy (non-Saxo) market data"
+}

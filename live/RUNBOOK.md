@@ -11,7 +11,7 @@
 # Scheduled live-simulation run
 
 Page (monitoring + start/stop): https://claude.ai/artifact/SG2VmB7APqkgiKyShrSHTD ("Atlantis Live")
-Repository: https://github.com/WildSideMelbourne/project-atlantis (branch `main`)
+Repository: https://github.com/Samettutuncu33/Project-Atlantis (branch `main`)
 
 SIMULATION ONLY. No real orders, ever. From the IBKR connector, if present, use only `search_contracts`,
 `get_price_history` and `get_price_snapshot`. Never call order, order-instruction, alert, watchlist,

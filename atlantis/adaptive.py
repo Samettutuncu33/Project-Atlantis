@@ -35,13 +35,18 @@ from atlantis.gate.sim.orders import Status
 from atlantis.instruments.spec import Instrument, make_instrument
 from atlantis.quant.decide import propose
 from atlantis.quant.learn.knowhow import Calibrator, HedgeWeights, PredictionLedger, lessons
-from atlantis.quant.predict.features import FEATURES, build_features, forward_labels
-from atlantis.quant.predict.models import default_predictors, training_set
+from atlantis.quant.predict.features import CONTEXT, FEATURES, add_context, build_features, forward_labels
+from atlantis.quant.predict.models import LLMAnalyst, default_predictors, training_set
 
 HORIZON = 5           # trading bars; the predictions are about the next week
 STRATEGY_ID = "adaptive"
 CLASS_NAMES = {"fx_spot": "FX", "crypto_fx": "Crypto", "stock_cfd": "Stocks", "index_cfd": "Indices",
                "commodity_cfd": "Oil", "metal_cfd": "Gold"}
+
+
+def _utc(x) -> pd.Timestamp:
+    t = pd.Timestamp(x)
+    return t.tz_localize("UTC") if t.tzinfo is None else t.tz_convert("UTC")
 
 
 @dataclass
@@ -63,27 +68,40 @@ class AdaptiveResult:
 def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: str | None = None,
                  end: str | None = None, ledger_path: Path | None = None,
                  instruments: dict[str, Instrument] | None = None,
-                 trade_from: str | None = None, controls=None) -> AdaptiveResult:
+                 trade_from: str | None = None, controls=None, horizon: int = HORIZON,
+                 bars_per_day: float = 1.0, context_daily: dict | None = None,
+                 llm_root: Path | None = None, llm_key_len: int = 10,
+                 strategy_id: str = STRATEGY_ID) -> AdaptiveResult:
     """`trade_from`: before this date the account predicts and learns but never trades
     (warm-up of the know-how on real outcomes); equity stays at `capital`."""
     instruments = instruments or {s: make_instrument(s) for s in data}
     panels = build_panels(data)
     mid = panels["mid_close"]
     feats = build_features(panels)
-    labels = forward_labels(panels, HORIZON)
+    cols = list(FEATURES)
+    if context_daily:
+        feats = add_context(feats, build_panels(context_daily))
+        cols += CONTEXT
+    labels = forward_labels(panels, horizon)
     predictors = default_predictors()
+    for i, p in enumerate(predictors):
+        if hasattr(p, "cols"):
+            p.cols = cols
+        if isinstance(p, LLMAnalyst):
+            predictors[i] = LLMAnalyst(llm_root, llm_key_len) if llm_root else LLMAnalyst(key_len=llm_key_len)
     names = [p.name for p in predictors]
     hedge = HedgeWeights(names)
     calib = Calibrator()
     pledger = PredictionLedger(ledger_path)
     audit = AuditLog()
     broker = Broker(instruments, Ledger(capital), CostModel.saxo_classic(), audit)
-    gate = RiskGate(broker, budgets={STRATEGY_ID: 1.0})
+    gate = RiskGate(broker, budgets={strategy_id: 1.0})
     idx = mid.index
     if start:
-        idx = idx[idx >= pd.Timestamp(start, tz=idx.tz)]
+        idx = idx[idx >= _utc(start)]
     if end:
-        idx = idx[idx <= pd.Timestamp(end, tz=idx.tz)]
+        idx = idx[idx <= _utc(end)]
+    trade_from_ts = _utc(trade_from) if trade_from is not None else None
     open_preds: list[dict] = []
     resolved_p, resolved_y = [], []
     eq_rows, props_out, w_hist = [], [], []
@@ -115,7 +133,7 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
         open_preds = still
         # 3. monthly retrain (only on information known before t)
         if prev_month != t.month:
-            X, y = training_set(feats, labels, t)
+            X, y = training_set(feats, labels, t, cols=cols)
             for p in predictors:
                 if p.trainable:
                     p.fit(X, y)
@@ -132,7 +150,7 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
             for s_ in list(broker.ledger.lots):
                 q_ = broker.ledger.position(s_)
                 if q_:
-                    gate.submit(OrderIntent(STRATEGY_ID, s_, -q_, ts, tag="flatten"), ts)
+                    gate.submit(OrderIntent(strategy_id, s_, -q_, ts, tag="flatten"), ts)
             audit.event(ts, "CONTROL_FLATTEN", severity="WARN")
         if broker.halted:
             continue
@@ -145,7 +163,7 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
         if today.empty:
             continue
         raw = {p.name: (p.predict_symbols(t, list(today.index)) if hasattr(p, "predict_symbols")
-                        else p.predict(today[FEATURES])) for p in predictors}
+                        else p.predict(today[cols])) for p in predictors}
         equity = broker.equity()
         mids = dict(broker.last_mids)
         for i, sym in enumerate(today.index):
@@ -157,20 +175,20 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
             outcome_at = lab["known_at"] if lab is not None else None
             rec = pledger.append({
                 "kind": "prediction", "id": f"{ts[:10]}:{sym}", "made_at": ts, "symbol": sym,
-                "asset_class": inst.asset_class, "horizon_bars": HORIZON,
+                "asset_class": inst.asset_class, "horizon_bars": horizon,
                 "predictor_probs": {k: (None if v is None else round(v, 5)) for k, v in probs.items()},
                 "weights": {k: round(v, 4) for k, v in hedge.weights(inst.asset_class).items()},
                 "p_raw": round(p_raw, 5), "p_final": round(p_final, 5), "mid_at_prediction": today.at[sym, "mid"]})
             if outcome_at is not None and pd.notna(outcome_at):
                 open_preds.append({**rec, "outcome_at": outcome_at, "_up": float(lab["up"]),
                                    "_ret": float(lab["fwd_ret"])})
-            if (trade_from is not None and t < pd.Timestamp(trade_from, tz=t.tz)) or mode != "RUNNING":
+            if (trade_from_ts is not None and t < trade_from_ts) or mode != "RUNNING":
                 continue                       # predictions and learning continue while paused
             # 5. decide
             usd_per_unit = mids[sym] * quote_to_usd(inst.quote, mids)
             spread = panels["ask_close"].at[t, sym] - panels["bid_close"].at[t, sym]
-            pp = propose(sym, p_final, float(today.at[sym, "vol20"]), HORIZON, equity, usd_per_unit,
-                         spread, mids[sym], inst)
+            pp = propose(sym, p_final, float(today.at[sym, "vol20"]), horizon, equity, usd_per_unit,
+                         spread, mids[sym], inst, horizon_days=horizon / bars_per_day * 7 / 5)
             cur = broker.ledger.position(sym)
             delta = pp.target_qty - cur
             props_out.append({"ts": ts, "symbol": sym, "p": round(p_final, 4), "target": pp.target_qty,
@@ -182,7 +200,7 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
                 if o.symbol == sym and o.status is Status.PENDING:
                     broker.cancel(ts, o)
             reduces = cur != 0 and (pp.target_qty == 0 or (pp.target_qty > 0) != (cur > 0))
-            gate.submit(OrderIntent(STRATEGY_ID, sym, delta, ts, tag="adaptive",
+            gate.submit(OrderIntent(strategy_id, sym, delta, ts, tag="adaptive",
                                     expected_edge_usd=None if reduces or pp.target_qty == 0 else pp.edge_usd,
                                     est_cost_usd=pp.cost_usd), ts)
     equity = pd.Series(dict(eq_rows), name="equity")

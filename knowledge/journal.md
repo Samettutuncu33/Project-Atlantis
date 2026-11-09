@@ -21,3 +21,8 @@ No edits to past entries.
 - 2026-11-09: Qlib LightGBM on Alpha158 shows only IC about 0.04-0.05 across about 300 stocks. With 20 instruments, expect AUC barely above 0.5 and months of data before any significance.
 - 2026-11-09: Numerai pays for orthogonal (marginal) contribution. Trend and breakout probably double-count in Hedge, so test leave-one-out ensemble Brier.
 - 2026-11-09: Pre-registered live test proposed: after 26 weeks, E's Brier skill score vs the trailing base rate must have a block-bootstrap 95% CI above 0; otherwise cut sizing.
+
+## 2026-11-09 correction (before any live decision)
+- Bug found: cached "file not found" placeholders made stocks and crypto look like they had 2016 history, so account E learned without them. Fixed: a placeholder no longer counts as data.
+- History span and prediction ledgers were reset and rebuilt with all 20 instruments. No live trade had happened yet, so no live record changed.
+- Added account F (hourly, 4-hour predictions, with daily/weekly context, news flashes and the hourly AI analyst).

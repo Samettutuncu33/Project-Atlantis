@@ -40,7 +40,10 @@ def round_to_feasible(q: float, min_size: float, step: float) -> float:
 
 
 def propose(symbol: str, p: float, sigma_daily: float, horizon: int, equity: float,
-            usd_per_unit: float, spread_price: float, price: float, inst) -> Proposal:
+            usd_per_unit: float, spread_price: float, price: float, inst,
+            horizon_days: float | None = None) -> Proposal:
+    """sigma_daily is the volatility per BAR (daily or hourly); horizon is in bars;
+    horizon_days is the calendar holding period used for financing."""
     if not (sigma_daily > 0 and usd_per_unit > 0 and equity > 0):
         return Proposal(symbol, 0.0, p, 0.0, 0.0, 0.0, "no volatility or price estimate")
     sig_h = sigma_daily * math.sqrt(horizon)
@@ -58,7 +61,8 @@ def propose(symbol: str, p: float, sigma_daily: float, horizon: int, equity: flo
     commission = 2 * max(comm_min, comm_rate * notional)
     fin_pa = (inst.financing_long_pa if qty > 0 else inst.financing_short_pa)
     fin_pa = 0.0075 if fin_pa is None else fin_pa
-    financing = fin_pa * notional * horizon * 7 / 5 / 360
+    hold_days = horizon * 7 / 5 if horizon_days is None else horizon_days
+    financing = fin_pa * notional * hold_days / 360
     spread_cost = spread_price / price * notional
     cost = commission + financing + spread_cost
     if edge <= cost:

@@ -117,7 +117,9 @@ class Broker:
     def _financing(self, ts: str) -> None:
         if self._last_ts is None or not self.ledger.lots:
             return
-        days = (datetime.fromisoformat(ts) - datetime.fromisoformat(self._last_ts)).days
+        # Rollovers = calendar-day boundaries (00:00 UTC) crossed since the previous bar.
+        # Identical to elapsed days for daily bars; correct for hourly bars too.
+        days = (datetime.fromisoformat(ts).date() - datetime.fromisoformat(self._last_ts).date()).days
         if days <= 0:
             return
         q2u = {s: self._q2usd(s, self.last_mids) for s in self.ledger.lots}

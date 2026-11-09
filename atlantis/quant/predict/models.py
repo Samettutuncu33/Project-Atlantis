@@ -67,11 +67,12 @@ class _SkModel(Predictor):
     trainable = True
     min_rows = 500
 
-    def __init__(self):
+    def __init__(self, cols: list[str] | None = None):
         self.model = None
+        self.cols = list(cols or FEATURES)
 
     def _clean(self, X):
-        return X[FEATURES].astype(float).fillna(0.0).to_numpy()
+        return X[self.cols].astype(float).fillna(0.0).to_numpy()
 
     def fit(self, X, y):
         if len(X) < self.min_rows or y.nunique() < 2:
@@ -120,14 +121,16 @@ class LLMAnalyst(Predictor):
     so it can never be scored on history it may already know (no look-ahead)."""
     name = "llm_analyst"
 
-    def __init__(self, root=None):
+    def __init__(self, root=None, key_len: int = 10):
+        """key_len 10 -> one file per day (YYYY-MM-DD); 13 -> one per hour (YYYY-MM-DDTHH)."""
         from pathlib import Path
         self.root = Path(root) if root else Path(__file__).resolve().parents[3] / "data" / "llm"
+        self.key_len = key_len
         self._cache: dict = {}
 
     def for_date(self, ts) -> dict:
         import json
-        key = str(ts)[:10]
+        key = str(ts).replace(" ", "T")[:self.key_len]
         if key not in self._cache:
             p = self.root / f"{key}.json"
             self._cache[key] = json.loads(p.read_text()).get("probs", {}) if p.exists() else {}
@@ -151,10 +154,10 @@ def default_predictors() -> list[Predictor]:
 
 
 def training_set(features: pd.DataFrame, labels: pd.DataFrame, asof: pd.Timestamp,
-                 embargo_days: int = 5) -> tuple[pd.DataFrame, pd.Series]:
+                 embargo_days: int = 5, cols: list[str] | None = None) -> tuple[pd.DataFrame, pd.Series]:
     """Rows whose outcome was known strictly before `asof - embargo` (purge + embargo)."""
     j = features.join(labels[["up", "known_at"]], how="inner")
     cutoff = asof - pd.Timedelta(days=embargo_days)
     j = j[(j["known_at"].notna()) & (j["known_at"] <= cutoff) & j["up"].notna()]
     j = j.dropna(subset=["ret_250", "vol20"])
-    return j[FEATURES], j["up"]
+    return j[list(cols or FEATURES)], j["up"]

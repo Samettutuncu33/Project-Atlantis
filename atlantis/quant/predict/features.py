@@ -79,3 +79,32 @@ def forward_labels(panels: dict[str, pd.DataFrame], horizon: int) -> pd.DataFram
                                   "known_at": known, "symbol": s}, index=m.index))
     out = pd.concat(rows).reset_index().rename(columns={"index": "ts"})
     return out.set_index(["ts", "symbol"]).sort_index()
+
+
+CONTEXT = ["d_ret_5", "d_ret_20", "d_ret_60", "d_ret_250", "d_rsi_14", "d_donchian_pos_55",
+           "d_vol_ratio_20_120", "d_dist_high_250"]
+
+
+def add_context(intraday: pd.DataFrame, daily_panels: dict[str, pd.DataFrame]) -> pd.DataFrame:
+    """Attach daily/weekly context to intraday feature rows, causally.
+
+    Daily bar D closes at D+1 00:00 UTC, so an intraday row at time ts may only see
+    daily rows with D + 1 day <= ts (as-of join). d_ret_5 is the weekly move, d_ret_20 the
+    monthly move, d_ret_250 the yearly trend, all normalised by volatility."""
+    daily = build_features(daily_panels)
+    base = [c.removeprefix("d_") for c in CONTEXT]
+    out = []
+    for sym, g in intraday.groupby(level="symbol"):
+        g = g.reset_index()
+        if sym not in daily.index.get_level_values("symbol"):
+            for c in CONTEXT:
+                g[c] = np.nan
+            out.append(g)
+            continue
+        d = daily.xs(sym, level="symbol")[base].rename(columns=lambda c: "d_" + c)
+        d = d.assign(avail=d.index + pd.Timedelta(days=1)).sort_values("avail")
+        g = g.sort_values("ts")
+        m = pd.merge_asof(g, d, left_on="ts", right_on="avail", direction="backward")
+        out.append(m.drop(columns=["avail"]))
+    res = pd.concat(out)
+    return res.set_index(["ts", "symbol"]).sort_index()

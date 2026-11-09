@@ -112,3 +112,22 @@ def test_llm_analyst_abstains_without_a_forward_file(tmp_path):
     assert a.predict_symbols("2020-01-02T00:00:00+00:00", ["EURUSD"]) == [None]
     (tmp_path / "2026-11-10.json").write_text(json.dumps({"probs": {"EURUSD": 0.99}}))
     assert a.predict_symbols("2026-11-10T00:00:00+00:00", ["EURUSD", "BTCUSD"]) == [0.98, None]
+
+
+def test_daily_context_is_causal(fx_data):
+    """An intraday row at ts may only use daily bars that closed by ts (bar D closes at D+1 00:00)."""
+    from atlantis.quant.predict.features import CONTEXT, add_context
+    p = build_panels(fx_data)
+    daily = build_features(p)
+    d = p["mid_close"].index
+    day = d[400]
+    rows = []
+    for hh in (0, 13, 23):                      # same calendar day as daily bar `day`
+        ts = day + pd.Timedelta(hours=hh)
+        rows.append({"ts": ts, "symbol": "EURUSD", **{f: 0.0 for f in FEATURES}})
+    intraday = pd.DataFrame(rows).set_index(["ts", "symbol"])
+    ctx = add_context(intraday, p)
+    prev = d[d < day][-1]                        # the latest daily bar closed before `day` ends
+    expect = daily.loc[(prev, "EURUSD"), "ret_20"]
+    assert np.allclose(ctx["d_ret_20"].to_numpy(), expect)       # never today's own (unfinished) bar
+    assert set(CONTEXT) <= set(ctx.columns)

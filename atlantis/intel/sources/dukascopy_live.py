@@ -42,9 +42,18 @@ class Fetcher:
         self.now = now or datetime.now(UTC)
         self.s = requests.Session()
         self.provenance: list[dict] = []
+        self._mem: dict[str, bytes | None] = {}
 
     def get(self, rel: str, period_end: datetime) -> bytes | None:
-        """Return decompressed payload, b'' for an empty file, None for 404."""
+        """Return decompressed payload, b'' for an empty file, None for 404.
+        Each file is fetched at most once per run (in-memory cache)."""
+        if rel in self._mem:
+            return self._mem[rel]
+        out = self._get(rel, period_end)
+        self._mem[rel] = out
+        return out
+
+    def _get(self, rel: str, period_end: datetime) -> bytes | None:
         dest = self.raw / rel
         meta = dest.with_name(dest.name + ".json")
         final = period_end <= self.now - timedelta(hours=3)
@@ -173,3 +182,72 @@ def latest_quote(f: Fetcher, symbol: str, lookback_hours: int = 72) -> dict | No
                     "ask": a["ask"][-1] / p, "source_url": f"{BASE_URL}/{rel}"}
         h -= timedelta(hours=1)
     return None
+
+
+def _to_hourly(df: pd.DataFrame) -> pd.DataFrame:
+    live = df[df["volume"] > 0]
+    if live.empty:
+        return live
+    g = live.groupby(live.index.floor("h"))
+    return pd.DataFrame({"open": g["open"].first(), "high": g["high"].max(), "low": g["low"].min(),
+                         "close": g["close"].last(), "volume": g["volume"].sum()})
+
+
+def _ticks_hour(payload: bytes, hour_start: datetime, symbol: str, side: str) -> pd.DataFrame:
+    if not payload:
+        return pd.DataFrame(columns=["open", "high", "low", "close", "volume"])
+    a = np.frombuffer(payload, dtype=TICK)
+    px = (a["bid"] if side == "BID" else a["ask"]) / POINT[symbol]
+    vol = (a["bv"] if side == "BID" else a["av"]).astype(float)
+    idx = pd.DatetimeIndex([pd.Timestamp(hour_start)], name="ts")
+    return pd.DataFrame({"open": [px[0]], "high": [px.max()], "low": [px.min()], "close": [px[-1]],
+                         "volume": [vol.sum()]}, index=idx)
+
+
+def _side_hourly(f: Fetcher, symbol: str, side: str, start: date, now: datetime) -> pd.DataFrame:
+    parts = []
+    y, m = start.year, start.month
+    while (y, m) < (now.year, now.month):
+        ms = datetime(y, m, 1, tzinfo=UTC)
+        me = datetime(y + (m == 12), m % 12 + 1, 1, tzinfo=UTC)
+        payload = f.get(f"{symbol}/{y}/{m - 1:02d}/{side}_candles_hour_1.bi5", me)
+        if payload is None:
+            raise LiveFetchError(f"{symbol} {y}-{m:02d} hour file missing")
+        parts.append(_candles(payload, ms, symbol))
+        y, m = (y + (m == 12), m % 12 + 1)
+    d0 = date(now.year, now.month, 1)
+    today = now.date()
+    while d0 < today:
+        ds = datetime(d0.year, d0.month, d0.day, tzinfo=UTC)
+        payload = f.get(f"{symbol}/{d0.year}/{d0.month - 1:02d}/{d0.day:02d}/{side}_candles_min_1.bi5",
+                        ds + timedelta(days=1))
+        if payload is not None:
+            parts.append(_to_hourly(_candles(payload, ds, symbol)))
+        d0 += timedelta(days=1)
+    h = datetime(today.year, today.month, today.day, tzinfo=UTC)
+    last_complete = now.replace(minute=0, second=0, microsecond=0)
+    while h < last_complete:
+        rel = f"{symbol}/{h.year}/{h.month - 1:02d}/{h.day:02d}/{h.hour:02d}h_ticks.bi5"
+        try:
+            payload = f.get(rel, h + timedelta(hours=1))
+        except LiveFetchError:
+            payload = None
+        if payload:
+            parts.append(_ticks_hour(payload, h, symbol, side))
+        h += timedelta(hours=1)
+    out = pd.concat([p for p in parts if len(p)]).sort_index()
+    out = out[out["volume"] > 0]
+    return out[~out.index.duplicated(keep="last")]
+
+
+def hourly_bid_ask(f: Fetcher, symbol: str, start: date, now: datetime | None = None) -> pd.DataFrame:
+    """Completed hourly bid/ask bars from `start` up to the last completed hour."""
+    now = now or f.now
+    b = _side_hourly(f, symbol, "BID", start, now).add_prefix("bid_")
+    a = _side_hourly(f, symbol, "ASK", start, now).add_prefix("ask_")
+    df = b.join(a, how="inner")
+    df.index.name = "ts"
+    bad = (df["ask_close"] < df["bid_close"]) | (df["ask_open"] < df["bid_open"])
+    df = df[~bad]
+    df.attrs["source"] = "dukascopy"
+    return df

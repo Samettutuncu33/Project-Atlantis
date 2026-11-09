@@ -27,7 +27,8 @@ import pandas as pd
 
 from atlantis.analytics import metrics as M
 from atlantis.checks.reconcile import reconcile
-from atlantis.intel.sources.dukascopy_live import Fetcher, LiveFetchError, daily_bid_ask, latest_quote
+from atlantis.intel.sources.dukascopy_live import (Fetcher, LiveFetchError, daily_bid_ask, hourly_bid_ask,
+                                                    latest_quote)
 from atlantis.intel.validate import clean_daily
 from atlantis.engine import run_backtest
 from atlantis.instruments.spec import make_instrument
@@ -91,9 +92,14 @@ def cached_first_year(symbol: str, floor: int = 2016) -> int:
     FIRST_YEAR. The adaptive account replays that whole history to build know-how,
     never downloading during a run, so every run replays the same years."""
     d = ROOT / "data" / "raw" / "dukascopy_live" / symbol
+
+    def has(year: int, side: str) -> bool:
+        # A cached 404 is an empty placeholder: it exists on disk but holds no data.
+        f = d / str(year) / f"{side}_candles_day_1.bi5"
+        return f.exists() and f.stat().st_size > 0
+
     y = FIRST_YEAR
-    while y - 1 >= floor and all((d / str(y - 1) / f"{side}_candles_day_1.bi5").exists()
-                                 for side in ("BID", "ASK")):
+    while y - 1 >= floor and all(has(y - 1, side) for side in ("BID", "ASK")):
         y -= 1
     return y
 
@@ -280,6 +286,7 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
         rows["projection"].append(projection(spec, data, equity_live, horizon))
     # ---- Account E: Atlantis Adaptive (multi-asset, self-learning) ---------------------
     checks += adaptive_section(f, until, now, quotes, rows, journal_new, write)
+    checks += adaptive_section(f, until, now, quotes, rows, journal_new, write, acct="F", hourly=True)
     # append-only journal verification
     jpath = LIVE_DIR / "journal.jsonl"
     old = [json.loads(x) for x in jpath.read_text().splitlines()] if jpath.exists() else []
@@ -303,6 +310,8 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
            "control_since": CONTROLS().current().get("since"),
            "label": "SIMULATED executions on Dukascopy (non-Saxo) market data"}
     portfolio_enrich(rows)
+    from atlantis.intel.news import bundle_rows
+    rows.update(bundle_rows(ROOT / "knowledge" / "intel"))
     checks = [{"run_utc": run["run_utc"], **c} for c in checks]
     if write:
         OUT.mkdir(parents=True, exist_ok=True)
@@ -324,11 +333,18 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     return {"run": run, "rows": rows, "checks": checks}
 
 
+INTRADAY_DATA_FROM = "2026-01-01"     # hourly history start (frozen)
+INTRADAY_LEARN_FROM = "2026-02-02"    # after ~250 hourly bars of feature warm-up
+INTRADAY_START = "2026-11-09T17:00:00+00:00"   # first hourly bar whose close may trade (account F)
+INTRADAY_HORIZON = 4                  # predictions are about the next 4 hours (pre-registered)
 ADAPTIVE_LEARN_FROM = "2017-01-01"   # replay history from here when cached (needs 250 bars of warm-up)
 
 
 def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows: dict,
-                     journal_new: list, write: bool = True) -> list[dict]:
+                     journal_new: list, write: bool = True, acct: str = "E",
+                     hourly: bool = False) -> list[dict]:
+    """Account E: daily bars, 5-day predictions. Account F: hourly bars, 4-hour predictions,
+    with daily/weekly context features and the hourly AI analyst."""
     from atlantis.adaptive import CLASS_NAMES, run_adaptive
     from atlantis.engine import BacktestResult
     from atlantis.instruments.spec import universe
@@ -336,30 +352,56 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
     syms = list(universe()["instruments"])
     data, dchecks = load_data(f, until, syms, strict=False, history=True)
     checks += dchecks
-    first = min(d.index[0] for d in data.values())
-    learn_from = max(pd.Timestamp(ADAPTIVE_LEARN_FROM, tz="UTC"), first + pd.Timedelta(days=380))
-    res = run_adaptive(data, CAPITAL, start=str(learn_from.date()), trade_from=LIVE_START,
-                       controls=CONTROLS())
-    checks.append({"check": "adaptive_history", "status": "OK",
-                   "detail": f"learned on real outcomes from {learn_from.date()} "
+    if hourly:
+        daily = data
+        data = {}
+        for s_ in daily:
+            try:
+                h = hourly_bid_ask(f, s_, date.fromisoformat(INTRADAY_DATA_FROM), now)
+            except LiveFetchError as e:
+                checks.append({"check": f"hourly_data_unavailable:{s_}", "status": "WARN", "detail": str(e)[:120]})
+                continue
+            data[s_] = h[h.index.dayofweek < 5]            # Saxo hours: no weekend bars
+        learn_from = pd.Timestamp(INTRADAY_LEARN_FROM, tz="UTC")
+        live_start = INTRADAY_START
+        res = run_adaptive(data, CAPITAL, start=INTRADAY_LEARN_FROM, trade_from=INTRADAY_START,
+                           controls=CONTROLS(), horizon=INTRADAY_HORIZON, bars_per_day=24.0,
+                           context_daily=daily, llm_root=ROOT / "data" / "llm" / "hourly", llm_key_len=13,
+                           strategy_id="intraday")
+    else:
+        first = min(d.index[0] for d in data.values())
+        learn_from = max(pd.Timestamp(ADAPTIVE_LEARN_FROM, tz="UTC"), first + pd.Timedelta(days=380))
+        live_start = LIVE_START
+        res = run_adaptive(data, CAPITAL, start=str(learn_from.date()), trade_from=LIVE_START,
+                           controls=CONTROLS())
+    checks.append({"check": f"adaptive_history:{acct}", "status": "OK",
+                   "detail": f"learned on real outcomes from {learn_from.date()} ({'hourly' if hourly else 'daily'} bars) "
                              f"({len(res.ledger.resolutions())} scored predictions before/through today)"})
     br, led = res.broker, res.broker.ledger
     wrapped = BacktestResult(res.equity, None, br, None, br.audit, {}, None, None)
-    rows["_closed"].extend(("E", c.symbol, c.pnl_usd_gross - c.conversion_fee_usd) for c in led.closed)
+    rows["_closed"].extend((acct, c.symbol, c.pnl_usd_gross - c.conversion_fee_usd) for c in led.closed)
     breaks = reconcile(wrapped)
     led.check_invariants()
-    checks.append({"check": "reconciliation:E", "status": "OK" if not breaks else "ERROR",
+    checks.append({"check": f"reconciliation:{acct}", "status": "OK" if not breaks else "ERROR",
                    "detail": "; ".join(breaks) or "engine ledger == independent FIFO recomputation"})
     # prediction ledger: append-only across runs (hash chain must extend the stored one)
-    ppath = LIVE_DIR / "predictions.jsonl"
+    ppath = LIVE_DIR / ("predictions_intraday.jsonl" if hourly else "predictions.jsonl")
     old = [json.loads(x)["hash"] for x in ppath.read_text().splitlines()] if ppath.exists() else []
-    new = [r["hash"] for r in res.ledger.records]
+    recs = res.ledger.records
+    if hourly:
+        # Hourly warm-up is ~100k records: store a checkpoint (the chain hash just before the
+        # live start) plus every live record. The chain still covers the whole history.
+        cut = next((i for i, r in enumerate(recs)
+                    if (r.get("made_at") or r.get("resolved_at") or "") >= INTRADAY_START), len(recs))
+        tip = recs[cut - 1]["hash"] if cut else "genesis"
+        recs = [{"kind": "checkpoint", "hash": tip, "warmup_records": cut}] + recs[cut:]
+    new = [r["hash"] for r in recs]
     ok = new[:len(old)] == old
-    checks.append({"check": "prediction_ledger_append_only", "status": "OK" if ok else "CRITICAL",
+    checks.append({"check": f"prediction_ledger_append_only:{acct}", "status": "OK" if ok else "CRITICAL",
                    "detail": f"{len(old)} earlier prediction records reproduced exactly; "
                              f"{len(new) - len(old)} new" if ok else "earlier predictions changed"})
     if ok and write:
-        ppath.write_text("".join(json.dumps(r, default=str) + "\n" for r in res.ledger.records))
+        ppath.write_text("".join(json.dumps(r, default=str) + "\n" for r in recs))
     mids = dict(br.last_mids)
     mids.update({s: (q["bid"] + q["ask"]) / 2 for s, q in quotes.items()})
     marks = {s: ((quotes[s]["bid"], quotes[s]["ask"]) if s in quotes else br.last_marks[s]) for s in led.lots}
@@ -370,22 +412,25 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
         qty = sum(l.qty for l in book)
         inst = br.instruments[s]
         rows["positions"].append({
-            "account": "E", "symbol": s, "side": "LONG" if qty > 0 else "SHORT", "qty": qty,
+            "account": acct, "symbol": s, "side": "LONG" if qty > 0 else "SHORT", "qty": qty,
             "avg_entry": round(sum(l.qty * l.price for l in book) / qty, 6),
             "mark_bid": marks[s][0], "mark_ask": marks[s][1], "opened": book[0].opened, "q2u": q2u[s],
             "mark_ts": quotes.get(s, {}).get("ts", str(br._last_ts)), "unrealised_usd": round(unreal_by[s], 2),
             "notional_usd": round(abs(qty) * mids[s] * q2u[s], 2),
             "margin_usd": round(abs(qty) * mids[s] * q2u[s] * inst.initial_margin, 2)})
-    eq = res.equity[res.equity.index >= pd.Timestamp(LIVE_START, tz="UTC")]
+    ls = pd.Timestamp(live_start)
+    ls = ls if ls.tzinfo else ls.tz_localize("UTC")
+    eq = res.equity[res.equity.index >= ls]
     for t, v in eq.items():
-        rows["equity"].append({"ts": t.isoformat(), "account": "E", "equity": round(v, 4), "kind": "daily close"})
-    rows["equity"].append({"ts": now.isoformat(timespec="minutes"), "account": "E",
+        rows["equity"].append({"ts": t.isoformat(), "account": acct, "equity": round(v, 4), "kind": "daily close"})
+    rows["equity"].append({"ts": now.isoformat(timespec="minutes"), "account": acct,
                            "equity": round(equity_live, 4), "kind": "live mark"})
     t = led.totals
     mdd = M.max_drawdown(pd.concat([pd.Series([CAPITAL]), eq.reset_index(drop=True), pd.Series([equity_live])]))
     rows["accounts"].append({
-        "account": "E", "name": "Atlantis Adaptive · multi-asset, self-learning", "strategy": "adaptive",
-        "sizing": "half Kelly, edge > cost", "start_capital": CAPITAL, "equity": round(equity_live, 2),
+        "account": acct, "name": ("Atlantis Intraday · hourly, news + daily/weekly context" if hourly
+                 else "Atlantis Adaptive · multi-asset, self-learning"),
+        "strategy": "intraday" if hourly else "adaptive", "sizing": "half Kelly, edge > cost", "start_capital": CAPITAL, "equity": round(equity_live, 2),
         "return_pct": round((equity_live / CAPITAL - 1) * 100, 2), "cash": round(led.cash, 2),
         "unrealised": round(sum(unreal_by.values()), 2), "realised": round(t["realised_gross"], 2),
         "commissions": round(t["commissions"], 2), "financing": round(t["financing"], 4),
@@ -395,7 +440,7 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
     for e in br.audit.events:
         if e["kind"] == "FILL":
             bar = data[e["symbol"]].loc[pd.Timestamp(e["fill_ts"])]
-            rec = {"account": "E", "ts": e["fill_ts"], "symbol": e["symbol"], "side": "BUY" if e["qty"] > 0 else "SELL",
+            rec = {"account": acct, "ts": e["fill_ts"], "symbol": e["symbol"], "side": "BUY" if e["qty"] > 0 else "SELL",
                    "qty": abs(e["qty"]), "price": round(e["price"], 6), "bar_bid_open": bar["bid_open"],
                    "bar_ask_open": bar["ask_open"],
                    "decision_mid": round(e["decision_mid"], 6) if e["decision_mid"] else None,
@@ -412,19 +457,19 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
             continue
         o = pend.get(p["symbol"])
         rows["plan"].append({
-            "account": "E", "symbol": p["symbol"], "signal": p["p"],
+            "account": acct, "symbol": p["symbol"], "signal": p["p"],
             "signal_text": f"P(up 5d) {p['p']:.0%}", "position_qty": p["current"],
             "pending_orders": (f"{'BUY' if o.qty > 0 else 'SELL'} {abs(o.qty):g} MARKET (adaptive)" if o else "none"),
             "executes_at": (str(pd.Timestamp(last_ts) + pd.Timedelta(days=1))[:16] + " UTC open") if o else "",
-            "next_decision": p["reason"] if last_ts >= LIVE_START else "learning only until live start"})
+            "next_decision": p["reason"] if last_ts >= live_start else "learning only until live start"})
     # predictions and know-how for the dashboard
     resol = res.ledger.resolutions()
     preds = res.ledger.predictions()
-    rows["predictions"] = []
-    for r in preds[-400:]:
+    rows.setdefault("predictions", [])
+    for r in preds[-(400 if not hourly else 200):]:
         z = resol.get(r["id"])
         rows["predictions"].append({
-            "id": r["id"], "made_at": r["made_at"], "symbol": r["symbol"],
+            "account": acct, "id": r["id"], "made_at": r["made_at"], "symbol": r["symbol"],
             "asset_class": CLASS_NAMES.get(r["asset_class"], r["asset_class"]),
             "p_up": r["p_final"], "call": "UP" if r["p_final"] > 0.5 else ("DOWN" if r["p_final"] < 0.5 else "NONE"),
             "status": "resolved" if z else "open",
@@ -432,24 +477,25 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
             "correct": (None if not z or z["hit"] is None else bool(z["hit"])),
             "fwd_return_pct": None if not z else round(z["fwd_log_return"] * 100, 3),
             "hash": r["hash"][:12]})
-    rows["knowhow"] = []
+    rows.setdefault("knowhow", [])
     for cls, w in res.hedge.to_dict()["weights"].items():
         for name, weight in w.items():
             n = res.hedge.counts[cls].get(name, 0)
             dn = res.hedge.directional[cls].get(name, 0)
             hits = res.hedge.hits[cls].get(name, 0)
             rows["knowhow"].append({
-                "asset_class": CLASS_NAMES.get(cls, cls), "predictor": name, "weight": round(weight, 4),
+                "account": acct, "asset_class": CLASS_NAMES.get(cls, cls), "predictor": name, "weight": round(weight, 4),
                 "scored": n, "directional_calls": dn, "correct": hits,
                 "hit_rate": round(hits / dn, 4) if dn else None,
                 "brier": round(res.hedge.cum_loss[cls][name] / n, 5) if n else None})
     resolved = [p for p in rows["predictions"] if p["status"] == "resolved"]
-    rows["lessons"] = [{"n": i, "lesson": x} for i, x in enumerate(res.lessons)]
-    rows["calibration"] = [{"resolved_total": len(resol), "calibrator_fitted": res.calibrator.iso is not None,
+    rows.setdefault("lessons", []).extend({"account": acct, "n": i, "lesson": x}
+                                          for i, x in enumerate(res.lessons))
+    rows.setdefault("calibration", []).append({"account": acct, "resolved_total": len(resol), "calibrator_fitted": res.calibrator.iso is not None,
                             "recent_hit_rate": round(np.mean([p["correct"] for p in resolved
                                                               if p["correct"] is not None]), 4)
-                            if resolved else None}]
-    knowhow_path = ROOT / "knowledge" / "knowhow.json"
+                            if resolved else None})
+    knowhow_path = ROOT / "knowledge" / ("knowhow_intraday.json" if hourly else "knowhow.json")
     knowhow_path.parent.mkdir(exist_ok=True)
     if write:
         knowhow_path.write_text(json.dumps({"asof": str(res.equity.index[-1].date()), **res.hedge.to_dict(),

@@ -1,5 +1,5 @@
 {
- "run_utc": "2026-11-09T17:01:58+00:00",
+ "run_utc": "2026-11-09T18:30:52+00:00",
  "live_start": "2026-11-09",
  "last_completed_bar": "2026-11-06",
  "live_started": false,
@@ -9,7 +9,7 @@
   "USDJPY",
   "AUDUSD"
  ],
- "files_used": 1447,
+ "files_used": 1467,
  "trading_mode": "RUNNING",
  "control_since": null,
  "label": "SIMULATED executions on Dukascopy (non-Saxo) market data"

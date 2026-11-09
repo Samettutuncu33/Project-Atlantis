@@ -14,6 +14,10 @@ screener-write, account, balance, position or trade tools.
    step=ONE_DAY, period=ONE_MONTH, outside_rth=false)`. Save the JSON answer verbatim, plus
    `symbol`, `contract_id`, `security_type`, `retrieved_utc` and `tool`, to `data/ibkr/<SYMBOL>_<conid>_<YYYY-MM-DD>.json`.
    Call IBKR one request at a time; it refuses parallel calls.
+2a. **Control Panel (start/stop):** ArtifactData `list` collection `events` on
+   https://claude.ai/artifact/SG2VmB7APqkgiKyShrSHTD with `out_dir` /tmp/panel, then
+   `python scripts/sync_controls.py /tmp/panel`. This appends new presses to `live/controls.jsonl`.
+   Never edit that file by hand; the simulation obeys it (PAUSED = no new risk, FLATTEN = close all, then paused).
 2b. **AI analyst (forward-only predictor `llm_analyst`):** run `python scripts/analyst_brief.py`. It prints the
    latest completed bar's indicators per instrument and the file to write, `data/llm/<bar-date>.json`.
    If that file already exists, do NOT change it: predictions are append-only. Otherwise study the briefing and
@@ -26,6 +30,8 @@ screener-write, account, balance, position or trade tools.
 5. `python scripts/dashboard_updates.py /_blob/<id> /tmp/dash` writes one update per dataset.
    Read each `datasets/<id>` document for its version. Then send one ArtifactData `batch` of `update` writes,
    pinned with `if_version`, each using `file_path` /tmp/dash/<id>.json. A dataset that does not exist yet is created with `set`.
+5b. **Report back to the Control Panel:** ArtifactData `set` doc `latest` in collection `status` on the Control Panel
+   with `{run_utc, last_completed_bar, trading_mode, accounts: [{account, equity}, ...]}`, taken from `live/out/live.json`.
 6. **Journal:** append one dated entry to the END of `knowledge/journal.md` with 3–6 factual lines:
    notable moves, which predictors were right or wrong, gate rejections, data problems. Never edit earlier entries.
 7. Commit `live/`, `knowledge/`, `data/llm/`, `data/ibkr/` and `data/raw/dukascopy_live/` with the message `live run <run_utc>`,

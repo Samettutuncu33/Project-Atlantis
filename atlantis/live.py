@@ -65,6 +65,11 @@ ACCOUNTS = [
 ]
 
 
+def CONTROLS():
+    from atlantis.controls import Controls
+    return Controls.load(LIVE_DIR / "controls.jsonl")
+
+
 def frozen_first_year(symbol: str) -> int:
     """History span is frozen the first time a symbol is used live (live/history_years.json),
     so later downloads can't change the replay and silently rewrite recorded predictions.
@@ -187,7 +192,7 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     for spec in ACCOUNTS:
         if live_started:
             res = run_backtest(data, spec.strategy(), CAPITAL, start=LIVE_START, sizer=spec.make_sizer(),
-                               instruments=instruments, rebalance_on_start=True)
+                               instruments=instruments, rebalance_on_start=True, controls=CONTROLS())
             led, br = res.ledger, res.broker
             breaks = reconcile(res)
             checks.append({"check": f"reconciliation:{spec.id}", "status": "OK" if not breaks else "ERROR",
@@ -292,6 +297,8 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     run = {"run_utc": now.isoformat(timespec="seconds"), "live_start": LIVE_START,
            "last_completed_bar": str(last_bar.date()), "live_started": bool(live_started),
            "universe": UNIVERSE, "files_used": len(f.provenance),
+           "trading_mode": CONTROLS().current()["mode"],
+           "control_since": CONTROLS().current().get("since"),
            "label": "SIMULATED executions on Dukascopy (non-Saxo) market data"}
     checks = [{"run_utc": run["run_utc"], **c} for c in checks]
     if write:
@@ -328,7 +335,8 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
     checks += dchecks
     first = min(d.index[0] for d in data.values())
     learn_from = max(pd.Timestamp(ADAPTIVE_LEARN_FROM, tz="UTC"), first + pd.Timedelta(days=380))
-    res = run_adaptive(data, CAPITAL, start=str(learn_from.date()), trade_from=LIVE_START)
+    res = run_adaptive(data, CAPITAL, start=str(learn_from.date()), trade_from=LIVE_START,
+                       controls=CONTROLS())
     checks.append({"check": "adaptive_history", "status": "OK",
                    "detail": f"learned on real outcomes from {learn_from.date()} "
                              f"({len(res.ledger.resolutions())} scored predictions before/through today)"})

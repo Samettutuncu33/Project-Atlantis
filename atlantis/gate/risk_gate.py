@@ -14,6 +14,7 @@ Every intent passes, in order:
   7. per-symbol margin share
   8. capital allocation: the strategy's margin budget share
   9. edge vs cost (when the intent states an expected edge)
+ 10. trading mode from the user's Control Panel (PAUSED blocks new risk)
 Each rejection is written to the audit log with the failing check's name.
 """
 
@@ -70,6 +71,7 @@ class RiskGate:
     last_bar_ts: str | None = None
     attribution: dict[str, str] = field(default_factory=dict)  # symbol -> strategy holding it
     decisions: list[GateDecision] = field(default_factory=list)
+    mode: str = "RUNNING"            # from the user's Control Panel (atlantis/controls.py)
 
     def on_bar(self, ts: str) -> None:
         self.last_bar_ts = ts
@@ -102,6 +104,8 @@ class RiskGate:
             if age > p["max_data_staleness_days"]:
                 return reject("data_freshness", f"latest bar is {age} days old")
         equity = br.equity()
+        if not reduces and self.mode != "RUNNING":
+            return reject("trading_paused", f"Control Panel mode is {self.mode}: no new risk")
         if not reduces:
             if self.peak_equity > 0 and equity < p["drawdown_kill_switch"] * self.peak_equity:
                 return reject("drawdown_kill_switch",

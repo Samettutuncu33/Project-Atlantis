@@ -1,0 +1,181 @@
+<title>Atlantis Control Panel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one narrow column — status first, then the three controls, then the audit trail. */
+:root {
+  --bg: #f6f7f4; --panel: #ffffff; --fg: #1b1f1c; --muted: #5d665f; --line: #dde2dc;
+  --run: #1f7a4d; --pause: #a86a00; --stop: #b3261e; --accent: #24524a;
+  --font-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121513; --panel: #1b201d; --fg: #e8ece8; --muted: #9aa49c; --line: #2c332e;
+  --run: #5cc591; --pause: #f0b54a; --stop: #ff8a80; --accent: #8cc7b9; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121513; --panel: #1b201d; --fg: #e8ece8; --muted: #9aa49c; --line: #2c332e;
+  --run: #5cc591; --pause: #f0b54a; --stop: #ff8a80; --accent: #8cc7b9; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--font-body); }
+.wrap { max-width: 640px; margin: 0 auto; padding-block: 24px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 20px; }
+h1 { font: 600 26px/1.15 var(--font-display); margin: 0; letter-spacing: .01em; text-wrap: balance; }
+h2 { font: 600 13px/1.2 var(--font-body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 8px; }
+p { margin: 0; }
+.muted { color: var(--muted); font-size: 13px; }
+.sim { display: inline-block; font: 600 11px/1.6 var(--font-body); letter-spacing: .06em; padding: 0 6px;
+  border: 1px solid var(--pause); color: var(--pause); border-radius: 4px; vertical-align: 2px; }
+.status { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px;
+  display: grid; gap: 6px; border-left: 6px solid var(--muted); }
+.status[data-mode="RUNNING"] { border-left-color: var(--run); }
+.status[data-mode="PAUSED"] { border-left-color: var(--pause); }
+.mode { font: 600 34px/1 var(--font-display); letter-spacing: .02em; }
+.status[data-mode="RUNNING"] .mode { color: var(--run); }
+.status[data-mode="PAUSED"] .mode { color: var(--pause); }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+button { font: 600 15px var(--font-body); padding: 14px 12px; border-radius: 10px; border: 1.5px solid var(--line);
+  background: var(--panel); color: var(--fg); cursor: pointer; }
+button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.b-run { border-color: var(--run); color: var(--run); }
+.b-pause { border-color: var(--pause); color: var(--pause); }
+.b-stop { border-color: var(--stop); color: var(--stop); }
+.confirm { background: var(--panel); border: 1.5px solid var(--stop); border-radius: 10px; padding: 14px; display: grid; gap: 10px; }
+.confirm .row { display: flex; gap: 10px; flex-wrap: wrap; }
+.confirm button { flex: 1 1 140px; padding: 10px; }
+.b-stop-go { background: var(--stop); color: var(--bg); border-color: var(--stop); }
+.msg { font-size: 13px; min-height: 1.5em; }
+.msg.err { color: var(--stop); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.hist { list-style: none; margin: 0; padding: 0; display: grid; }
+.hist li { display: grid; grid-template-columns: 92px 1fr; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.hist li:first-child { border-top: 0; }
+.tag { font: 600 12px var(--font-mono); }
+.tag.RUNNING { color: var(--run); } .tag.PAUSED { color: var(--pause); } .tag.FLATTEN { color: var(--stop); }
+.mono { font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; font-size: 14px; }
+dt { color: var(--muted); } dd { margin: 0; font-variant-numeric: tabular-nums; min-width: 0; overflow-wrap: anywhere; }
+a { color: var(--accent); }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:6px">
+    <h1>Atlantis Control Panel</h1>
+    <p class="muted"><span class="sim">SIMULATION</span> Controls the five virtual $200 paper accounts. No real money or broker is involved.</p>
+  </header>
+
+  <section class="status" id="status" data-mode="">
+    <h2 style="margin:0">Trading is</h2>
+    <div class="mode" id="mode">Loading…</div>
+    <p id="since" class="muted"></p>
+    <p id="effect" class="muted">A change applies from the next daily decision (each day's bar closes at 00:00 UTC, and the next scheduled run carries it out). Trades already made are never changed.</p>
+  </section>
+
+  <section>
+    <h2>Controls</h2>
+    <div class="controls">
+      <button id="b-run" class="b-run" type="button" disabled>▶ Resume trading</button>
+      <button id="b-pause" class="b-pause" type="button" disabled>⏸ Pause new trades</button>
+      <button id="b-stop" class="b-stop" type="button" disabled>⏹ Stop &amp; close all</button>
+    </div>
+    <div id="confirm" class="confirm" hidden>
+      <p><b>Close every open position at the next open and pause?</b> All five accounts sell or buy back what they hold. Learning and predictions continue.</p>
+      <div class="row">
+        <button id="b-stop-go" class="b-stop-go" type="button">Yes, stop and close all</button>
+        <button id="b-stop-no" type="button">Cancel</button>
+      </div>
+    </div>
+    <p id="msg" class="msg" role="status"></p>
+    <p class="muted"><b>Pause</b>: no new positions; existing ones are kept and can still be reduced. <b>Stop &amp; close all</b>: closes everything at the next open, then stays paused. <b>Resume</b>: normal trading again.</p>
+  </section>
+
+  <section class="card">
+    <h2>Last scheduled run</h2>
+    <dl id="run">
+      <dt>Run</dt><dd id="r-at">No run has reported yet.</dd>
+      <dt>Mode it applied</dt><dd id="r-mode">—</dd>
+      <dt>Account equities</dt><dd id="r-eq">—</dd>
+    </dl>
+    <p class="muted" style="margin-top:8px">Full details: <a href="https://claude.ai/artifact/AWBpwhmciFEZQZuu8Tp1TY" target="_blank" rel="noopener">Atlantis Live Simulation dashboard</a></p>
+  </section>
+
+  <section class="card">
+    <h2>History of presses</h2>
+    <ul class="hist" id="hist"><li><span class="muted">—</span><span class="muted">No presses yet. Trading has been running since the live start on 9 Nov 2026.</span></li></ul>
+  </section>
+</div>
+
+<script>
+(async () => {
+  const $ = (id) => document.getElementById(id);
+  const fmt = (iso) => { try { return new Date(iso).toISOString().replace('T', ' ').slice(0, 16) + ' UTC'; } catch { return iso; } };
+  const label = { RUNNING: 'Running', PAUSED: 'Paused', FLATTEN: 'Stopped (closing all)' };
+  const btns = [$('b-run'), $('b-pause'), $('b-stop')];
+  let current = 'RUNNING';
+
+  function render(mode, since) {
+    current = mode;
+    const shown = mode === 'FLATTEN' ? 'PAUSED' : mode;
+    $('status').dataset.mode = shown;
+    $('mode').textContent = mode === 'FLATTEN' ? 'Stopped' : label[mode];
+    $('since').textContent = since ? `Since ${fmt(since)}` + (mode === 'FLATTEN' ? ' — positions close at the next open, then trading stays paused.' : '') : 'Running since the live start.';
+    $('b-run').disabled = shown === 'RUNNING';
+    $('b-pause').disabled = shown === 'PAUSED';
+    $('b-stop').disabled = false;
+  }
+
+  const db = await claude.use('db');
+  const user = await claude.use('user');
+  if (!db) {
+    $('mode').textContent = 'Unavailable';
+    $('msg').textContent = 'Sign in to claude.ai to see and change the trading state.';
+    return;
+  }
+  const canEdit = user ? await user.canEdit() : false;
+  const myId = user ? await user.id() : '';
+
+  db.collection('events').orderBy('pressed_at', 'asc').onSnapshot((snap) => {
+    const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    if (docs.length) { const last = docs[docs.length - 1]; render(last.mode, last.pressed_at); }
+    else render('RUNNING', null);
+    if (!canEdit) btns.forEach((b) => (b.disabled = true));
+    const ul = $('hist');
+    if (!docs.length) return;
+    ul.replaceChildren(...docs.slice().reverse().map((d) => {
+      const li = document.createElement('li');
+      const t = document.createElement('span'); t.className = `tag ${d.mode}`; t.textContent = d.mode === 'FLATTEN' ? 'STOP+CLOSE' : d.mode;
+      const w = document.createElement('span'); w.className = 'mono'; w.textContent = fmt(d.pressed_at);
+      li.append(t, w);
+      return li;
+    }));
+  }, (e) => { $('msg').className = 'msg err'; $('msg').textContent = `Could not read the trading state (${e.code}).`; });
+
+  db.doc('status/latest').onSnapshot((s) => {
+    if (!s.exists) return;
+    const d = s.data();
+    $('r-at').textContent = fmt(d.run_utc) + (d.last_completed_bar ? ` · bar ${d.last_completed_bar}` : '');
+    $('r-mode').textContent = d.trading_mode ? label[d.trading_mode] || d.trading_mode : '—';
+    $('r-eq').textContent = Array.isArray(d.accounts) ? d.accounts.map((a) => `${a.account} $${Number(a.equity).toFixed(2)}`).join(' · ') : '—';
+  }, () => {});
+
+  async function press(mode) {
+    $('msg').className = 'msg'; $('msg').textContent = 'Saving…';
+    btns.forEach((b) => (b.disabled = true));
+    try {
+      await db.collection('events').add({ mode, pressed_at: new Date().toISOString(), by: myId || '' });
+      $('msg').textContent = mode === 'RUNNING' ? 'Saved: trading resumes from the next daily decision.'
+        : mode === 'PAUSED' ? 'Saved: no new trades from the next daily decision.'
+        : 'Saved: all positions close at the next open, then trading stays paused.';
+    } catch (e) {
+      $('msg').className = 'msg err';
+      $('msg').textContent = e && e.code === 'permission_denied' ? 'Only the dashboard owner can change trading.' : `Not saved (${(e && e.code) || 'error'}). Try again.`;
+      render(current, null);
+    }
+  }
+  $('b-run').onclick = () => press('RUNNING');
+  $('b-pause').onclick = () => press('PAUSED');
+  $('b-stop').onclick = () => { $('confirm').hidden = false; $('b-stop-go').focus(); };
+  $('b-stop-no').onclick = () => { $('confirm').hidden = true; };
+  $('b-stop-go').onclick = () => { $('confirm').hidden = true; press('FLATTEN'); };
+})();
+</script>

@@ -74,7 +74,8 @@ def run_backtest(data: dict[str, pd.DataFrame], strategy: Strategy, capital: flo
                  sizer: VolTargetSizer | None = None, costs: CostModel | None = None,
                  extra_spread_bps: float = 0.0, carver_buffer: float = 0.10,
                  instruments: dict[str, Instrument] | None = None,
-                 verify_causality: bool = True, rebalance_on_start: bool = False) -> BacktestResult:
+                 verify_causality: bool = True, rebalance_on_start: bool = False,
+                 controls=None) -> BacktestResult:
     sizer = sizer or VolTargetSizer()
     costs = costs or CostModel.saxo_classic()
     instruments = instruments or {s: make_instrument(s) for s in data}
@@ -121,7 +122,18 @@ def run_backtest(data: dict[str, pd.DataFrame], strategy: Strategy, capital: flo
         eq_rows.append((t, equity))
         expo_rows.append({"ts": t, **{s: ledger.position(s) * mids[s] * quote_to_usd(
             instruments[s].quote, mids) if ledger.position(s) else 0.0 for s in data}})
-        if broker.halted:
+        mode, flatten_now = controls.mode_at(t) if controls else ("RUNNING", False)
+        gate.mode = mode
+        if flatten_now:
+            for o in broker.orders:
+                if o.status in (Status.PENDING, Status.PARTIAL):
+                    broker.cancel(ts, o)
+            for s_ in list(broker.ledger.lots):
+                q_ = broker.ledger.position(s_)
+                if q_:
+                    gate.submit(OrderIntent(strategy.name, s_, -q_, ts, tag="flatten"), ts)
+            audit.event(ts, "CONTROL_FLATTEN", severity="WARN")
+        if broker.halted or mode != "RUNNING":
             continue
         month_change = (prev_month is not None and t.month != prev_month) or \
             (rebalance_on_start and first)

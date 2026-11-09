@@ -63,7 +63,7 @@ class AdaptiveResult:
 def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: str | None = None,
                  end: str | None = None, ledger_path: Path | None = None,
                  instruments: dict[str, Instrument] | None = None,
-                 trade_from: str | None = None) -> AdaptiveResult:
+                 trade_from: str | None = None, controls=None) -> AdaptiveResult:
     """`trade_from`: before this date the account predicts and learns but never trades
     (warm-up of the know-how on real outcomes); equity stays at `capital`."""
     instruments = instruments or {s: make_instrument(s) for s in data}
@@ -123,6 +123,17 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
             w_hist.append({"ts": ts, **{f"{c}:{k}": v for c in hedge.cum_loss
                                        for k, v in hedge.weights(c).items()}})
         prev_month = t.month
+        mode, flatten_now = controls.mode_at(t) if controls else ("RUNNING", False)
+        gate.mode = mode
+        if flatten_now:
+            for o in broker.orders:
+                if o.status in (Status.PENDING, Status.PARTIAL):
+                    broker.cancel(ts, o)
+            for s_ in list(broker.ledger.lots):
+                q_ = broker.ledger.position(s_)
+                if q_:
+                    gate.submit(OrderIntent(STRATEGY_ID, s_, -q_, ts, tag="flatten"), ts)
+            audit.event(ts, "CONTROL_FLATTEN", severity="WARN")
         if broker.halted:
             continue
         # 4. predict
@@ -153,8 +164,8 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
             if outcome_at is not None and pd.notna(outcome_at):
                 open_preds.append({**rec, "outcome_at": outcome_at, "_up": float(lab["up"]),
                                    "_ret": float(lab["fwd_ret"])})
-            if trade_from is not None and t < pd.Timestamp(trade_from, tz=t.tz):
-                continue
+            if (trade_from is not None and t < pd.Timestamp(trade_from, tz=t.tz)) or mode != "RUNNING":
+                continue                       # predictions and learning continue while paused
             # 5. decide
             usd_per_unit = mids[sym] * quote_to_usd(inst.quote, mids)
             spread = panels["ask_close"].at[t, sym] - panels["bid_close"].at[t, sym]

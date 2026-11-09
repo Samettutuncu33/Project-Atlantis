@@ -20,7 +20,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from atlantis.instruments.spec import Instrument, conditions
-from atlantis.sim.orders import Order, OrderType
+from atlantis.gate.sim.orders import Order, OrderType
 
 
 @dataclass(frozen=True)

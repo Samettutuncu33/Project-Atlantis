@@ -6,11 +6,11 @@ from hypothesis import strategies as st
 
 from atlantis.audit.log import AuditLog
 from atlantis.instruments.spec import make_instrument
-from atlantis.portfolio.ledger import Ledger, LedgerError
-from atlantis.sim.broker import Broker
-from atlantis.sim.costs import CostModel
-from atlantis.sim.fills import Bar, try_fill
-from atlantis.sim.orders import TIF, Order, OrderType, Status
+from atlantis.gate.portfolio.ledger import Ledger, LedgerError
+from atlantis.gate.sim.broker import Broker
+from atlantis.gate.sim.costs import CostModel
+from atlantis.gate.sim.fills import Bar, try_fill
+from atlantis.gate.sim.orders import TIF, Order, OrderType, Status
 
 EURUSD = make_instrument("EURUSD")
 USDJPY = make_instrument("USDJPY")

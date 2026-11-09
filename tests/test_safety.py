@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from atlantis.data.sources.saxo_sim import SafetyViolation, SaxoSimAdapter, assert_safe
+from atlantis.intel.sources.saxo_sim import SafetyViolation, SaxoSimAdapter, assert_safe
 
 PKG = Path(__file__).resolve().parent.parent / "atlantis"
 

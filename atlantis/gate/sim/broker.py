@@ -14,10 +14,10 @@ from datetime import datetime
 
 from atlantis.audit.log import AuditLog
 from atlantis.instruments.spec import Instrument, UnavailableDataError, conditions
-from atlantis.portfolio.ledger import Ledger
-from atlantis.sim.costs import CostModel
-from atlantis.sim.fills import Bar, try_fill
-from atlantis.sim.orders import TIF, Order, OrderType, Status
+from atlantis.gate.portfolio.ledger import Ledger
+from atlantis.gate.sim.costs import CostModel
+from atlantis.gate.sim.fills import Bar, try_fill
+from atlantis.gate.sim.orders import TIF, Order, OrderType, Status
 
 
 def quote_to_usd(ccy: str, mids: dict[str, float]) -> float:
@@ -62,18 +62,19 @@ class Broker:
         if abs(qty) < inst.min_size - 1e-9 and abs(qty + self.ledger.position(symbol)) > 1e-9:
             # Saxo allows closing an odd remainder; opening/adding below min size is rejected.
             return self._reject(o, f"BELOW_MIN_SIZE({inst.min_size:g})")
+        o.transition(Status.ACCEPTED)
         self.orders.append(o)
         self.audit.event(ts, "ORDER_SUBMITTED", id=o.id, symbol=symbol, qty=qty,
                          type=type_.value, price=price, tag=tag)
         return o
 
     def cancel(self, ts: str, o: Order) -> None:
-        if o.status is Status.PENDING:
-            o.status = Status.CANCELLED
+        if o.status in (Status.PENDING, Status.PARTIAL):
+            o.transition(Status.CANCELLED)
             self.audit.event(ts, "ORDER_CANCELLED", id=o.id)
 
     def _reject(self, o: Order, reason: str) -> Order:
-        o.status, o.reject_reason = Status.REJECTED, reason
+        o.transition(Status.REJECTED, reason)
         self.stats["rejects"] += 1
         self.audit.event(o.submitted, "ORDER_REJECTED", id=o.id, symbol=o.symbol,
                          qty=o.qty, reason=reason, severity="WARN")
@@ -137,7 +138,7 @@ class Broker:
             fq = try_fill(o, bar, inst, self.extra_spread_bps)
             if fq is None:
                 if o.tif is TIF.DAY:
-                    o.status = Status.EXPIRED
+                    o.transition(Status.EXPIRED)
                     self.audit.event(ts, "ORDER_EXPIRED", id=o.id)
                 continue
             pos = self.ledger.position(o.symbol)
@@ -146,7 +147,7 @@ class Broker:
                 eq = self.equity()
                 need = self.required_margin(mids, (o.symbol, fq.qty))
                 if need > eq:
-                    o.status, o.reject_reason = Status.REJECTED, "INSUFFICIENT_MARGIN"
+                    o.transition(Status.REJECTED, "INSUFFICIENT_MARGIN")
                     self.stats["rejects"] += 1
                     self.audit.event(ts, "ORDER_REJECTED", id=o.id, symbol=o.symbol,
                                      reason="INSUFFICIENT_MARGIN", need=need, equity=eq,
@@ -164,7 +165,7 @@ class Broker:
         comm = self.costs.commission(notional)
         self.ledger.charge(ts, "commissions", comm, f"{o.symbol} order {o.id}")
         o.filled_qty += qty
-        o.status = Status.FILLED if abs(o.remaining) < 1e-9 else Status.PARTIAL
+        o.transition(Status.FILLED if abs(o.remaining) < 1e-9 else Status.PARTIAL)
         half_spread = 0.5 * (bar.ask_open - bar.bid_open) if "open" in reason else \
             0.5 * (bar.ask_close - bar.bid_close)
         slip_usd = abs(qty) * slip_pips * inst.pip * q2u
@@ -202,13 +203,14 @@ class Broker:
                 qty = -self.ledger.position(s)
                 px = worst[s][0] if qty < 0 else worst[s][1]   # sell at bid, buy at ask
                 o = Order(self._next_id, s, qty, OrderType.MARKET, None, TIF.DAY, ts, "closeout")
+                o.transition(Status.ACCEPTED)
                 self._next_id += 1
                 self.orders.append(o)
                 b = bars.get(s) or Bar(ts, *([px] * 8))
                 self._execute(ts, o, qty, px, mids, b, "margin_closeout", 0.0)
             for o in self.orders:
-                if o.status is Status.PENDING:
-                    o.status = Status.CANCELLED
+                if o.status in (Status.PENDING, Status.PARTIAL):
+                    o.transition(Status.CANCELLED)
 
     def _negative_balance(self, ts: str) -> None:
         if not self.ledger.lots and self.ledger.cash < 0:

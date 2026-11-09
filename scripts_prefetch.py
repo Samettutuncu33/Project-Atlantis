@@ -2,7 +2,7 @@
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from atlantis.data.sources.dukascopy import fetch_year
+from atlantis.intel.sources.dukascopy import fetch_year
 SYMS = ["EURUSD","GBPUSD","USDJPY","AUDUSD","USDCAD","USDCHF","NZDUSD","EURGBP","EURJPY","GBPJPY","XAUUSD","XAGUSD"]
 jobs = [(s, y, side) for y in range(2025, 2009, -1) for s in SYMS for side in ("BID", "ASK")]
 ok = fail = 0

@@ -1,8 +1,8 @@
 """Build the clean store from cached raw files only (no network)."""
 from pathlib import Path
-from atlantis.data.sources.dukascopy import load_bid_ask, cached_years
-from atlantis.data.validate import clean_daily
-from atlantis.data.store import DataStore
+from atlantis.intel.sources.dukascopy import load_bid_ask, cached_years
+from atlantis.intel.validate import clean_daily
+from atlantis.intel.store import DataStore
 raw = Path("data/raw/dukascopy"); store = DataStore(Path("data"))
 for d in sorted(raw.iterdir()):
     yrs = cached_years(d.name, raw)

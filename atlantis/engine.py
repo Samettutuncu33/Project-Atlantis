@@ -9,15 +9,16 @@ import numpy as np
 import pandas as pd
 
 from atlantis.audit.log import AuditLog, run_manifest
-from atlantis.data.store import frame_hash
+from atlantis.intel.store import frame_hash
 from atlantis.instruments.spec import Instrument, make_instrument
-from atlantis.portfolio.ledger import Ledger
-from atlantis.risk.sizing import VolTargetSizer, ewma_vol
-from atlantis.sim.broker import Broker, quote_to_usd
-from atlantis.sim.costs import CostModel
-from atlantis.sim.fills import Bar
-from atlantis.sim.orders import TIF, OrderType, Status
-from atlantis.strategies.base import Strategy
+from atlantis.gate.portfolio.ledger import Ledger
+from atlantis.quant.risk.sizing import VolTargetSizer, ewma_vol
+from atlantis.gate.risk_gate import OrderIntent, RiskGate
+from atlantis.gate.sim.broker import Broker, quote_to_usd
+from atlantis.gate.sim.costs import CostModel
+from atlantis.gate.sim.fills import Bar
+from atlantis.gate.sim.orders import TIF, OrderType, Status
+from atlantis.quant.strategies.base import Strategy
 
 FIELDS = [f"{s}_{k}" for s in ("bid", "ask") for k in ("open", "high", "low", "close")]
 
@@ -93,6 +94,7 @@ def run_backtest(data: dict[str, pd.DataFrame], strategy: Strategy, capital: flo
     audit = AuditLog()
     ledger = Ledger(capital, conversion_fee=_conv_fee(costs))
     broker = Broker(instruments, ledger, costs, audit, extra_spread_bps)
+    gate = RiskGate(broker)
     eq_rows, expo_rows = [], []
     stop_orders: dict[str, object] = {}
     stopped_dir: dict[str, float] = {}
@@ -107,6 +109,7 @@ def run_backtest(data: dict[str, pd.DataFrame], strategy: Strategy, capital: flo
                 bars[s] = Bar(ts, *row)
         pos_before = {s: ledger.position(s) for s in data}
         broker.process_bar(ts, bars)
+        gate.on_bar(ts)
         # detect stop-outs: position went to zero via a stop order this bar
         for s, o in list(stop_orders.items()):
             if o.status is Status.FILLED:
@@ -149,15 +152,19 @@ def run_backtest(data: dict[str, pd.DataFrame], strategy: Strategy, capital: flo
             for o in broker.orders:      # cancel stale working orders for this symbol
                 if o.symbol == s and o.status is Status.PENDING and o.tag != "stop":
                     broker.cancel(ts, o)
-            broker.submit(ts, s, delta, OrderType.MARKET, tag="rebalance")
+            dec = gate.submit(OrderIntent(strategy.name, s, delta, ts, tag="rebalance"), ts)
+            if not dec.accepted:
+                continue
             if stop_dist is not None:
                 if s in stop_orders:
                     broker.cancel(ts, stop_orders.pop(s))
                 dist = stop_dist.at[t, s]
                 if target != 0 and np.isfinite(dist) and dist > 0:
                     lvl = mids[s] - math.copysign(dist, target)
-                    stop_orders[s] = broker.submit(ts, s, -target, OrderType.STOP, lvl,
-                                                   TIF.GTC, tag="stop")
+                    sd = gate.submit(OrderIntent(strategy.name, s, -target, ts, OrderType.STOP, lvl,
+                                                 TIF.GTC, tag="stop", protective=True), ts)
+                    if sd.accepted:
+                        stop_orders[s] = sd.order
     equity = pd.Series(dict(eq_rows), name="equity")
     exposure = pd.DataFrame(expo_rows).set_index("ts") if expo_rows else pd.DataFrame()
     manifest = run_manifest(
@@ -167,7 +174,10 @@ def run_backtest(data: dict[str, pd.DataFrame], strategy: Strategy, capital: flo
          "cost_multiplier": costs.cost_multiplier, "extra_spread_bps": extra_spread_bps,
          "carver_buffer": carver_buffer},
         {s: frame_hash(d) for s, d in data.items()})
-    return BacktestResult(equity, exposure, broker, sizer, audit, manifest, sig, mid)
+    res = BacktestResult(equity, exposure, broker, sizer, audit, manifest, sig, mid)
+    res.meta["gate_rejects"] = {d.check: sum(1 for x in gate.decisions if not x.accepted and x.check == d.check)
+                                for d in gate.decisions if not d.accepted}
+    return res
 
 
 def _conv_fee(costs: CostModel) -> float:

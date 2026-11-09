@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 import requests
 
-from atlantis.data.sources.dukascopy import BASE_URL, PLAUSIBLE_RANGE, POINT, USER_AGENT
+from atlantis.intel.sources.dukascopy import BASE_URL, PLAUSIBLE_RANGE, POINT, USER_AGENT
 
 CANDLE = np.dtype([("t", ">i4"), ("o", ">i4"), ("c", ">i4"), ("l", ">i4"), ("h", ">i4"), ("v", ">f4")])
 TICK = np.dtype([("t", ">i4"), ("ask", ">i4"), ("bid", ">i4"), ("av", ">f4"), ("bv", ">f4")])

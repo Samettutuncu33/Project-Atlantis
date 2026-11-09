@@ -1,9 +1,9 @@
 """Fetch + validate + store all universe data (run: python scripts_fetch.py)."""
 import sys, json
 from pathlib import Path
-from atlantis.data.sources.dukascopy import load_bid_ask, FetchError
-from atlantis.data.validate import clean_daily
-from atlantis.data.store import DataStore
+from atlantis.intel.sources.dukascopy import load_bid_ask, FetchError
+from atlantis.intel.validate import clean_daily
+from atlantis.intel.store import DataStore
 SYMS = sys.argv[1].split(",") if len(sys.argv) > 1 else ["EURUSD","GBPUSD","USDJPY","AUDUSD","USDCAD","USDCHF","NZDUSD","EURGBP","EURJPY","GBPJPY","XAUUSD","XAGUSD"]
 YEARS = list(range(2010, 2026))
 store = DataStore(Path("data"))

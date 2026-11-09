@@ -1,0 +1,50 @@
+# ATLANTIS risk policy: the limits the central gate enforces on every order intent.
+#
+# REGULATION values are fixed by law (ESMA retail rules) and live in saxo_conditions.yaml.
+# POLICY values below are the account owner's choices. Each carries its rationale.
+# Change them here only; nothing else in the code holds a risk limit.
+
+max_margin_utilisation:
+  value: 1.0
+  kind: REGULATION-DERIVED
+  rationale: >
+    Total ESMA initial margin may not exceed equity, which is the regulatory maximum.
+    No tighter limit is imposed by default; the owner may lower it.
+
+drawdown_kill_switch:
+  value: 0.50
+  kind: POLICY
+  rationale: >
+    New risk-increasing orders are blocked once equity falls below 50% of its peak;
+    risk-reducing orders are still allowed. Under correctly estimated full Kelly
+    sizing, P(ever halving) = 50% (Thorp 2006). With half-Kelly it is about 12.5%.
+    A halving is strong evidence that the strategy's edge estimates are wrong, so
+    trading stops until a human reviews it.
+
+max_symbol_margin_share:
+  value: 0.50
+  kind: POLICY
+  rationale: >
+    A single instrument may use at most half of the margin budget, so one gap cannot
+    trigger the ESMA 50% close-out on its own. This is a diversification floor, not an
+    optimisation result.
+
+max_data_staleness_days:
+  value: 4
+  kind: DATA
+  rationale: >
+    A weekend plus a one-day holiday spans at most 4 calendar days between daily bars.
+    Older prices mean the feed is broken, and no new risk is taken on stale data.
+
+max_intent_age_bars:
+  value: 1
+  kind: DATA
+  rationale: "An intent must be executed on the next bar after it was formed, or it is discarded."
+
+require_edge_above_cost:
+  value: true
+  kind: POLICY
+  rationale: >
+    If an intent states an expected edge, it must exceed the estimated round-trip
+    cost (spread + commission + expected financing over the holding period).
+    Intents without a stated edge (fixed-rule baselines) skip this check.

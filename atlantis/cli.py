@@ -7,7 +7,7 @@ import json
 from collections import Counter
 from pathlib import Path
 
-from atlantis.data.store import DataStore
+from atlantis.intel.store import DataStore
 
 ROOT = Path.cwd()
 
@@ -23,7 +23,7 @@ def load_all(store: DataStore, symbols: list[str] | None = None):
 
 def cmd_research(a) -> None:
     from atlantis.analytics.report import build
-    from atlantis.research.runner import research
+    from atlantis.quant.research.runner import research
 
     store = DataStore(ROOT / "data")
     data, manifests, issues = load_all(store, a.symbols.split(",") if a.symbols else None)
@@ -34,8 +34,8 @@ def cmd_research(a) -> None:
     res["findings_html"] = findings(res)
     eq = {}
     from atlantis.engine import run_backtest
-    from atlantis.research.runner import HOLDOUT
-    from atlantis.strategies.library import REGISTRY
+    from atlantis.quant.research.runner import HOLDOUT
+    from atlantis.quant.strategies.library import REGISTRY
     for name in res["strategies"]:
         eq[name] = run_backtest(data, REGISTRY[name](), 1_000_000.0, *HOLDOUT,
                                 verify_causality=False).equity

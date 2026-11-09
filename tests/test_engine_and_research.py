@@ -6,10 +6,10 @@ from atlantis.analytics import metrics as M
 from atlantis.checks.reconcile import reconcile
 from atlantis.engine import LookAheadError, check_causality, run_backtest
 from atlantis.instruments.spec import make_instrument
-from atlantis.research.robustness import deflated_sharpe, kelly, target_analysis
-from atlantis.risk.sizing import VolTargetSizer
-from atlantis.strategies.base import Strategy
-from atlantis.strategies.library import REGISTRY
+from atlantis.quant.research.robustness import deflated_sharpe, kelly, target_analysis
+from atlantis.quant.risk.sizing import VolTargetSizer
+from atlantis.quant.strategies.base import Strategy
+from atlantis.quant.strategies.library import REGISTRY
 
 
 class Cheater(Strategy):
@@ -57,7 +57,7 @@ def test_backtest_is_reproducible(fx_data):
 
 
 def test_higher_costs_never_increase_final_equity(fx_data):
-    from atlantis.sim.costs import CostModel
+    from atlantis.gate.sim.costs import CostModel
     eq = [run_backtest(fx_data, REGISTRY["donchian_55_20"](), costs=CostModel.saxo_classic(k),
                        verify_causality=False).equity.iloc[-1] for k in (0.0, 1.0, 3.0)]
     assert eq[0] >= eq[1] >= eq[2]

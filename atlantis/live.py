@@ -27,15 +27,15 @@ import pandas as pd
 
 from atlantis.analytics import metrics as M
 from atlantis.checks.reconcile import reconcile
-from atlantis.data.sources.dukascopy_live import Fetcher, LiveFetchError, daily_bid_ask, latest_quote
-from atlantis.data.validate import clean_daily
+from atlantis.intel.sources.dukascopy_live import Fetcher, LiveFetchError, daily_bid_ask, latest_quote
+from atlantis.intel.validate import clean_daily
 from atlantis.engine import run_backtest
 from atlantis.instruments.spec import make_instrument
-from atlantis.research.robustness import block_bootstrap
-from atlantis.risk.sizing import MinTicketSizer, VolTargetSizer
-from atlantis.sim.broker import quote_to_usd
-from atlantis.sim.orders import Status
-from atlantis.strategies.library import DonchianBreakout, TimeSeriesMomentum
+from atlantis.quant.research.robustness import block_bootstrap
+from atlantis.quant.risk.sizing import MinTicketSizer, VolTargetSizer
+from atlantis.gate.sim.broker import quote_to_usd
+from atlantis.gate.sim.orders import Status
+from atlantis.quant.strategies.library import DonchianBreakout, TimeSeriesMomentum
 
 LIVE_START = "2026-11-09"          # first daily bar whose close may trigger a decision
 CAPITAL = 200.0
@@ -86,7 +86,7 @@ def load_data(f: Fetcher, until: date) -> tuple[dict, list[dict]]:
 
 def aggregation_check(f: Fetcher) -> dict:
     """Daily bars built from hourly candles must equal Dukascopy's own day candles."""
-    from atlantis.data.sources.dukascopy_live import _candles, _to_daily
+    from atlantis.intel.sources.dukascopy_live import _candles, _to_daily
     y, m = 2025, 12
     hour = f.get(f"EURUSD/{y}/{m - 1:02d}/BID_candles_hour_1.bi5", datetime(y + 1, 1, 1, tzinfo=UTC))
     day = f.get(f"EURUSD/{y}/BID_candles_day_1.bi5", datetime(y + 1, 1, 1, tzinfo=UTC))

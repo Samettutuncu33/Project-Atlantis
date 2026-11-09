@@ -23,10 +23,10 @@ import pandas as pd
 from atlantis.analytics import metrics as M
 from atlantis.checks.reconcile import reconcile
 from atlantis.engine import BacktestResult, run_backtest
-from atlantis.research.robustness import TrialRegistry, deflated_sharpe, kelly, target_analysis
-from atlantis.risk.sizing import MinTicketSizer, VolTargetSizer
-from atlantis.sim.costs import CostModel
-from atlantis.strategies.library import REGISTRY
+from atlantis.quant.research.robustness import TrialRegistry, deflated_sharpe, kelly, target_analysis
+from atlantis.quant.risk.sizing import MinTicketSizer, VolTargetSizer
+from atlantis.gate.sim.costs import CostModel
+from atlantis.quant.strategies.library import REGISTRY
 
 DEV = ("2012-01-01", "2019-12-31")
 HOLDOUT = ("2020-01-01", "2025-12-31")

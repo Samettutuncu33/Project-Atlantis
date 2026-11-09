@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from atlantis.data.validate import Issue
+from atlantis.intel.validate import Issue
 
 
 def frame_hash(df: pd.DataFrame) -> str:

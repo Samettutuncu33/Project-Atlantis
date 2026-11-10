@@ -1,6 +1,6 @@
 # Atlantis status (SIMULATION ONLY)
 
-Last run: 2026-11-09T19:52:03+00:00 · last bar: 2026-11-06 · mode: **RUNNING** · Claude API spend this month: **$0.40**
+Last run: 2026-11-10T02:20:39+00:00 · last bar: 2026-11-09 · mode: **RUNNING** · Claude API spend this month: **$0.40**
 
 | Account | Strategy | Equity $ | Return % | Fills | Open positions | Max drawdown % |
 |---|---|---|---|---|---|---|
@@ -9,13 +9,13 @@ Last run: 2026-11-09T19:52:03+00:00 · last bar: 2026-11-06 · mode: **RUNNING**
 | C | Breakout 55/20 · conservative | 200.00 | +0.00 | 0 | 0 | 0.0 |
 | D | Breakout 55/20 · min ticket | 200.00 | +0.00 | 0 | 0 | 0.0 |
 | E | Atlantis Adaptive · multi-asset, self-learning | 200.00 | +0.00 | 0 | 0 | 0.0 |
-| F | Atlantis Intraday · hourly, news + daily/weekly context | 200.15 | +0.08 | 1 | 1 | 0.0 |
+| F | Atlantis Intraday · hourly, news + daily/weekly context | 199.87 | -0.06 | 1 | 1 | -0.7 |
 
 ## Open positions
 
 | Account | Name | Qty | Value $ | P&L $ |
 |---|---|---|---|---|
-| F | Nikkei 225 index (Japan) | 0.4 | 153.34 | 0.15 |
+| F | Nikkei 225 index (Japan) | 0.4 | 153.07 | -0.11 |
 
 ## Last fills
 
@@ -25,5 +25,4 @@ Last run: 2026-11-09T19:52:03+00:00 · last bar: 2026-11-06 · mode: **RUNNING**
 
 ## Checks
 
-- **CRITICAL** prediction_ledger_append_only:E: earlier predictions changed
-- **CRITICAL** prediction_ledger_append_only:F: earlier predictions changed
+All OK.

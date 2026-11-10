@@ -4,4 +4,4 @@ B,Trend 12m · min ticket,tsmom_12m,min_ticket,200.0,200.0,0.0,200.0,0.0,0.0,0.0
 C,Breakout 55/20 · conservative,donchian_55_20,conservative,200.0,200.0,0.0,200.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0,0,0.0,False
 D,Breakout 55/20 · min ticket,donchian_55_20,min_ticket,200.0,200.0,0.0,200.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0,0,0.0,False
 E,"Atlantis Adaptive · multi-asset, self-learning",adaptive,"half Kelly, edge > cost",200.0,200.0,0.0,200.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0,0,0.0,False
-F,"Atlantis Intraday · hourly, news + daily/weekly context",intraday,"half Kelly, edge > cost",200.0,200.15,0.08,200.0,0.15,0.0,0.0,0.0,0.0,0.01,1,0,1,0.0,False
+F,"Atlantis Intraday · hourly, news + daily/weekly context",intraday,"half Kelly, edge > cost",200.0,199.87,-0.06,199.99,-0.11,0.0,0.0,0.0128,0.0,0.01,1,0,1,-0.74,False

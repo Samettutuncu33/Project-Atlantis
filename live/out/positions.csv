@@ -1,2 +1,2 @@
 account,symbol,side,qty,avg_entry,mark_bid,mark_ask,opened,mark_ts,unrealised_usd,notional_usd,margin_usd,name,asset_class,cost_usd,pnl_usd,value_usd,pnl_pct,weight_pct
-F,JPNIDXJPY,LONG,0.5,60284.0034,59843.315,59848.583,2026-11-09T18:00:00+00:00,2026-11-10T17:00:00+00:00,-1.39,188.41,9.42,Nikkei 225 index (Japan),Indices,189.79,-1.39,188.4,-0.007324,0.96849
+F,JPNIDXJPY,LONG,0.5,60284.0034,60011.366,60016.634,2026-11-09T18:00:00+00:00,2026-11-10T22:00:00+00:00,-0.86,189.02,9.45,Nikkei 225 index (Japan),Indices,189.88,-0.86,189.02,-0.004529,0.968985

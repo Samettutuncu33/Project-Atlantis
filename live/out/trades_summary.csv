@@ -1,2 +1,3 @@
 account,symbol,name,bought_units,sold_units,commissions_usd,trades,realised_usd,first_trade,last_trade,avg_buy_price,avg_sell_price
-F,JPNIDXJPY,Nikkei 225 index (Japan),0.4,0.0,0.0,1,0.0,2026-11-09T18:00:00+00:00,2026-11-09T18:00:00+00:00,60527.634,
+F,JPNIDXJPY,Nikkei 225 index (Japan),0.7,0.19999999999999996,0.0,3,-0.09,2026-11-09T18:00:00+00:00,2026-11-10T15:00:00+00:00,60353.612143,60458.417
+F,USA500IDXUSD,S&P 500 index,0.1,0.1,0.0,2,-3.97,2026-11-10T15:00:00+00:00,2026-11-10T16:00:00+00:00,7529.332,7489.603

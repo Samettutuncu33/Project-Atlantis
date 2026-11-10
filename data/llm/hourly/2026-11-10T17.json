@@ -1,0 +1,19 @@
+{
+ "made_at": "2026-11-10T18:12:50+00:00",
+ "analyst": "claude-api:claude-opus-5-5",
+ "probs": {
+  "EURUSD": 0.48,
+  "GBPUSD": 0.48,
+  "USDJPY": 0.52,
+  "AUDUSD": 0.48,
+  "USDCHF": 0.52,
+  "USDCAD": 0.52,
+  "BTCUSD": 0.48,
+  "ETHUSD": 0.48,
+  "NVDAUSUSD": 0.48,
+  "USA500IDXUSD": 0.49,
+  "USATECHIDXUSD": 0.49,
+  "XAUUSD": 0.48,
+  "LIGHTCMDUSD": 0.5
+ }
+}

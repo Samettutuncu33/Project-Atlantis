@@ -1,4 +1,13 @@
 account,ts,symbol,side,qty,price,bar_bid_open,bar_ask_open,decision_mid,commission_usd,slippage_usd,reason,tag,label,data_source
+B,2026-11-10T00:00:00+00:00,EURUSD,SELL,1000.0,1.12219,1.12219,1.12223,1.122225,1.0,-0.0,market@open,rebalance,SIMULATED,Dukascopy daily bar open (00:00 UTC)
+B,2026-11-10T00:00:00+00:00,GBPUSD,BUY,1000.0,1.34411,1.34406,1.34411,1.344105,1.0,-0.0,market@open,rebalance,SIMULATED,Dukascopy daily bar open (00:00 UTC)
+B,2026-11-10T00:00:00+00:00,USDJPY,BUY,1000.0,157.99,157.987,157.99,157.99,1.0,-0.0,market@open,rebalance,SIMULATED,Dukascopy daily bar open (00:00 UTC)
+B,2026-11-10T00:00:00+00:00,AUDUSD,BUY,1000.0,0.69214,0.69205,0.69214,0.6921,1.0,-0.0,market@open,rebalance,SIMULATED,Dukascopy daily bar open (00:00 UTC)
+D,2026-11-10T00:00:00+00:00,EURUSD,SELL,1000.0,1.12219,1.12219,1.12223,1.122225,1.0,-0.0,market@open,rebalance,SIMULATED,Dukascopy daily bar open (00:00 UTC)
+D,2026-11-10T00:00:00+00:00,USDJPY,SELL,1000.0,157.987,157.987,157.99,157.99,1.0,-0.0,market@open,rebalance,SIMULATED,Dukascopy daily bar open (00:00 UTC)
+D,2026-11-10T00:00:00+00:00,AUDUSD,SELL,1000.0,0.69205,0.69205,0.69214,0.6921,1.0,-0.0,market@open,rebalance,SIMULATED,Dukascopy daily bar open (00:00 UTC)
+E,2026-11-10T00:00:00+00:00,JPNIDXJPY,BUY,0.3,60645.481,60640.366,60645.481,60648.051,0.0,0.0,market@open,adaptive,SIMULATED,Dukascopy daily bar open (00:00 UTC)
+E,2026-11-10T00:00:00+00:00,LIGHTCMDUSD,BUY,1.0,86.47,86.42,86.47,86.44,0.0,0.0,market@open,adaptive,SIMULATED,Dukascopy daily bar open (00:00 UTC)
 F,2026-11-09T18:00:00+00:00,JPNIDXJPY,BUY,0.4,60527.634,60522.315,60527.634,60523.0765,0.0,0.0,market@open,adaptive,SIMULATED,Dukascopy daily bar open (00:00 UTC)
 F,2026-11-10T12:00:00+00:00,JPNIDXJPY,BUY,0.29999999999999993,60121.583,60116.366,60121.583,60116.0765,0.0,0.0,market@open,adaptive,SIMULATED,Dukascopy daily bar open (00:00 UTC)
 F,2026-11-10T15:00:00+00:00,JPNIDXJPY,SELL,0.19999999999999996,60458.417,60458.417,60463.532,60463.949,0.0,0.0,market@open,adaptive,SIMULATED,Dukascopy daily bar open (00:00 UTC)

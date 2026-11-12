@@ -1,29 +1,29 @@
 # Atlantis status (SIMULATION ONLY)
 
-Last run: 2026-11-12T13:02:39+00:00 · last bar: 2026-11-11 · mode: **RUNNING** · Claude API spend this month: **$0.46**
+Last run: 2026-11-12T20:59:46+00:00 · last bar: 2026-11-11 · mode: **RUNNING** · Claude API spend this month: **$0.46**
 
 | Account | Strategy | Equity $ | Return % | Fills | Open positions | Max drawdown % |
 |---|---|---|---|---|---|---|
 | A | Trend 12m · conservative | 200.00 | +0.00 | 0 | 0 | 0.0 |
-| B | Trend 12m · min ticket | 192.61 | -3.70 | 4 | 4 | -4.4 |
+| B | Trend 12m · min ticket | 191.77 | -4.12 | 4 | 4 | -4.4 |
 | C | Breakout 55/20 · conservative | 200.00 | +0.00 | 0 | 0 | 0.0 |
-| D | Breakout 55/20 · min ticket | 214.06 | +7.03 | 4 | 2 | 0.0 |
+| D | Breakout 55/20 · min ticket | 219.51 | +9.75 | 4 | 2 | 0.0 |
 | E | Atlantis Adaptive · multi-asset, self-learning | 201.11 | +0.55 | 2 | 2 | -0.5 |
-| F | Atlantis Intraday · hourly, news + daily/weekly context | 197.19 | -1.41 | 9 | 1 | -3.2 |
+| F | Atlantis Intraday · hourly, news + daily/weekly context | 198.93 | -0.53 | 9 | 1 | -3.2 |
 
 ## Open positions
 
 | Account | Name | Qty | Value $ | P&L $ |
 |---|---|---|---|---|
-| B | Euro / US dollar | -1000.0 | 1135.61 | 13.42 |
-| B | British pound / US dollar | 1000.0 | 1326.57 | -17.54 |
-| B | US dollar / Japanese yen | 1000.0 | 999.99 | 10.32 |
-| B | Australian dollar / US dollar | 1000.0 | 682.64 | -9.5 |
-| D | Euro / US dollar | -1000.0 | 1135.61 | 13.42 |
-| D | Australian dollar / US dollar | -1000.0 | 701.36 | 9.31 |
-| E | Nikkei 225 index (Japan) | 0.3 | 115.35 | 1.38 |
+| B | Euro / US dollar | -1000.0 | 1138.79 | 16.6 |
+| B | British pound / US dollar | 1000.0 | 1323.63 | -20.48 |
+| B | US dollar / Japanese yen | 1000.0 | 1000.0 | 11.49 |
+| B | Australian dollar / US dollar | 1000.0 | 680.39 | -11.75 |
+| D | Euro / US dollar | -1000.0 | 1138.79 | 16.6 |
+| D | Australian dollar / US dollar | -1000.0 | 703.63 | 11.58 |
+| E | Nikkei 225 index (Japan) | 0.3 | 115.21 | 1.38 |
 | E | WTI crude oil | 1.0 | 86.21 | -0.26 |
-| F | Nikkei 225 index (Japan) | 0.7 | 266.58 | -2.66 |
+| F | Nikkei 225 index (Japan) | 0.7 | 268.01 | -0.91 |
 
 ## Last fills
 
@@ -42,6 +42,4 @@ Last run: 2026-11-12T13:02:39+00:00 · last bar: 2026-11-11 · mode: **RUNNING**
 
 ## Checks
 
-- **CRITICAL** prediction_ledger_append_only:E: earlier predictions changed: first difference at record 66 of 96940 (resolution 2017-01-18T00:00:00+00:00:DEUIDXEUR); stored ledger kept
-- **CRITICAL** prediction_ledger_append_only:F: earlier predictions changed: first difference at record 0 of 1223 (checkpoint ); stored ledger kept
 - **CRITICAL** journal_append_only: 5 earlier fills changed (first at line 1)

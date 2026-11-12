@@ -35,18 +35,18 @@ E,USDCAD,0.5427,P(up 5d) 54%,0.0,none,,edge $0.49 <= cost $2.22
 E,USDCHF,0.5431,P(up 5d) 54%,0.0,none,,edge $0.71 <= cost $2.25
 E,USDJPY,0.5442,P(up 5d) 54%,0.0,none,,edge $0.63 <= cost $2.18
 E,XAUUSD,0.5456,P(up 5d) 55%,0.0,none,,Kelly size below half the minimum ticket
-F,AUDUSD,0.511,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.23
-F,BTCUSD,0.5123,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,DEUIDXEUR,0.5105,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,ETHUSD,0.5117,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.42
-F,EURUSD,0.5113,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.03
-F,GBPUSD,0.5113,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.07
-F,GBRIDXGBP,0.511,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,JPNIDXJPY,0.5115,P(up 5d) 51%,0.7,none,,edge $0.04 > cost $0.03
-F,LIGHTCMDUSD,0.5112,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $0.10
-F,USA500IDXUSD,0.5116,P(up 5d) 51%,0.0,none,,edge $0.05 <= cost $0.07
-F,USATECHIDXUSD,0.5115,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,USDCAD,0.5109,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.31
-F,USDCHF,0.5112,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.18
-F,USDJPY,0.5111,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.04
-F,XAUUSD,0.5105,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,AUDUSD,0.5106,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.20
+F,BTCUSD,0.5127,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,DEUIDXEUR,0.5115,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,ETHUSD,0.5125,P(up 5d) 51%,0.0,none,,edge $0.04 <= cost $2.51
+F,EURUSD,0.5108,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.04
+F,GBPUSD,0.5111,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.08
+F,GBRIDXGBP,0.5119,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,JPNIDXJPY,0.5108,P(up 5d) 51%,0.7,none,,edge $0.03 > cost $0.03
+F,LIGHTCMDUSD,0.5115,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $0.10
+F,USA500IDXUSD,0.511,P(up 5d) 51%,0.0,none,,edge $0.04 <= cost $0.07
+F,USATECHIDXUSD,0.511,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,USDCAD,0.5118,P(up 5d) 51%,0.0,none,,edge $0.04 <= cost $2.23
+F,USDCHF,0.5111,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.18
+F,USDJPY,0.5113,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.04
+F,XAUUSD,0.5114,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket

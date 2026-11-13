@@ -75,6 +75,21 @@ a { color: var(--accent); }
 .pf.on { border-color: var(--accent); color: var(--accent); }
 tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
 
+/* ---- Ask Atlantis (chat) ---- */
+.ask { display: grid; gap: 8px; }
+.ask-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.ask-mini { font-size: 12px; padding: 5px 10px; min-height: 0 !important; border-radius: 999px; color: var(--muted); }
+.ask-log { display: grid; gap: 8px; max-height: 52vh; overflow-y: auto; }
+.ask-log:empty { display: none; }
+.bub { padding: 9px 12px; border-radius: 12px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.5; max-width: 92%; }
+.bub.user { justify-self: end; background: #12233a; border: 1px solid #1f3c63; }
+.bub.bot { justify-self: start; background: var(--panel2); border: 1px solid var(--line); }
+.bub.wait { color: var(--muted); }
+.ask-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: end; }
+.ask-form textarea { font: 15px/1.4 var(--font-body); color: var(--fg); background: #06080b; border: 1.5px solid var(--line); border-radius: 10px;
+  padding: 11px 12px; resize: none; min-height: 46px; max-height: 140px; width: 100%; }
+.ask-form textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 /* ---- Command view (HUD) ---- */
 .hud { position: relative; background: radial-gradient(ellipse at 50% 0%, #07131f 0%, #000 70%); border: 1px solid #12324a; border-radius: 14px; padding: 14px 14px 10px; overflow: hidden; }
 .hud::before { content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -117,6 +132,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
   .card dl { font-size: 11.5px; gap: 1px 6px; }
   th, td { padding: 6px 8px; }
   .wrapx { max-height: 62vh; overflow: auto; -webkit-overflow-scrolling: touch; }
+  .ask-form { grid-template-columns: minmax(0, 1fr); } .ask-form button { width: 100%; } .bub { max-width: 100%; }
   .hud { padding: 12px 10px 8px; } .hud-title { letter-spacing: .14em; } .hud-head { gap: 4px 14px; }
   .hud-flow svg { min-width: 760px; }
   .swipe { display: block; }
@@ -154,6 +170,24 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
       <p class="muted">Applies from the next daily decision (bars close at 00:00 UTC; the next scheduled run carries it out). Past trades never change.</p>
     </section>
   </div>
+
+  <section id="ask" class="box ask" hidden aria-label="Ask Atlantis assistant">
+    <div class="ask-head"><h2 style="margin:0">Ask Atlantis</h2><button type="button" id="ask-clear" class="ask-mini">Clear chat</button></div>
+    <p class="muted">An assistant that answers from the data on this page (simulation only, not financial advice). It uses your Claude usage.</p>
+    <div id="ask-log" class="ask-log" aria-live="polite"></div>
+    <div id="ask-starters" class="pf-bar" style="margin:8px 0 0"></div>
+    <div id="ask-confirm" class="confirm" hidden>
+      <p id="ask-confirm-text"></p>
+      <div class="row"><button id="ask-confirm-yes" type="button"></button><button id="ask-confirm-no" type="button">Cancel</button></div>
+    </div>
+    <form id="ask-form" class="ask-form">
+      <label class="sr" for="ask-input">Your question</label>
+      <textarea id="ask-input" rows="1" placeholder="Ask a question…" maxlength="2000"></textarea>
+      <button type="submit" id="ask-send" class="b-run">Send</button>
+      <button type="button" id="ask-stop" class="b-stop" hidden>Stop</button>
+    </form>
+    <p id="ask-note" class="msg" role="status"></p>
+  </section>
 
   <section id="command" class="hud" aria-label="Live agent command view">
     <div class="hud-head">
@@ -589,5 +623,107 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
   $('b-stop').onclick = () => { $('confirm').hidden = false; $('b-stop-go').focus(); };
   $('b-stop-no').onclick = () => { $('confirm').hidden = true; };
   $('b-stop-go').onclick = () => { $('confirm').hidden = true; press('FLATTEN'); };
+  // ---- Ask Atlantis: a chat assistant that answers from the data loaded on this page -----------------
+  (async () => {
+    const sample = await claude.use('sample');
+    if (!sample) return;                                     // not available here (e.g. the GitHub copy): stay hidden
+    $('ask').hidden = false;
+    const KEY = 'atlantis-chat-v1';
+    let turns = [];
+    try { turns = JSON.parse(localStorage.getItem(KEY) || '[]').filter((t) => t && t.role && typeof t.content === 'string').slice(-20); } catch (e) { turns = []; }
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(turns.slice(-20))); } catch (e) { /* storage is optional */ } };
+    const log = $('ask-log');
+    const bubble = (role, text) => { const d = document.createElement('div'); d.className = `bub ${role === 'user' ? 'user' : 'bot'}`; d.textContent = text; log.append(d); log.scrollTop = log.scrollHeight; return d; };
+    const redraw = () => { log.replaceChildren(); for (const t of turns) bubble(t.role, t.content); };
+    redraw();
+    const STARTERS = ['How are my accounts doing?', 'What did account F trade most recently?', 'Why is account B losing money?', 'Did all checks pass in the last run?'];
+    $('ask-starters').replaceChildren(...STARTERS.map((q) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'pf'; b.textContent = q; b.onclick = () => ask(q); return b; }));
+
+    // Small lookup tools over the loaded run data (the full file is too large to send with every question).
+    const TABLES = ['accounts', 'positions', 'fills', 'trades_summary', 'plan', 'predictions', 'knowhow', 'lessons', 'calibration', 'projection',
+      'intel_summary', 'intel_items', 'intel_calendar', 'intel_views', 'checks', 'pipeline', 'activity', 'agents', 'prices'];
+    const tidy = (r) => Object.fromEntries(Object.entries(r).filter(([k, v]) => v !== null && v !== '' && k !== 'hash' && k !== 'label' && k !== 'data_source')
+      .map(([k, v]) => [k, typeof v === 'number' && !Number.isInteger(v) ? +v.toPrecision(7) : v]));
+    const tools = [
+      { name: 'overview', description: 'Run time, trading mode, every account (equity, return, fills, open positions, drawdown) and how many checks passed. Call this first for general questions.',
+        execute: () => {
+          const b = bundle; if (!b) throw new Error('No run data is loaded on the page yet.');
+          const run = (b.run || [])[0] || {}; const ch = b.checks || []; const bad = ch.filter((c) => c.status !== 'OK' && c.status !== 'INFO');
+          return { now_utc: new Date().toISOString().slice(0, 16), latest_run_utc: run.run_utc, last_completed_daily_bar: run.last_completed_bar, live_start: run.live_start,
+            trading_mode: current, checks_total: ch.length, checks_failed: bad.map((c) => `${c.check}: ${c.detail}`.slice(0, 200)),
+            accounts: (b.accounts || []).map(tidy), tables_available: TABLES.filter((t) => (b[t] || []).length) };
+        } },
+      { name: 'lookup', description: `Rows of one table from the latest run. Tables: ${TABLES.join(', ')}. fills = every simulated trade; positions = open positions; plan = current signal and pending orders per instrument; predictions/knowhow/lessons = what the models predicted and learned; intel_* = dated news brief; pipeline = stages of the last run; prices = prices used. Filter by account (A-F) and/or symbol; newest rows are returned first where rows have a time.`,
+        inputSchema: { type: 'object', properties: { table: { type: 'string', enum: TABLES }, account: { type: 'string', description: 'A, B, C, D, E or F' },
+          symbol: { type: 'string', description: 'e.g. EURUSD, JPNIDXJPY, or part of the name' }, limit: { type: 'integer', minimum: 1, maximum: 40 } }, required: ['table'] },
+        execute: ({ table, account, symbol, limit }) => {
+          if (!bundle) throw new Error('No run data is loaded on the page yet.');
+          if (!TABLES.includes(table)) throw new Error(`Unknown table. Use one of: ${TABLES.join(', ')}`);
+          let rows = bundle[table] || [];
+          if (account) rows = rows.filter((r) => !('account' in r) || String(r.account).toUpperCase() === String(account).toUpperCase());
+          if (symbol) { const q = String(symbol).toLowerCase(); rows = rows.filter((r) => [r.symbol, r.name, r.names, r.symbols].some((v) => v && String(v).toLowerCase().includes(q))); }
+          const timeKey = ['ts', 'made_at', 'at', 'published_at', 'started_at'].find((k) => rows[0] && k in rows[0]);
+          if (timeKey && table !== 'pipeline') rows = [...rows].sort((a, b) => String(b[timeKey]).localeCompare(String(a[timeKey])));
+          const n = Math.min(40, Math.max(1, limit || 15));
+          return { table, total_matching: rows.length, returned: Math.min(n, rows.length), rows: rows.slice(0, n).map(tidy) };
+        } },
+      { name: 'request_control', description: 'Ask the user to confirm a trading-control change. This only SHOWS a confirmation on the page; nothing changes unless the user presses the confirm button themselves. Use only when the user clearly asks to pause, resume, or stop and close all positions.',
+        inputSchema: { type: 'object', properties: { action: { type: 'string', enum: ['pause', 'resume', 'stop_and_close_all'] } }, required: ['action'] },
+        execute: ({ action }) => {
+          if (!canEdit) return { shown: false, reason: 'Only the page owner can change trading.' };
+          const map = { pause: ['PAUSED', 'Pause trading from the next decision?', 'Yes, pause'], resume: ['RUNNING', 'Resume trading from the next decision?', 'Yes, resume'],
+            stop_and_close_all: ['FLATTEN', 'Close every open position at the next open and pause?', 'Yes, stop and close all'] }[action];
+          if (!map) throw new Error('Unknown action.');
+          $('ask-confirm-text').textContent = map[1]; $('ask-confirm-yes').textContent = map[2];
+          $('ask-confirm-yes').className = action === 'resume' ? 'b-run' : action === 'pause' ? 'b-pause' : 'b-stop-go';
+          $('ask-confirm-yes').onclick = () => { $('ask-confirm').hidden = true; press(map[0]); };
+          $('ask-confirm').hidden = false;
+          return { shown: true, note: 'A confirmation is now on the page. Nothing has changed yet; tell the user to press the button to confirm.' };
+        } },
+    ];
+    $('ask-confirm-no').onclick = () => { $('ask-confirm').hidden = true; };
+
+    const RULES = `You are "Atlantis", the assistant inside the Atlantis Live dashboard. Atlantis is a paper-trading SIMULATION: six virtual $200 accounts (A-D fixed-rule baselines, E daily self-learning, F hourly self-learning) traded on Dukascopy prices with Saxo-calibrated costs. No real money, broker or orders exist.
+Rules:
+- Answer ONLY from the tools' data. Call "overview" first for general questions and "lookup" for details. If the data does not contain the answer, say so plainly. Never invent numbers, trades, news or forecasts.
+- The data is the latest run uploaded to this page, not live prices. Mention the run time when the answer depends on freshness (compare latest_run_utc with now_utc).
+- Everything is simulated: say "simulated" when describing trades or profits. Do not give financial advice or tell the user what to buy or sell with real money.
+- You cannot trade or change anything yourself. If the user asks to pause, resume or stop trading, call "request_control"; it only shows a confirmation the user must press.
+- Reply in the user's language (English or Turkish). Be brief and plain: short sentences, numbers with units, no jargon without a short explanation. Plain text only: no markdown tables, no headings; simple lines starting with "- " are fine.`;
+    const COPY = { not_granted: 'Claude access was not allowed for this page, so the assistant is off. Reload the page to be asked again.', rate_limited: 'Too many requests right now. Try again in a moment.',
+      cancelled: '', truncated: 'The answer was cut short. Ask for less at a time.' };
+    let ctl = null;
+    const busy = (on) => { $('ask-send').hidden = on; $('ask-stop').hidden = !on; $('ask-input').disabled = on; for (const b of $('ask-starters').children) b.disabled = on; };
+    async function ask(q) {
+      q = String(q || '').trim(); if (!q || ctl) return;
+      $('ask-note').textContent = ''; $('ask-note').className = 'msg';
+      turns.push({ role: 'user', content: q }); bubble('user', q); save();
+      const out = bubble('bot', 'Thinking…'); out.classList.add('wait');
+      ctl = new AbortController(); busy(true);
+      try {
+        const { text, truncated } = await sample([{ role: 'user', content: RULES }, { role: 'assistant', content: 'Understood. I will answer only from the page data, using the tools.' }, ...turns.slice(-12)], {
+          cache: false, signal: ctl.signal, tools,
+          onText: ({ text }) => { out.classList.remove('wait'); out.textContent = text; log.scrollTop = log.scrollHeight; },
+        });
+        out.classList.remove('wait'); out.textContent = text || '(no answer)';
+        turns.push({ role: 'assistant', content: text || '(no answer)' }); save();
+        if (truncated) $('ask-note').textContent = COPY.truncated;
+      } catch (e) {
+        const kept = e && e.text;
+        if (kept) { out.classList.remove('wait'); out.textContent = kept; turns.push({ role: 'assistant', content: kept }); }
+        else { out.remove(); turns.pop(); }                  // nothing usable came back: drop the unanswered question from history
+        save();
+        const code = e && e.code;
+        if (code === 'not_granted') { $('ask-form').hidden = true; $('ask-starters').hidden = true; }
+        if (code !== 'cancelled') { $('ask-note').className = 'msg err'; $('ask-note').textContent = COPY[code] || 'The assistant could not answer just now. Try again.'; }
+        if (!kept && code !== 'not_granted') $('ask-input').value = q;
+      } finally { ctl = null; busy(false); }
+    }
+    $('ask-form').onsubmit = (ev) => { ev.preventDefault(); const q = $('ask-input').value; $('ask-input').value = ''; $('ask-input').style.height = ''; ask(q); };
+    $('ask-input').addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); $('ask-form').requestSubmit(); } });
+    $('ask-input').addEventListener('input', () => { const t = $('ask-input'); t.style.height = ''; t.style.height = Math.min(140, t.scrollHeight) + 'px'; });
+    $('ask-stop').onclick = () => { if (ctl) ctl.abort(); };
+    $('ask-clear').onclick = () => { if (ctl) return; turns = []; save(); redraw(); $('ask-note').textContent = ''; };
+  })();
 })();
 </script>

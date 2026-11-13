@@ -33,6 +33,22 @@ SYMBOLS = ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCHF", "USDCAD", "BTCUSD",
            "GBRIDXGBP", "JPNIDXJPY", "LIGHTCMDUSD", "XAUUSD"]
 
 
+STAGE_FILE = Path("live/ai_stage.json")
+
+
+def stage(name: str, started: str, status: str, detail: str) -> None:
+    """Record what the news / analyst agent really did this run (read by the dashboard's command view)."""
+    d = json.loads(STAGE_FILE.read_text()) if STAGE_FILE.exists() else {}
+    prev = d.get(name)
+    if prev and prev.get("status") in ("done", "error") and status == "idle":
+        age = (datetime.now(UTC) - datetime.fromisoformat(prev["finished_at"])).total_seconds()
+        if age < 600:
+            return                              # keep the real result written minutes ago in this same run
+    d[name] = {"started_at": started, "finished_at": now_iso(), "status": status, "detail": detail[:160]}
+    STAGE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    STAGE_FILE.write_text(json.dumps(d, indent=1))
+
+
 def now_iso() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat()
 
@@ -123,22 +139,27 @@ ANALYST_SYSTEM = (
     "Answer with one short reasoning paragraph, then a single ```json block: {\"probs\": {\"SYMBOL\": p, ...}}.")
 
 
-def analyst(task: str, script: str, horizon: str) -> None:
+def analyst(task: str, script: str, horizon: str) -> tuple[str, str]:
+    """Returns (status, detail): what really happened, for the command view."""
     target, text = briefing(script)
-    if target is None or not allowed(task):
-        return
+    if target is None:
+        return "idle", "already forecast for this bar"
+    if not allowed(task):
+        return "idle", "skipped: monthly API budget reached"
     target = Path(target)
     if target.exists():
         print(f"SKIP {task}: {target} exists")
-        return
+        return "idle", "already forecast for this bar"
+    before = month_spend()
     reply = ask(task, ANALYST_SYSTEM, f"Horizon: {horizon}. Symbols: {', '.join(SYMBOLS)}.\n\n{text[:60000]}")
     probs = clean_probs(last_json(reply))
     if not probs:
         print(f"{task}: no usable probabilities; nothing written")
-        return
+        return "error", "no usable forecast returned"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps({"made_at": now_iso(), "analyst": f"claude-api:{MODEL}", "probs": probs}, indent=1))
     print(f"{task}: wrote {target} ({len(probs)} instruments)")
+    return "done", f"{len(probs)} forecasts for {target.stem} (${month_spend() - before:.2f})"
 
 
 NEWS_SYSTEM = (
@@ -149,10 +170,13 @@ NEWS_SYSTEM = (
     "tone is -1..+1 for the instrument's price (0 if unclear); be conservative. Write facts, not trading advice.")
 
 
-def news(bar_date: str) -> None:
+def news(bar_date: str) -> tuple[str, str]:
     target = Path(f"knowledge/intel/{bar_date}.json")
-    if target.exists() or not allowed("news"):
-        return
+    if target.exists():
+        return "idle", f"brief for {bar_date} already written"
+    if not allowed("news"):
+        return "idle", "skipped: monthly API budget reached"
+    before = month_spend()
     fmt = ('{"date": "%s", "made_at": "<UTC ISO now>", "agent": "atlantis-news-analyst (api)", '
            '"summary": "3-6 sentences", "calendar": [{"when": "YYYY-MM-DD[THH:MMZ]", "event": "...", '
            '"region": "US", "importance": "high|medium|low", "symbols": ["EURUSD"], "source": "https://..."}], '
@@ -170,35 +194,47 @@ def news(bar_date: str) -> None:
         clean, report = validate(brief)
     except BriefError as e:
         print(f"news: brief rejected ({e}); nothing written")
-        return
+        return "error", f"brief rejected: {e}"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(clean, indent=1))
     print(f"news: wrote {target}: {json.dumps(report)}")
+    return "done", f"{report['items_kept']} dated items kept of {report['items_in']} (${month_spend() - before:.2f})"
 
 
 def main(mode: str) -> None:
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("SKIP: no ANTHROPIC_API_KEY secret; AI agents not run (the simulation still runs)")
+        for n in ("news", "analyst"):
+            stage(n, now_iso(), "idle", "no API key in this run")
         return
     print(f"month spend so far ${month_spend():.2f} of ${BUDGET:.2f}")
-    if mode == "daily":
-        _, text = briefing("scripts/analyst_brief.py")
-        m = re.search(r"bar (\d{4}-\d{2}-\d{2})", text)
-        if m:                       # the news brief runs even when the analyst file for that bar exists
-            news(m.group(1))
-        analyst("daily_analyst", "scripts/analyst_brief.py", "5 trading days after the briefing bar")
-    elif mode == "hourly":
-        # GitHub starts scheduled runs late, so "due" is decided by elapsed time, not by the clock hour.
-        files = sorted(Path("data/llm/hourly").glob("*.json"))
-        if files:
-            last = datetime.fromisoformat(json.loads(files[-1].read_text())["made_at"])
-            age_h = (datetime.now(UTC) - last).total_seconds() / 3600
-            if age_h < HOURLY_EVERY_H:
-                print(f"SKIP hourly_analyst: last forecast {age_h:.1f} h ago (< {HOURLY_EVERY_H} h)")
-                return
-        analyst("hourly_analyst", "scripts/analyst_brief_hourly.py", "4 hours after the briefing bar")
-    else:
-        raise SystemExit("usage: ai_api_runner.py daily|hourly")
+    t = now_iso()
+    try:
+        if mode == "daily":
+            _, text = briefing("scripts/analyst_brief.py")
+            m = re.search(r"bar (\d{4}-\d{2}-\d{2})", text)
+            if m:                       # the news brief runs even when the analyst file for that bar exists
+                stage("news", t, *news(m.group(1)))
+            else:
+                stage("news", t, "idle", "no completed bar to brief")
+            t = now_iso()
+            stage("analyst", t, *analyst("daily_analyst", "scripts/analyst_brief.py", "5 trading days after the briefing bar"))
+        elif mode == "hourly":
+            # GitHub starts scheduled runs late, so "due" is decided by elapsed time, not by the clock hour.
+            files = sorted(Path("data/llm/hourly").glob("*.json"))
+            if files:
+                last = datetime.fromisoformat(json.loads(files[-1].read_text())["made_at"])
+                age_h = (datetime.now(UTC) - last).total_seconds() / 3600
+                if age_h < HOURLY_EVERY_H:
+                    print(f"SKIP hourly_analyst: last forecast {age_h:.1f} h ago (< {HOURLY_EVERY_H} h)")
+                    stage("analyst", t, "idle", f"not due: last hourly forecast {age_h:.1f} h ago")
+                    return
+            stage("analyst", t, *analyst("hourly_analyst", "scripts/analyst_brief_hourly.py", "4 hours after the briefing bar"))
+        else:
+            raise SystemExit("usage: ai_api_runner.py daily|hourly")
+    except Exception as e:              # record the real failure, then let the workflow step fail visibly
+        stage("news" if mode == "daily" and "analyst" not in str(e) else "analyst", t, "error", f"{type(e).__name__}: {e}")
+        raise
 
 
 if __name__ == "__main__":

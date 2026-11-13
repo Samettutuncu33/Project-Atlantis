@@ -8,16 +8,19 @@ import shutil
 from pathlib import Path
 
 SHIM = """<script>
-/* GitHub Pages shim: read-only, data from ./live.json (rebuilt by GitHub Actions every run). */
+/* GitHub Pages shim: read-only. Re-reads ./live.json every minute; the page replays a run when a new one arrives. */
 window.claude = { use: async (n) => n !== 'db' ? null : {
-  doc: (p) => ({ onSnapshot: (cb) => { if (p === 'status/latest') cb({ exists: true, data: () => ({ live_json: 'live.json?t=' + Date.now() }) }); } }),
+  doc: (p) => ({ onSnapshot: (cb) => {
+    if (p !== 'status/latest') return;
+    const go = () => cb({ exists: true, data: () => ({ live_json: 'live.json?t=' + Date.now() }) });
+    go(); setInterval(go, 60 * 1000);
+  } }),
   collection: () => { const q = { orderBy: () => q, limit: () => q, onSnapshot: (cb) => cb({ empty: true, docs: [] }) }; return q; },
 } };
-setTimeout(() => location.reload(), 10 * 60 * 1000);   // refresh every 10 minutes
 </script>
 """
 NOTE = ('<p class="muted"><b>Phone view (read-only).</b> Updated by GitHub Actions every hour on weekdays; '
-        'this page reloads itself every 10 minutes. Controls are not available here.</p>')
+        'this page checks for a new run every minute. Controls are not available here.</p>')
 
 src = Path("dashboard/control_panel.html").read_text()
 assert "<script>" in src and '<p class="muted" id="runline">' in src

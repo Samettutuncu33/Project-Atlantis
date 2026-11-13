@@ -34,7 +34,16 @@ def test_parse_and_clean_probs():
     assert probs == {"EURUSD": 0.53, "XAUUSD": 0.47, "BTCUSD": 0.98}
 
 
-def test_no_key_skips(monkeypatch, capsys):
+def test_no_key_skips(monkeypatch, capsys, tmp_path):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.setattr(r, "STAGE_FILE", tmp_path / "ai_stage.json")
     r.main("hourly")
     assert "SKIP" in capsys.readouterr().out
+    assert json.loads(r.STAGE_FILE.read_text())["analyst"]["status"] == "idle"     # recorded honestly, not as work done
+
+
+def test_stage_keeps_a_real_result_over_a_later_not_due(monkeypatch, tmp_path):
+    monkeypatch.setattr(r, "STAGE_FILE", tmp_path / "ai_stage.json")
+    r.stage("analyst", r.now_iso(), "done", "20 forecasts")
+    r.stage("analyst", r.now_iso(), "idle", "not due")
+    assert json.loads(r.STAGE_FILE.read_text())["analyst"]["detail"] == "20 forecasts"

@@ -1,0 +1,10 @@
+stage,started_at,finished_at,status,detail
+controls,2026-11-13T15:33:08+00:00,2026-11-13T15:33:08+00:00,done,trading running
+market,2026-11-13T15:33:08+00:00,2026-11-13T15:36:23+00:00,done,"189 price files, last daily bar 2026-11-12"
+news,2026-11-13T15:33:08+00:00,2026-11-13T15:33:08+00:00,idle,not run this time
+analyst,2026-11-13T15:33:08+00:00,2026-11-13T15:33:08+00:00,idle,not run this time
+simulation,2026-11-13T15:36:23+00:00,2026-11-13T15:46:01+00:00,done,0 new predictions (E); 0 new predictions (F)
+gate,2026-11-13T15:36:23+00:00,2026-11-13T15:46:01+00:00,done,0 orders rejected since the live start
+broker,2026-11-13T15:36:23+00:00,2026-11-13T15:46:01+00:00,done,"0 new fills this run, 22 in total"
+checks,2026-11-13T15:46:01+00:00,2026-11-13T15:46:01+00:00,done,56 of 56 passed
+commit,2026-11-13T15:46:01+00:00,2026-11-13T15:46:01+00:00,done,results saved to the GitHub repository

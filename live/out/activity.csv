@@ -1,0 +1,28 @@
+at,agent,level,msg
+2026-11-13T15:33:08+00:00,learning,info,"Account E: 48,460 predictions scored so far, recent hit rate 37%"
+2026-11-13T15:33:08+00:00,learning,info,"Account F: 77,017 predictions scored so far, recent hit rate 42%"
+2026-11-13T15:33:08+00:00,checks,info,Run finished: 56 of 56 checks passed
+2026-11-13T13:00:00+00:00,broker,info,"Account F sold 0.7 Nikkei 225 index (Japan) at 61,427.5 (simulated)"
+2026-11-13T04:00:00+00:00,broker,info,"Account F bought 0.7 Nikkei 225 index (Japan) at 61,237.6 (simulated)"
+2026-11-13T03:00:00+00:00,broker,info,"Account F sold 0.7 Nikkei 225 index (Japan) at 61,747.3 (simulated)"
+2026-11-12T00:00:00+00:00,broker,info,"Account F bought 0.7 Nikkei 225 index (Japan) at 61,400.5 (simulated)"
+2026-11-11T21:00:00+00:00,broker,info,"Account F sold 0.7 Nikkei 225 index (Japan) at 61,942.5 (simulated)"
+2026-11-11T16:00:00+00:00,broker,info,"Account F bought 0.7 Nikkei 225 index (Japan) at 62,117.6 (simulated)"
+2026-11-11T13:00:00+00:00,broker,info,"Account F sold 0.5 Nikkei 225 index (Japan) at 61,785.4 (simulated)"
+2026-11-11T07:10:32+00:00,analyst,info,"AI analyst (hourly, account F): 14 predictions for hour 2026-11-11T05 · track record: 47 predictions scored, hit rate 40%"
+2026-11-11T00:00:00+00:00,broker,info,Account D bought 1000 US dollar / Japanese yen at 158.717 (simulated)
+2026-11-10T16:00:00+00:00,broker,info,"Account F sold 0.1 S&P 500 index at 7,489.6 (simulated)"
+2026-11-10T15:00:00+00:00,broker,info,"Account F sold 0.2 Nikkei 225 index (Japan) at 60,458.4 (simulated)"
+2026-11-10T15:00:00+00:00,broker,info,"Account F bought 0.1 S&P 500 index at 7,529.33 (simulated)"
+2026-11-10T12:00:00+00:00,broker,info,"Account F bought 0.3 Nikkei 225 index (Japan) at 60,121.6 (simulated)"
+2026-11-10T00:00:00+00:00,broker,info,Account B sold 1000 Euro / US dollar at 1.12219 (simulated)
+2026-11-10T00:00:00+00:00,broker,info,Account B bought 1000 British pound / US dollar at 1.34411 (simulated)
+2026-11-10T00:00:00+00:00,broker,info,Account B bought 1000 US dollar / Japanese yen at 157.99 (simulated)
+2026-11-10T00:00:00+00:00,broker,info,Account B bought 1000 Australian dollar / US dollar at 0.69214 (simulated)
+2026-11-10T00:00:00+00:00,broker,info,Account D sold 1000 Euro / US dollar at 1.12219 (simulated)
+2026-11-10T00:00:00+00:00,broker,info,Account D sold 1000 US dollar / Japanese yen at 157.987 (simulated)
+2026-11-10T00:00:00+00:00,broker,info,Account D sold 1000 Australian dollar / US dollar at 0.69205 (simulated)
+2026-11-10T00:00:00+00:00,broker,info,"Account E bought 0.3 Nikkei 225 index (Japan) at 60,645.5 (simulated)"
+2026-11-10T00:00:00+00:00,broker,info,Account E bought 1 WTI crude oil at 86.47 (simulated)
+2026-11-09T18:45:42+00:00,news,info,"News brief for 2026-11-06: 7 dated, sourced items kept of 7"
+2026-11-09T18:00:00+00:00,broker,info,"Account F bought 0.4 Nikkei 225 index (Japan) at 60,527.6 (simulated)"

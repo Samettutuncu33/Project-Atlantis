@@ -32,6 +32,7 @@ from atlantis.intel.sources.dukascopy_live import (Fetcher, LiveFetchError, dail
 from atlantis.intel.validate import clean_daily
 from atlantis.engine import run_backtest
 from atlantis.instruments.spec import make_instrument
+from atlantis.pipeline import StageLog, activity_rows
 from atlantis.quant.learn.knowhow import PredictionLedger
 from atlantis.quant.research.robustness import block_bootstrap
 from atlantis.quant.risk.sizing import MinTicketSizer, VolTargetSizer
@@ -175,6 +176,11 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     now = now or datetime.now(UTC)
     until = (now - timedelta(days=1)).date()
     f = Fetcher(ROOT / "data" / "raw" / "dukascopy_live", now=now)
+    plog = StageLog()
+    wall_start = datetime.now(UTC).isoformat(timespec="seconds")
+    plog.start("controls")
+    plog.end("controls", f"trading {CONTROLS().current()['mode'].lower()}")
+    plog.start("market")
     checks: list[dict] = []
     data, dchecks = load_data(f, until)
     checks += dchecks
@@ -192,7 +198,9 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     last_bar = min(d.index[-1] for d in data.values())
     live_started = last_bar >= pd.Timestamp(LIVE_START, tz="UTC")
 
-    rows = {k: [] for k in ("accounts", "equity", "fills", "positions", "plan", "projection", "_closed")}
+    plog.end("market", f"{len(f.provenance)} price files, last daily bar {last_bar.date()}")
+    plog.start("simulation")
+    rows = {k: [] for k in ("accounts", "equity", "fills", "positions", "plan", "projection", "_closed", "_rejects")}
     journal_new = []
     end_of_obs = date(2026, 12, 9)
     horizon = int(np.busday_count(now.date(), end_of_obs)) if now.date() < end_of_obs else 0
@@ -259,6 +267,8 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
             "max_drawdown_pct": round(mdd * 100, 2), "halted": bool(br.halted) if br else False})
         if led:
             for e in res.audit.events:
+                if e["kind"] in ("GATE_REJECT", "ORDER_REJECTED") and str(e["ts"]) >= LIVE_START:
+                    rows["_rejects"].append({"account": spec.id, **e})
                 if e["kind"] == "FILL":
                     side = "BUY" if e["qty"] > 0 else "SELL"
                     bar = data[e["symbol"]].loc[pd.Timestamp(e["fill_ts"])]
@@ -288,6 +298,8 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     # ---- Account E: Atlantis Adaptive (multi-asset, self-learning) ---------------------
     checks += adaptive_section(f, until, now, quotes, rows, journal_new, write)
     checks += adaptive_section(f, until, now, quotes, rows, journal_new, write, acct="F", hourly=True)
+    plog.end("simulation", "accounts A-F replayed bar by bar")
+    plog.start("checks")
     # append-only journal verification
     jpath = LIVE_DIR / "journal.jsonl"
     old = [json.loads(x) for x in jpath.read_text().splitlines()] if jpath.exists() else []
@@ -316,6 +328,24 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     rows.update(bundle_rows(ROOT / "knowledge" / "intel"))
     rows["agents"] = agents_rows(rows, now)
     checks = [{"run_utc": run["run_utc"], **c} for c in checks]
+    # ---- what this run really did, for the dashboard's command view ----
+    rejects = rows.pop("_rejects")
+    new_fills = len(journal_new) - len(old)
+    sim = plog.rows["simulation"]
+    sim["detail"] = "; ".join(c["detail"].split(";")[-1].strip() + f" predictions ({c['check'][-1]})"
+                              for c in checks if c["check"].startswith("prediction_ledger")) or sim["detail"]
+    plog.mirror("gate", "simulation", f"{len(rejects)} orders rejected since the live start",
+                "done")
+    plog.mirror("broker", "simulation", f"{new_fills} new fills this run, {len(journal_new)} in total")
+    bad = [c for c in checks if c["status"] not in ("OK", "INFO")]
+    plog.end("checks", f"{len(checks) - len(bad)} of {len(checks)} passed" + (f"; failed: {bad[0]['check']}" if bad else ""),
+             "error" if bad else "done")
+    plog.merge_ai(LIVE_DIR / "ai_stage.json", wall_start)
+    plog.start("commit")
+    plog.end("commit", "results saved to the GitHub repository")
+    from atlantis.instruments.spec import universe as _uni
+    rows["pipeline"] = plog.table()
+    rows["activity"] = activity_rows(rows, checks, rejects, run["run_utc"], _uni().get("names", {}))
     if write:
         OUT.mkdir(parents=True, exist_ok=True)
         for k, v in rows.items():
@@ -445,6 +475,8 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
         "fills": int(br.stats["fills"]), "rejects": int(br.stats["rejects"]), "open_positions": len(led.lots),
         "max_drawdown_pct": round(mdd * 100, 2), "halted": bool(br.halted)})
     for e in br.audit.events:
+        if e["kind"] in ("GATE_REJECT", "ORDER_REJECTED") and str(e["ts"]) >= live_start:
+            rows["_rejects"].append({"account": acct, **e})
         if e["kind"] == "FILL":
             bar = data[e["symbol"]].loc[pd.Timestamp(e["fill_ts"])]
             rec = {"account": acct, "ts": e["fill_ts"], "symbol": e["symbol"], "side": "BUY" if e["qty"] > 0 else "SELL",

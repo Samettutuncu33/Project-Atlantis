@@ -100,9 +100,14 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
 .node.running .st { fill: #6fd3e8; } .node.error .st { fill: #ff5c5c; }
 .feed { position: relative; margin-top: 8px; border-top: 1px solid #12324a; padding-top: 8px; max-height: 210px; overflow-y: auto;
   font: 12px/1.55 var(--font-mono); }
-.feed div { display: grid; grid-template-columns: 64px 150px minmax(0,1fr); gap: 10px; color: #a9c7df; }
+.feed div { display: grid; grid-template-columns: 84px 76px minmax(0,1fr); gap: 10px; color: #a9c7df; }
 .feed .t { color: #4f6f88; } .feed .a { color: #7cc4ff; } .feed .lvl-warn { color: var(--pause); } .feed .lvl-error { color: var(--down); }
-@media (max-width: 560px) { .feed div { grid-template-columns: 52px minmax(0,1fr); } .feed .a { display: none; } }
+@media (max-width: 560px) { .feed div { grid-template-columns: 78px minmax(0,1fr); } .feed .a { display: none; }
+  #hud-stages div { grid-template-columns: 96px minmax(0,1fr); } #hud-stages .t { display: none; } #hud-stages .a { display: block; } }
+.hud-cap { position: relative; font: 600 10.5px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: #4f6f88; margin-top: 10px; }
+#hud-stages { max-height: none; } #hud-stages div { grid-template-columns: 70px 132px minmax(0,1fr); }
+.hud-btn { position: relative; font: 600 11.5px var(--font-mono); padding: 5px 10px; min-height: 0 !important; border-radius: 999px; border-color: #24465f; color: #7cc4ff; background: #06101a; }
+.node.idle circle.core { stroke-dasharray: 3 4; } .node.idle .st { fill: #4f6f88; }
 .swipe { display: none; font-size: 11.5px; color: var(--muted); margin-top: 4px; }
 @media (max-width: 560px) {
   .wrap { gap: 22px; padding-block: 14px 40px; } h1 { font-size: 24px; }
@@ -157,10 +162,14 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
       <span class="hud-stat">STATE <b id="hud-state">waiting</b></span>
       <span class="hud-stat">ELAPSED <b id="hud-elapsed">—</b></span>
       <span class="hud-stat">NEXT RUN <b id="hud-next">—</b></span>
+      <button type="button" id="hud-replay" class="hud-btn" hidden>↻ Replay last run</button>
     </div>
     <div class="hud-flow"><svg id="hud-svg" viewBox="0 0 1000 250" role="img" aria-label="Data flow between the Atlantis agents; the active stage is highlighted"></svg></div>
     <p class="swipe">Swipe the diagram and the tables sideways to see more.</p>
-    <div class="feed" id="feed" aria-live="polite"><div><span class="t">--:--</span><span class="a">system</span><span>Waiting for the first agent report. Agents report here live while a run is working.</span></div></div>
+    <p class="hud-cap">Stages of the latest run (real times, UTC)</p>
+    <div class="feed" id="hud-stages"><div><span class="t">--:--</span><span class="a">system</span><span>Waiting for run data.</span></div></div>
+    <p class="hud-cap">Events (real fills, rejections, news, forecasts, checks)</p>
+    <div class="feed" id="feed" aria-live="polite"><div><span class="t">--:--</span><span class="a">system</span><span>Waiting for run data.</span></div></div>
   </section>
 
   <section id="agents">
@@ -277,8 +286,10 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
   }
 
   let bundle = null;
+  let showRun = () => {};      // set once the command view is built
   function render(b) {
     bundle = b;
+    showRun(b);
     const run = (b.run || [])[0] || {};
     $('runline').textContent = `Last run ${ts(run.run_utc)} UTC · last completed daily bar ${run.last_completed_bar || '—'} · live start ${run.live_start || '—'} · ${run.live_started ? 'decisions after every daily bar' : 'first decision after the first live bar closes'}`;
     const ch = b.checks || []; const bad = ch.filter((c) => c.status !== 'OK' && c.status !== 'INFO');
@@ -407,17 +418,17 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
   // ---- Command view: live pipeline + activity feed -------------------------
   const STAGES = [
     { id: 'controls', label: 'Your controls', x: 80, y: 50 },
-    { id: 'market', label: 'Market data', x: 80, y: 125, follows: 'simulation' },
+    { id: 'market', label: 'Market data', x: 80, y: 125, },
     { id: 'news', label: 'News agent', x: 80, y: 200 },
     { id: 'analyst', label: 'AI analyst', x: 290, y: 165 },
     { id: 'simulation', label: 'Prediction engine', x: 470, y: 110 },
     { id: 'gate', label: 'Risk gate', x: 630, y: 110, follows: 'simulation' },
     { id: 'broker', label: 'Sim broker', x: 780, y: 110, follows: 'simulation' },
-    { id: 'publish', label: 'Atlantis Live', x: 920, y: 60 },
+    { id: 'checks', label: 'Checks', x: 920, y: 60 },
     { id: 'commit', label: 'GitHub memory', x: 920, y: 175 },
   ];
   const EDGES = [['controls', 'simulation'], ['market', 'simulation'], ['market', 'analyst'], ['news', 'analyst'],
-    ['analyst', 'simulation'], ['simulation', 'gate'], ['gate', 'broker'], ['broker', 'publish'], ['broker', 'commit']];
+    ['analyst', 'simulation'], ['simulation', 'gate'], ['gate', 'broker'], ['broker', 'checks'], ['broker', 'commit']];
   const NS = 'http://www.w3.org/2000/svg';
   const svg = $('hud-svg');
   const byId = Object.fromEntries(STAGES.map((st) => [st.id, st]));
@@ -438,45 +449,116 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
     const lbl2 = document.createElementNS(NS, 'text'); lbl2.setAttribute('class', 'st'); lbl2.setAttribute('x', st.x); lbl2.setAttribute('y', st.y + 44); lbl2.textContent = st.label;
     g.append(ring, core, lbl, lbl2); svg.append(g); nodeEls[st.id] = { g, sub: lbl2, label: st.label };
   }
-  let runStart = null, runState = 'idle';
-  function paintPipeline(run) {
-    const stages = (run && run.stages) || {};
-    const stateOf = (id) => { const st = byId[id]; return stages[st.follows || id] || 'idle'; };
-    for (const st of STAGES) {
-      const state = stateOf(st.id);
-      nodeEls[st.id].g.setAttribute('class', `node ${state}`);
-      const det = run && run.details && run.details[st.follows ? '' : st.id];
-      nodeEls[st.id].sub.textContent = state === 'running' ? `${st.label} · working` : det ? `${st.label} · ${String(det).slice(0, 22)}` : st.label;
+  // The command view shows REAL activity only. Two sources:
+  //  1) a Claude session reporting live (database doc pipeline/run, state "running"), or
+  //  2) the latest finished run, replayed from the stage log recorded inside live.json (real times, real results).
+  const dur = (ms) => { const s = Math.max(0, Math.round(ms / 1000)); return s >= 60 ? `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, '0')}s` : `${s}s`; };
+  const short = (iso) => iso ? String(iso).slice(5, 16).replace('T', ' ') : '';
+  const det = (r) => !r ? '' : r.status === 'idle' ? 'skipped' : r.status === 'error' ? 'failed' : (new Date(r.finished_at) - new Date(r.started_at)) >= 1000 ? dur(new Date(r.finished_at) - new Date(r.started_at)) : 'ok';
+  function stageLog(pipe) {      // the full, real result of every stage, in the order they ran
+    $('hud-stages').replaceChildren(...[...pipe].sort((a, b) => String(a.started_at).localeCompare(String(b.started_at))).map((r) => {
+      const row = document.createElement('div');
+      const t = document.createElement('span'); t.className = 't'; t.textContent = String(r.started_at).slice(11, 19);
+      const a = document.createElement('span'); a.className = 'a'; a.textContent = (byId[r.stage] || {}).label || r.stage;
+      const m = document.createElement('span'); m.textContent = `${r.detail || ''}${r.status === 'idle' ? '' : ' · ' + det(r)}`;
+      m.className = r.status === 'error' ? 'lvl-error' : r.status === 'idle' ? 't' : '';
+      row.append(t, a, m); return row;
+    }));
+  }
+  let liveMode = false, liveStart = null, replayTimer = null, shownRun = null, lastPipe = null;
+  function setNode(id, state, text) {
+    const n = nodeEls[id]; if (!n) return;
+    n.g.setAttribute('class', `node ${state}`);
+    n.sub.textContent = text || n.label;
+  }
+  function setEdges(stateOf) { for (const e of edgeEls) e.el.setAttribute('class', `edge${stateOf(e.a) === 'running' || stateOf(e.b) === 'running' ? ' on' : ''}`); }
+  function head(state, color, elapsed) {
+    $('hud-state').textContent = state; $('hud-state').style.color = color || '#cfe8ff';
+    $('hud-elapsed').textContent = elapsed || '—';
+  }
+  function paintFinal(pipe) {
+    const by = Object.fromEntries(pipe.map((r) => [r.stage, r]));
+    for (const st of STAGES) { const r = by[st.id]; setNode(st.id, r ? r.status : 'idle', r ? `${st.label} · ${det(r)}` : st.label); }
+    setEdges(() => 'idle');
+    const t0 = Math.min(...pipe.map((r) => +new Date(r.started_at))), t1 = Math.max(...pipe.map((r) => +new Date(r.finished_at)));
+    const failed = pipe.filter((r) => r.status === 'error');
+    head(failed.length ? `LAST RUN · ${failed.map((r) => r.stage).join(', ')} failed` : 'LAST RUN COMPLETE', failed.length ? 'var(--down)' : '#cfe8ff', `took ${dur(t1 - t0)}`);
+  }
+  function replay(pipe) {
+    if (liveMode || !pipe || !pipe.length) return;
+    clearTimeout(replayTimer);
+    const by = Object.fromEntries(pipe.map((r) => [r.stage, r]));
+    // groups in the real order; stages with the same start and end (gate and broker work inside the engine) run together
+    const groups = [];
+    for (const r of [...pipe].sort((a, b) => String(a.started_at).localeCompare(String(b.started_at)))) {
+      const live = r.status !== 'idle';
+      const g = live && groups.find((x) => x.live && x.start === r.started_at && x.end === r.finished_at);
+      if (g) g.ids.push(r.stage); else groups.push({ start: r.started_at, end: r.finished_at, ids: [r.stage], live });
     }
-    for (const e of edgeEls) e.el.setAttribute('class', `edge${stateOf(e.b) === 'running' || (stateOf(e.a) === 'running') ? ' on' : ''}`);
-    runState = (run && run.state) || 'idle';
-    runStart = run && run.started_at ? new Date(run.started_at) : null;
-    $('hud-run').textContent = run && run.run_id ? run.run_id : '—';
-    $('hud-state').textContent = runState === 'running' ? 'AGENTS WORKING' : runState === 'done' ? 'IDLE · last run complete' : runState === 'error' ? 'ERROR · see feed' : 'waiting';
-    $('hud-state').style.color = runState === 'running' ? '#6fd3e8' : runState === 'error' ? 'var(--down)' : '#cfe8ff';
+    for (const st of STAGES) setNode(st.id, 'idle', st.label);
+    const stateNow = {}; const stateOf = (id) => stateNow[id] || 'idle';
+    let i = 0;
+    const step = () => {
+      if (liveMode) return;
+      if (i > 0) for (const id of groups[i - 1].ids) { stateNow[id] = by[id].status; setNode(id, by[id].status, `${byId[id].label} · ${det(by[id])}`); }
+      if (i >= groups.length) { paintFinal(pipe); return; }
+      const g = groups[i++]; const real = new Date(g.end) - new Date(g.start);
+      if (!g.live) { replayTimer = setTimeout(step, 350); return; }
+      for (const id of g.ids) { stateNow[id] = 'running'; setNode(id, 'running', `${byId[id].label} · ${real >= 1000 ? 'took ' + dur(real) : 'working'}`); }
+      setEdges(stateOf);
+      head(`REPLAY · ${g.ids.map((id) => byId[id].label).join(' + ')}`, '#6fd3e8', real >= 1000 ? `this stage took ${dur(real)}` : '—');
+      replayTimer = setTimeout(step, Math.min(6000, Math.max(1100, real / 40)));   // real durations, played about 40x faster
+    };
+    step();
+  }
+  function feedRow(x) {
+    const row = document.createElement('div');
+    const t = document.createElement('span'); t.className = 't'; t.textContent = short(x.at);
+    const a = document.createElement('span'); a.className = 'a'; a.textContent = x.agent || '';
+    const m = document.createElement('span'); m.textContent = x.msg || ''; if (x.level) m.className = `lvl-${x.level}`;
+    row.append(t, a, m); return row;
+  }
+  showRun = (b) => {
+    const run = (b.run || [])[0] || {}; const pipe = b.pipeline || [];
+    lastPipe = pipe.length ? pipe : null;
+    $('hud-replay').hidden = !lastPipe;
+    if (lastPipe) stageLog(lastPipe);
+    if (liveMode) return;
+    $('hud-run').textContent = run.run_utc ? `${short(run.run_utc)} UTC` : '—';
+    if (b.activity && b.activity.length) $('feed').replaceChildren(...b.activity.map(feedRow));
+    if (!lastPipe) { head('no stage log in this run yet'); return; }
+    if (shownRun !== run.run_utc) { shownRun = run.run_utc; replay(lastPipe); }
+  };
+  $('hud-replay').onclick = () => replay(lastPipe);
+  function paintLive(run) {      // a Claude session is reporting its stages right now
+    const stages = run.stages || {};
+    const stateOf = (id) => stages[byId[id].follows || id] || 'idle';
+    for (const st of STAGES) { const d = run.details && run.details[st.id]; const s = stateOf(st.id); setNode(st.id, s, s === 'running' ? `${st.label} · working` : d ? `${st.label} · ${String(d).slice(0, 34)}` : st.label); }
+    setEdges(stateOf);
+    $('hud-run').textContent = run.run_id || '—';
+    head('AGENTS WORKING NOW', '#6fd3e8');
   }
   function tick() {
     const now = new Date();
-    if (runStart) {
-      const end = runState === 'running' ? now : null;
-      const sec = Math.max(0, Math.round(((end || runStart) - runStart) / 1000));
-      $('hud-elapsed').textContent = runState === 'running' ? `${Math.floor(sec / 60)}m ${String(sec % 60).padStart(2, '0')}s` : '—';
-    }
-    const next = new Date(now); next.setUTCMinutes(25, 0, 0); if (next <= now) next.setUTCHours(next.getUTCHours() + 1);
+    if (liveMode && liveStart) $('hud-elapsed').textContent = dur(now - liveStart);
+    // GitHub schedule: minutes 07 and 37 of every hour, Monday to Friday (GitHub often starts late)
+    const next = new Date(now); next.setUTCSeconds(0, 0);
+    do { next.setUTCMinutes(next.getUTCMinutes() + 1); } while (!((next.getUTCMinutes() === 7 || next.getUTCMinutes() === 37) && next.getUTCDay() >= 1 && next.getUTCDay() <= 5));
     const m = Math.round((next - now) / 60000);
-    $('hud-next').textContent = `${next.toISOString().slice(11, 16)} UTC (in ${m} min)`;
+    $('hud-next').textContent = `due ${next.toISOString().slice(11, 16)} UTC` + (m < 120 ? ` (in ${m} min)` : ` ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][next.getUTCDay()]}`);
   }
-  paintPipeline(null); tick(); setInterval(tick, 1000);
-  db.doc('pipeline/run').onSnapshot((snap) => { if (snap.exists) paintPipeline(snap.data()); }, () => {});
+  for (const st of STAGES) setNode(st.id, 'idle', st.label);
+  head('waiting for run data'); tick(); setInterval(tick, 1000);
+  if (bundle) showRun(bundle);
+  db.doc('pipeline/run').onSnapshot((snap) => {
+    const run = snap.exists ? snap.data() : null;
+    const live = !!(run && run.state === 'running' && run.started_at && (Date.now() - new Date(run.started_at)) < 45 * 60000);
+    if (live) { liveMode = true; liveStart = new Date(run.started_at); clearTimeout(replayTimer); paintLive(run); }
+    else if (liveMode) { liveMode = false; if (lastPipe) paintFinal(lastPipe); }
+  }, () => {});
   db.collection('activity').orderBy('at', 'desc').limit(60).onSnapshot((snap) => {
-    if (snap.empty) return;
-    $('feed').replaceChildren(...snap.docs.map((d) => {
-      const x = d.data(); const row = document.createElement('div');
-      const t = document.createElement('span'); t.className = 't'; t.textContent = String(x.at || '').slice(11, 16);
-      const a = document.createElement('span'); a.className = 'a'; a.textContent = x.agent || '';
-      const m = document.createElement('span'); m.textContent = x.msg || ''; if (x.level) m.className = `lvl-${x.level}`;
-      row.append(t, a, m); return row;
-    }));
+    if (snap.empty || !liveMode) return;
+    $('feed').replaceChildren(...snap.docs.map((d) => feedRow(d.data())));
   }, () => {});
 
   db.collection('events').orderBy('pressed_at', 'asc').onSnapshot((snap) => {

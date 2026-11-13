@@ -1,4 +1,5 @@
 """Portfolio table: hand-calculated cost, value, P&L, share of account and the bought/sold summary."""
+from pathlib import Path
 import pytest
 
 from atlantis.live import portfolio_enrich
@@ -75,3 +76,24 @@ def test_journal_check_ignores_order_but_catches_changes():
     assert journal_check(old, [f("B", "t2", 1000, 1.1), f("F", "t1", 0.4, 100.0)]) == []   # earlier account added
     assert journal_check(old, [f("F", "t1", 0.5, 100.0)])                                    # quantity changed
     assert journal_check(old, [])                                                            # fill disappeared
+
+
+def test_command_view_tables_come_from_the_run_itself():
+    from atlantis.pipeline import STAGES, StageLog, activity_rows
+    log = StageLog()
+    log.start("market"); log.end("market", "3 files")
+    log.start("simulation"); log.end("simulation", "replayed")
+    log.mirror("broker", "simulation", "1 new fill")
+    log.merge_ai(Path("/nonexistent/ai_stage.json"), log.rows["market"]["started_at"])
+    t = {r["stage"]: r for r in log.table()}
+    assert t["news"]["status"] == "idle" and t["analyst"]["status"] == "idle"     # never shown as work when none ran
+    assert t["broker"]["started_at"] == t["simulation"]["started_at"]
+    assert [r["stage"] for r in log.table()] == [s for s in STAGES if s in t]
+    rows = {"fills": [{"account": "F", "ts": "2026-11-10T12:00:00+00:00", "symbol": "JPNIDXJPY", "side": "BUY",
+                       "qty": 0.3, "price": 60121.583}]}
+    checks = [{"check": "a", "status": "OK", "detail": ""}, {"check": "b", "status": "CRITICAL", "detail": "boom"}]
+    rej = [{"account": "E", "ts": "2026-11-11T00:00:00+00:00", "symbol": "BTCUSD", "check": "margin", "reason": "too big"}]
+    act = activity_rows(rows, checks, rej, "2026-11-13T15:00:00+00:00", {"JPNIDXJPY": "Nikkei 225"})
+    msgs = " | ".join(a["msg"] for a in act)
+    assert "bought 0.3 Nikkei 225" in msgs and "order rejected" in msgs and "b: boom" in msgs
+    assert "1 of 2 checks passed" in msgs and act[0]["at"] >= act[-1]["at"]       # newest first

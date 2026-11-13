@@ -44,3 +44,34 @@ def test_incomplete_market_data_stops_the_adaptive_accounts(monkeypatch):
     for acct, hourly in (("E", False), ("F", True)):
         with pytest.raises(RuntimeError, match="incomplete market data"):
             live.adaptive_section(None, None, None, {}, {}, [], write=False, acct=acct, hourly=hourly)
+
+
+def _chain(n, noise=0.0):
+    from atlantis.quant.learn.knowhow import PredictionLedger
+    L = PredictionLedger()
+    for i in range(n):
+        L.append({"kind": "resolution", "prediction_id": f"p{i}", "fwd_log_return": 0.0123456789 + i + noise,
+                  "outcome_up": 1.0})
+    return L.records
+
+
+def test_ledger_tolerates_cpu_float_noise_but_not_real_changes():
+    from atlantis.live import extend_ledger
+    from atlantis.quant.learn.knowhow import PredictionLedger
+    stored = _chain(3)
+    ok, detail, merged = extend_ledger(stored, _chain(5, noise=1e-15))     # last-bit noise + 2 new records
+    assert ok and len(merged) == 5 and merged[:3] == stored                 # stored records are never rewritten
+    L = PredictionLedger(); L.records = merged; L.verify()                  # chain still valid end to end
+    ok, detail, merged = extend_ledger(stored, _chain(5, noise=1e-3))       # a real change
+    assert not ok and "fwd_log_return" in detail and merged == stored
+    ok, _, _ = extend_ledger(stored, _chain(2))                             # replay lost a record
+    assert not ok
+
+
+def test_journal_check_ignores_order_but_catches_changes():
+    from atlantis.live import journal_check
+    f = lambda a, ts, q, p: {"account": a, "ts": ts, "symbol": "X", "side": "BUY", "qty": q, "price": p}
+    old = [f("F", "t1", 0.4, 100.0)]
+    assert journal_check(old, [f("B", "t2", 1000, 1.1), f("F", "t1", 0.4, 100.0)]) == []   # earlier account added
+    assert journal_check(old, [f("F", "t1", 0.5, 100.0)])                                    # quantity changed
+    assert journal_check(old, [])                                                            # fill disappeared

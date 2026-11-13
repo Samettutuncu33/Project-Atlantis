@@ -32,6 +32,7 @@ from atlantis.intel.sources.dukascopy_live import (Fetcher, LiveFetchError, dail
 from atlantis.intel.validate import clean_daily
 from atlantis.engine import run_backtest
 from atlantis.instruments.spec import make_instrument
+from atlantis.quant.learn.knowhow import PredictionLedger
 from atlantis.quant.research.robustness import block_bootstrap
 from atlantis.quant.risk.sizing import MinTicketSizer, VolTargetSizer
 from atlantis.gate.sim.broker import quote_to_usd
@@ -290,10 +291,11 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     # append-only journal verification
     jpath = LIVE_DIR / "journal.jsonl"
     old = [json.loads(x) for x in jpath.read_text().splitlines()] if jpath.exists() else []
-    mism = [i for i, o in enumerate(old) if i >= len(journal_new) or not _same(o, journal_new[i])]
+    journal_new.sort(key=lambda j: (j["ts"], j["account"], j["symbol"], j["side"]))
+    mism = journal_check(old, journal_new)
     checks.append({"check": "journal_append_only", "status": "OK" if not mism else "CRITICAL",
-                   "detail": f"{len(old)} earlier fills reproduced exactly" if not mism
-                   else f"{len(mism)} earlier fills changed (first at line {mism[0] + 1})"})
+                   "detail": f"{len(old)} earlier fills reproduced; {len(journal_new) - len(old)} new" if not mism
+                   else f"{len(mism)} earlier fills changed: {'; '.join(mism[:3])}"[:400]})
     prices = []
     for s, d in data.items():
         for t, r in d.tail(30).iterrows():
@@ -393,8 +395,8 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
                    "detail": "; ".join(breaks) or "engine ledger == independent FIFO recomputation"})
     # prediction ledger: append-only across runs (hash chain must extend the stored one)
     ppath = LIVE_DIR / ("predictions_intraday.jsonl" if hourly else "predictions.jsonl")
-    old = [json.loads(x)["hash"] for x in ppath.read_text().splitlines()] if ppath.exists() else []
-    recs = res.ledger.records
+    stored = [json.loads(x) for x in ppath.read_text().splitlines() if x.strip()] if ppath.exists() else []
+    recs = [json.loads(json.dumps(r, default=str)) for r in res.ledger.records]
     if hourly:
         # Hourly warm-up is ~100k records: store a checkpoint (the chain hash just before the
         # live start) plus every live record. The chain still covers the whole history.
@@ -402,19 +404,11 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
                     if (r.get("made_at") or r.get("resolved_at") or "") >= INTRADAY_START), len(recs))
         tip = recs[cut - 1]["hash"] if cut else "genesis"
         recs = [{"kind": "checkpoint", "hash": tip, "warmup_records": cut}] + recs[cut:]
-    new = [r["hash"] for r in recs]
-    ok = new[:len(old)] == old
-    if ok:
-        detail = f"{len(old)} earlier prediction records reproduced exactly; {len(new) - len(old)} new"
-    else:   # name the first record that differs, so the cause can be traced
-        i = next((k for k, (a, b) in enumerate(zip(old, new)) if a != b), min(len(old), len(new)))
-        r = recs[i] if i < len(recs) else {}
-        detail = (f"earlier predictions changed: first difference at record {i} of {len(old)} "
-                  f"({r.get('kind', '?')} {r.get('id') or r.get('prediction_id') or ''}); stored ledger kept")
+    ok, detail, merged = extend_ledger(stored, recs)
     checks.append({"check": f"prediction_ledger_append_only:{acct}", "status": "OK" if ok else "CRITICAL",
                    "detail": detail})
     if ok and write:
-        ppath.write_text("".join(json.dumps(r, default=str) + "\n" for r in recs))
+        ppath.write_text("".join(json.dumps(r, default=str) + "\n" for r in merged))
     mids = dict(br.last_mids)
     mids.update({s: (q["bid"] + q["ask"]) / 2 for s, q in quotes.items()})
     marks = {s: ((quotes[s]["bid"], quotes[s]["ask"]) if s in quotes else br.last_marks[s]) for s in led.lots}
@@ -620,6 +614,79 @@ def portfolio_enrich(rows: dict) -> None:
             d.pop(k)
         out.append(d)
     rows["trades_summary"] = sorted(out, key=lambda d: (d["account"], d["symbol"]))
+
+
+LEDGER_TOL = 2e-5     # stored numbers are rounded to 5 decimals; CPUs differ in the last bits of log()/BLAS
+
+
+def _close(a, b, tol: float = LEDGER_TOL) -> str | None:
+    """None if two ledger records agree (hash fields ignored, floats within tolerance), else what differs."""
+    if isinstance(a, dict) and isinstance(b, dict):
+        for k in sorted(set(a) | set(b)):
+            if k in ("hash", "prev_hash"):
+                continue
+            if k not in a or k not in b:
+                return f"field {k} missing"
+            d = _close(a[k], b[k], tol)
+            if d:
+                return f"{k}: {d}" if not d.startswith("field") else d
+        return None
+    if isinstance(a, bool) or isinstance(b, bool) or a is None or b is None or isinstance(a, str):
+        return None if a == b else f"{a!r} -> {b!r}"
+    if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+        return None if abs(a - b) <= max(tol, 1e-9 * max(abs(a), abs(b))) else f"{a!r} -> {b!r}"
+    return None if a == b else f"{a!r} -> {b!r}"
+
+
+def extend_ledger(stored: list[dict], recomputed: list[dict]) -> tuple[bool, str, list[dict]]:
+    """The stored ledger is the record of what was predicted. A replay must reproduce every stored
+    record (within LEDGER_TOL: machines differ in the last bits of floating point), and may only
+    ADD records. New records are chained onto the stored hash chain; stored records are never rewritten."""
+    for i, old in enumerate(stored):
+        if i >= len(recomputed):
+            return False, f"replay has only {len(recomputed)} records, stored ledger has {len(stored)}; stored ledger kept", stored
+        if old.get("kind") == "checkpoint":
+            diff = None if old.get("warmup_records") == recomputed[i].get("warmup_records") else \
+                f"warmup_records: {old.get('warmup_records')} -> {recomputed[i].get('warmup_records')}"
+        else:
+            diff = _close(old, recomputed[i])
+        if diff:
+            r = recomputed[i]
+            return False, (f"earlier predictions changed: record {i} of {len(stored)} ({r.get('kind', '?')} "
+                           f"{r.get('id') or r.get('prediction_id') or ''}) {diff}; stored ledger kept")[:400], stored
+    hasher = PredictionLedger()
+    merged = list(stored)
+    for r in recomputed[len(stored):]:
+        r = {k: v for k, v in r.items() if k != "hash"}
+        if merged and r.get("kind") != "checkpoint":
+            r["prev_hash"] = merged[-1]["hash"]
+            r["hash"] = hasher._hash(r)
+        else:
+            r["hash"] = recomputed[len(merged)]["hash"]
+        merged.append(r)
+    return True, f"{len(stored)} earlier prediction records reproduced; {len(merged) - len(stored)} new", merged
+
+
+def journal_check(old: list[dict], new: list[dict]) -> list[str]:
+    """Every stored fill must still exist in the replay (matched by account, bar, symbol and side;
+    order does not matter). Returns the problems found."""
+    from collections import defaultdict
+    key = lambda j: (j["account"], j["ts"], j["symbol"], j["side"])
+    pool = defaultdict(list)
+    for j in new:
+        pool[key(j)].append(j)
+    bad = []
+    for o in old:
+        c = pool.get(key(o), [])
+        m = next((j for j in c if abs(j["qty"] - o["qty"]) <= 1e-6 * max(1, abs(o["qty"]))
+                  and abs(j["price"] - o["price"]) <= 1e-6 * abs(o["price"])), None)
+        if m is None:
+            bad.append(f"{o['account']} {o['ts'][:16]} {o['symbol']} {o['side']} {o['qty']:g} @ {o['price']:g}"
+                       + (f" -> now {c[0]['qty']:g} @ {c[0]['price']:g}" if c else " -> missing"))
+        else:
+            c.remove(m)
+    return bad
+
 
 
 def _same(a: dict, b: dict) -> bool:

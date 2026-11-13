@@ -26,6 +26,7 @@ PRICE_IN, PRICE_OUT, PRICE_CACHE_READ = 4.0 / 1e6, 20.0 / 1e6, 0.2 / 1e6   # USD
 PRICE_SEARCH = 10.0 / 1000                                               # USD per web search
 SPEND = Path("live/api_spend.jsonl")
 BUDGET = float(os.environ.get("ATLANTIS_API_BUDGET_USD", "18"))
+HOURLY_EVERY_H = 5.0     # at most one hourly-analyst call per 5 hours (budget: about 4 per day)
 WORST_CASE = {"news": 1.00, "daily_analyst": 0.40, "hourly_analyst": 0.40}
 SYMBOLS = ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCHF", "USDCAD", "BTCUSD", "ETHUSD", "AAPLUSUSD",
            "MSFTUSUSD", "NVDAUSUSD", "AMZNUSUSD", "GOOGLUSUSD", "USA500IDXUSD", "USATECHIDXUSD", "DEUIDXEUR",
@@ -187,6 +188,14 @@ def main(mode: str) -> None:
             news(m.group(1))
         analyst("daily_analyst", "scripts/analyst_brief.py", "5 trading days after the briefing bar")
     elif mode == "hourly":
+        # GitHub starts scheduled runs late, so "due" is decided by elapsed time, not by the clock hour.
+        files = sorted(Path("data/llm/hourly").glob("*.json"))
+        if files:
+            last = datetime.fromisoformat(json.loads(files[-1].read_text())["made_at"])
+            age_h = (datetime.now(UTC) - last).total_seconds() / 3600
+            if age_h < HOURLY_EVERY_H:
+                print(f"SKIP hourly_analyst: last forecast {age_h:.1f} h ago (< {HOURLY_EVERY_H} h)")
+                return
         analyst("hourly_analyst", "scripts/analyst_brief_hourly.py", "4 hours after the briefing bar")
     else:
         raise SystemExit("usage: ai_api_runner.py daily|hourly")

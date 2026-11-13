@@ -4,7 +4,7 @@ name: Atlantis hourly simulation
 # Without the secret the AI steps print SKIP and the simulation still runs.
 on:
   schedule:
-    - cron: "25 * * * 1-5"   # every hour Mon-Fri (public repo: free); weekends have no Saxo trading hours
+    - cron: "7,37 * * * 1-5"   # twice an hour Mon-Fri: GitHub starts scheduled runs late or drops them, so ask more often
   workflow_dispatch: {}
 concurrency:
   group: atlantis-live
@@ -27,14 +27,13 @@ jobs:
           python-version: "3.12"
       - name: Install
         run: pip install -q -e . lightgbm scikit-learn anthropic
-      - name: AI agents via Claude API (news + daily analyst at 00 UTC; hourly analyst at 00/06/12/18)
+      - name: AI agents via Claude API (daily news + analyst once per bar; hourly analyst at most every 5 hours)
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          H=$(date -u +%H)
-          if [ "$H" = "00" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then python scripts/ai_api_runner.py daily; fi
-          case "$H" in 00|06|12|18) python scripts/ai_api_runner.py hourly;; *) [ "${{ github.event_name }}" = "workflow_dispatch" ] && python scripts/ai_api_runner.py hourly || true;; esac
+          python scripts/ai_api_runner.py daily
+          python scripts/ai_api_runner.py hourly
       - name: Simulation step (exit 2 = a check failed; outputs still published)
         run: python -m atlantis.live step || [ $? -eq 2 ]
       - name: Status page for GitHub (live/STATUS.md)

@@ -1,0 +1,14 @@
+{
+ "news": {
+  "started_at": "2026-11-13T21:23:58+00:00",
+  "finished_at": "2026-11-13T21:25:17+00:00",
+  "status": "done",
+  "detail": "10 dated items kept of 10 ($0.42)"
+ },
+ "analyst": {
+  "started_at": "2026-11-13T21:25:20+00:00",
+  "finished_at": "2026-11-13T21:27:49+00:00",
+  "status": "done",
+  "detail": "13 forecasts for 2026-11-13T20 ($0.03)"
+ }
+}

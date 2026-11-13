@@ -1,10 +1,22 @@
 symbol,name,tone,event_risk,reason
-NVDAUSUSD,NVIDIA,-0.4,high,Board investigation involving CEO; headline risk ongoing
-USATECHIDXUSD,Nasdaq 100 index,0.1,high,Relief rally after tech rout; CPI Nov 10 and NVDA governance news
-USA500IDXUSD,S&P 500 index,0.1,high,Rebound on strong jobs data; CPI Nov 10 key
-LIGHTCMDUSD,WTI crude oil,-0.3,normal,Sharp daily decline; no OPEC/inventory news found
-XAUUSD,Gold,0.2,high,Rebound on softer USD; sensitive to CPI
-EURUSD,Euro / US dollar,0.0,high,US CPI Nov 10; no ECB news found in window
-USDJPY,US dollar / Japanese yen,0.0,high,US CPI Nov 10; no BoJ news found
-BTCUSD,Bitcoin,0.0,normal,Only prediction-market pricing near $75k found; no dated news
-MACRO,MACRO,0.0,high,US Oct CPI Nov 10; Fed easing expectations being tested by strong jobs data
+NVDAUSUSD,NVIDIA,-0.4,high,"CEO exit, China scandal reports and steep declines; earnings on Nov 17."
+USATECHIDXUSD,Nasdaq 100 index,-0.4,high,NDX -1.7% on chip selloff; yields reportedly at 5%; Nvidia earnings and retail sales ahead.
+USA500IDXUSD,S&P 500 index,-0.3,high,Back-to-back declines; rates pressure; retail sales on Tue.
+MSFTUSUSD,Microsoft,-0.1,normal,No company-specific news found; tech-sector weakness.
+AAPLUSUSD,Apple,0.0,normal,No dateable news in window.
+AMZNUSUSD,Amazon,0.0,normal,No dateable news in window.
+GOOGLUSUSD,Alphabet (Google),0.0,normal,No dateable news in window.
+BTCUSD,Bitcoin,-0.4,normal,Broke below $70k with liquidations; strong USD.
+ETHUSD,Ethereum,-0.4,normal,"Below $2,000; weak weekly performance."
+LIGHTCMDUSD,WTI crude oil,-0.1,normal,Large US crude build offsets elevated Brent levels.
+XAUUSD,Gold,0.0,normal,"Little changed near $3,880 despite high yields."
+EURUSD,Euro / US dollar,-0.2,normal,Dollar Index at 19-month high; ZEW Tue.
+GBPUSD,British pound / US dollar,-0.1,normal,Strong USD; UK jobs and retail data next week.
+USDJPY,US dollar / Japanese yen,0.1,normal,Firm USD and high US yields.
+AUDUSD,Australian dollar / US dollar,-0.1,normal,Risk-off and strong USD; RBA minutes Tue.
+USDCHF,US dollar / Swiss franc,0.0,normal,No SNB news found.
+USDCAD,US dollar / Canadian dollar,0.0,normal,Canadian retail sales Fri.
+DEUIDXEUR,DAX 40 index (Germany),0.0,normal,No dateable news found.
+GBRIDXGBP,FTSE 100 index (UK),0.0,normal,No dateable news found.
+JPNIDXJPY,Nikkei 225 index (Japan),-0.1,normal,Spillover from US chip selloff possible; no direct news found.
+MACRO,MACRO,-0.2,high,Yields reportedly at 5% and USD strength; US retail sales and FOMC minutes next week.

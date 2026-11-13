@@ -35,23 +35,23 @@ E,USDCAD,0.5427,P(up 5d) 54%,0.0,none,,edge $0.49 <= cost $2.24
 E,USDCHF,0.5432,P(up 5d) 54%,0.0,none,,edge $0.70 <= cost $2.28
 E,USDJPY,0.5436,P(up 5d) 54%,0.0,none,,edge $0.62 <= cost $2.16
 E,XAUUSD,0.5462,P(up 5d) 55%,0.0,none,,Kelly size below half the minimum ticket
-F,AAPLUSUSD,0.511,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,AMZNUSUSD,0.5118,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,AUDUSD,0.5111,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.12
-F,BTCUSD,0.5112,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,DEUIDXEUR,0.5115,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,ETHUSD,0.5095,P(up 5d) 51%,0.0,none,,edge $0.02 <= cost $2.21
-F,EURUSD,0.5107,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.03
+F,AAPLUSUSD,0.5122,P(up 5d) 51%,0.0,none,,edge $0.06 <= cost $2.07
+F,AMZNUSUSD,0.511,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,AUDUSD,0.5104,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.11
+F,BTCUSD,0.5104,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,DEUIDXEUR,0.5105,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,ETHUSD,0.5094,P(up 5d) 51%,0.0,none,,edge $0.02 <= cost $2.17
+F,EURUSD,0.5101,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.05
 F,GBPUSD,0.5105,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.08
-F,GBRIDXGBP,0.5116,P(up 5d) 51%,0.0,none,,edge $0.06 <= cost $0.16
-F,GOOGLUSUSD,0.5109,P(up 5d) 51%,0.0,none,,edge $0.05 <= cost $2.16
-F,JPNIDXJPY,0.5118,P(up 5d) 51%,0.0,BUY 0.7 MARKET (adaptive),2026-11-14 14:00 UTC open,edge $0.04 > cost $0.03
-F,LIGHTCMDUSD,0.5099,P(up 5d) 51%,0.0,none,,edge $0.02 <= cost $0.10
-F,MSFTUSUSD,0.5113,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,NVDAUSUSD,0.5113,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,USA500IDXUSD,0.512,P(up 5d) 51%,0.0,BUY 0.1 MARKET (adaptive),2026-11-14 14:00 UTC open,edge $0.07 > cost $0.06
-F,USATECHIDXUSD,0.512,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,USDCAD,0.5119,P(up 5d) 51%,0.0,none,,edge $0.04 <= cost $2.19
-F,USDCHF,0.5114,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.12
-F,USDJPY,0.5112,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.08
-F,XAUUSD,0.5108,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,GBRIDXGBP,0.5107,P(up 5d) 51%,0.0,none,,edge $0.05 <= cost $0.58
+F,GOOGLUSUSD,0.5107,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,JPNIDXJPY,0.5107,P(up 5d) 51%,0.7,SELL 0.2 MARKET (adaptive),2026-11-14 20:00 UTC open,edge $0.03 > cost $0.02
+F,LIGHTCMDUSD,0.5111,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $0.10
+F,MSFTUSUSD,0.5106,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,NVDAUSUSD,0.5102,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,USA500IDXUSD,0.5105,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,USATECHIDXUSD,0.5106,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,USDCAD,0.5114,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.13
+F,USDCHF,0.5114,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.11
+F,USDJPY,0.5114,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.05
+F,XAUUSD,0.5099,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket

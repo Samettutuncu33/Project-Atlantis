@@ -1,0 +1,354 @@
+{
+ "date": "2026-11-12",
+ "made_at": "2026-11-13T21:25:17+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "US equities fell on Nov 13, led by semiconductors: S&P 500 -0.7% and Nasdaq 100 -1.7% by midday as AMD dropped 10.5% and Nvidia fell 3.3% ahead of its Nov 17 earnings, its first without Jensen Huang as CEO. Treasury yields reportedly hit 5% and the Dollar Index a 19-month high, coinciding with a crypto selloff that took Bitcoin below $70,000 and ether below $2,000. Brent traded near $98.45; EIA data showed a 4.657M bbl US crude build for the week ended Nov 6. Gold was little changed near $3,880. Next week's focus: US October retail sales (Tue), Nvidia earnings, RBA minutes, UK jobs data and the German ZEW survey.",
+ "calendar": [
+  {
+   "when": "2026-11-17T13:30:00+00:00",
+   "event": "US Retail Sales (Oct), consensus +0.2% M/M; also Import/Export Prices and Industrial Production",
+   "region": "US",
+   "importance": "high",
+   "symbols": [
+    "MACRO",
+    "USA500IDXUSD",
+    "USATECHIDXUSD",
+    "EURUSD",
+    "USDJPY",
+    "XAUUSD"
+   ],
+   "source": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs"
+  },
+  {
+   "when": "2026-11-17T00:00:00+00:00",
+   "event": "Nvidia quarterly earnings (first report without Jensen Huang as CEO)",
+   "region": "US",
+   "importance": "high",
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD",
+    "USA500IDXUSD"
+   ],
+   "source": "https://www.benzinga.com/markets/equities/26/11/63259862/stock-market-today-amd-nvidia-chip-selloff-cisco-modine-november-13"
+  },
+  {
+   "when": "2026-11-17T00:00:00+00:00",
+   "event": "RBA Minutes (Nov)",
+   "region": "AU",
+   "importance": "medium",
+   "symbols": [
+    "AUDUSD"
+   ],
+   "source": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs"
+  },
+  {
+   "when": "2026-11-17T00:00:00+00:00",
+   "event": "UK Unemployment Rate (Sep)",
+   "region": "UK",
+   "importance": "medium",
+   "symbols": [
+    "GBPUSD",
+    "GBRIDXGBP"
+   ],
+   "source": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs"
+  },
+  {
+   "when": "2026-11-17T00:00:00+00:00",
+   "event": "EZ/German ZEW Survey (Nov)",
+   "region": "EU",
+   "importance": "medium",
+   "symbols": [
+    "EURUSD",
+    "DEUIDXEUR"
+   ],
+   "source": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs"
+  },
+  {
+   "when": "2026-11-17T00:00:00+00:00",
+   "event": "Japan Balance of Trade",
+   "region": "JP",
+   "importance": "low",
+   "symbols": [
+    "USDJPY",
+    "JPNIDXJPY"
+   ],
+   "source": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs"
+  },
+  {
+   "when": "2026-11-20T00:00:00+00:00",
+   "event": "UK Retail Sales (Oct), UK PSNB (Oct), UK-EU Summit, Moody's review on UK",
+   "region": "UK",
+   "importance": "medium",
+   "symbols": [
+    "GBPUSD",
+    "GBRIDXGBP"
+   ],
+   "source": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs"
+  },
+  {
+   "when": "2026-11-20T00:00:00+00:00",
+   "event": "German PPI (Oct), EZ Consumer Confidence Flash (Nov)",
+   "region": "EU",
+   "importance": "low",
+   "symbols": [
+    "EURUSD",
+    "DEUIDXEUR"
+   ],
+   "source": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs"
+  },
+  {
+   "when": "2026-11-20T00:00:00+00:00",
+   "event": "US UoM Consumer Sentiment Final (Nov)",
+   "region": "US",
+   "importance": "medium",
+   "symbols": [
+    "MACRO",
+    "USA500IDXUSD"
+   ],
+   "source": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs"
+  },
+  {
+   "when": "2026-11-20T00:00:00+00:00",
+   "event": "Canadian Retail Sales (Sep)",
+   "region": "CA",
+   "importance": "medium",
+   "symbols": [
+    "USDCAD"
+   ],
+   "source": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs"
+  }
+ ],
+ "items": [
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD",
+    "USA500IDXUSD",
+    "MSFTUSUSD"
+   ],
+   "headline": "AMD Sinks 10.5%, Nasdaq 100 Falls 1.7%: Stock Market Today",
+   "source": "https://www.benzinga.com/markets/equities/26/11/63259862/stock-market-today-amd-nvidia-chip-selloff-cisco-modine-november-13",
+   "published_at": "2026-11-13T18:41:08+00:00",
+   "tone": -0.5,
+   "relevance": "high",
+   "note": "S&P 500 -0.7% to 7,536; NDX -1.7% to 27,801; NVDA -3.3% to $160.69 ahead of Tuesday earnings; AMD lost about $100B as the chip rotation unwound; Nvidia China scandal reportedly deepening."
+  },
+  {
+   "symbols": [
+    "USATECHIDXUSD",
+    "USA500IDXUSD",
+    "XAUUSD",
+    "MACRO"
+   ],
+   "headline": "Stock Market Midday, Nov. 13: Nasdaq Plunges as Nvidia Turmoil Deepens and Treasury Yields Hit 5%",
+   "source": "https://www.fool.com/coverage/stock-market-today/2026/11/13/stock-market-midday-nov-13-nasdaq-plunges-as-nvidia-turmoil-deepens-and-treasury-yields-hit-5/",
+   "published_at": "2026-11-13T16:31:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "Headline says Treasury yields hit 5%. At 11:31 ET Nasdaq Composite -1.45%, S&P 500 -0.82%; gold -0.13% at $3,880.40."
+  },
+  {
+   "symbols": [
+    "USA500IDXUSD"
+   ],
+   "headline": "Stock Market News for Nov 13, 2026",
+   "source": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-13-081500049.html",
+   "published_at": "2026-11-13T08:15:00+00:00",
+   "tone": -0.2,
+   "relevance": "medium",
+   "note": "Prior-session recap: Dow -0.4% to 52,297.09; S&P 500 -0.4% to 7,592.40."
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Stock market news for Nov. 12, 2026: Nasdaq Composite slides as Nvidia shares tumble on Jensen Huang's exit; oil prices jump",
+   "source": "https://www.cnbc.com/2026/11/11/stock-market-today-live-updates.html",
+   "published_at": "2026-11-12T21:00:00+00:00",
+   "tone": -0.5,
+   "relevance": "high",
+   "note": "CEO departure at Nvidia is a key AI-trade leadership risk; time approximated to the Nov 12 US close."
+  },
+  {
+   "symbols": [
+    "BTCUSD",
+    "ETHUSD"
+   ],
+   "headline": "Bitcoin dips below $70,000 as Dollar Index hits 19-month high (CoinDesk via Coinbase)",
+   "source": "https://www.coinbase.com/price/ethereum",
+   "published_at": "2026-11-13T03:37:00+00:00",
+   "tone": -0.5,
+   "relevance": "high",
+   "note": "Crypto selloff with large futures liquidations; a strong dollar is a headwind. Page shows 03:37 AM with no time zone; recorded as UTC."
+  },
+  {
+   "symbols": [
+    "BTCUSD"
+   ],
+   "headline": "Current price of Bitcoin for November 13, 2026",
+   "source": "https://fortune.com/article/price-of-bitcoin-11-13-2026/",
+   "published_at": "2026-11-13T13:30:00+00:00",
+   "tone": -0.4,
+   "relevance": "medium",
+   "note": "BTC $69,134.72 at 8:30 ET, down $4,073.52 from the prior morning."
+  },
+  {
+   "symbols": [
+    "ETHUSD"
+   ],
+   "headline": "Current price of Ethereum for November 13, 2026",
+   "source": "https://fortune.com/article/price-of-ethereum-11-13-2026/",
+   "published_at": "2026-11-13T13:30:00+00:00",
+   "tone": -0.4,
+   "relevance": "medium",
+   "note": "ETH $1,953.96 at 8:30 ET, down $83.29 from the prior day."
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "Current price of oil as of November 13, 2026",
+   "source": "https://fortune.com/article/price-of-oil-11-13-2026/",
+   "published_at": "2026-11-13T13:30:00+00:00",
+   "tone": 0.0,
+   "relevance": "medium",
+   "note": "Brent $98.45/bbl at 8:30 ET."
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "US crude oil inventories increased by 4.657 million barrels in week ended November 6",
+   "source": "https://tradingeconomics.com/united-states/crude-oil-stocks-change",
+   "published_at": "2026-11-12T17:00:00+00:00",
+   "tone": -0.3,
+   "relevance": "medium",
+   "note": "Largest build since August, ending five straight weekly draws; bearish for crude. Release time taken from the calendar entry (assumed UTC)."
+  },
+  {
+   "symbols": [
+    "MACRO",
+    "EURUSD",
+    "GBPUSD",
+    "USDJPY",
+    "AUDUSD",
+    "USDCAD",
+    "USA500IDXUSD"
+   ],
+   "headline": "Week in Focus - 16-20th November 2026: US Retail Sales, FOMC Minutes, Chinese Activity Data, PBoC LPR, RBA Minutes, UK Inflation and UK Jobs",
+   "source": "https://www.newsquawk.com/headlines/week-in-focus--16-20th-november-2026-highlights-include-us-retail-sales-fomc-minutes-chinese-activity-data-pboc-lpr-rba-minutes-uk-inflation-and-uk-jobs",
+   "published_at": "2026-11-13T14:26:00+00:00",
+   "tone": 0.0,
+   "relevance": "medium",
+   "note": "Week-ahead preview; Oct retail sales consensus +0.2% M/M (control +0.4%). Page shows 13 Nov 14:26 with no time zone; recorded as UTC."
+  }
+ ],
+ "views": {
+  "NVDAUSUSD": {
+   "tone": -0.4,
+   "event_risk": "high",
+   "reason": "CEO exit, China scandal reports and steep declines; earnings on Nov 17."
+  },
+  "USATECHIDXUSD": {
+   "tone": -0.4,
+   "event_risk": "high",
+   "reason": "NDX -1.7% on chip selloff; yields reportedly at 5%; Nvidia earnings and retail sales ahead."
+  },
+  "USA500IDXUSD": {
+   "tone": -0.3,
+   "event_risk": "high",
+   "reason": "Back-to-back declines; rates pressure; retail sales on Tue."
+  },
+  "MSFTUSUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "No company-specific news found; tech-sector weakness."
+  },
+  "AAPLUSUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No dateable news in window."
+  },
+  "AMZNUSUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No dateable news in window."
+  },
+  "GOOGLUSUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No dateable news in window."
+  },
+  "BTCUSD": {
+   "tone": -0.4,
+   "event_risk": "normal",
+   "reason": "Broke below $70k with liquidations; strong USD."
+  },
+  "ETHUSD": {
+   "tone": -0.4,
+   "event_risk": "normal",
+   "reason": "Below $2,000; weak weekly performance."
+  },
+  "LIGHTCMDUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Large US crude build offsets elevated Brent levels."
+  },
+  "XAUUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "Little changed near $3,880 despite high yields."
+  },
+  "EURUSD": {
+   "tone": -0.2,
+   "event_risk": "normal",
+   "reason": "Dollar Index at 19-month high; ZEW Tue."
+  },
+  "GBPUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Strong USD; UK jobs and retail data next week."
+  },
+  "USDJPY": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "Firm USD and high US yields."
+  },
+  "AUDUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Risk-off and strong USD; RBA minutes Tue."
+  },
+  "USDCHF": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No SNB news found."
+  },
+  "USDCAD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "Canadian retail sales Fri."
+  },
+  "DEUIDXEUR": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No dateable news found."
+  },
+  "GBRIDXGBP": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No dateable news found."
+  },
+  "JPNIDXJPY": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Spillover from US chip selloff possible; no direct news found."
+  },
+  "MACRO": {
+   "tone": -0.2,
+   "event_risk": "high",
+   "reason": "Yields reportedly at 5% and USD strength; US retail sales and FOMC minutes next week."
+  }
+ }
+}

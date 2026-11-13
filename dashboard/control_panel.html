@@ -11,10 +11,12 @@
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
 }
-body { background: var(--bg); color: var(--fg); font: 14px/1.5 var(--font-body); }
+*, *::before, *::after { box-sizing: border-box; } [hidden] { display: none !important; }
+html, body { margin: 0; max-width: 100%; overflow-x: hidden; }
+body { background: var(--bg); color: var(--fg); font: 14px/1.5 var(--font-body); -webkit-text-size-adjust: 100%; }
 .wrap { max-width: 1120px; margin: 0 auto; padding-block: 20px 48px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-  display: grid; gap: 28px; }
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
 h1 { font: 600 28px/1.1 var(--font-display); margin: 0; letter-spacing: .01em; }
 h2 { font: 600 12px/1.2 var(--font-body); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 0 0 10px; }
 p { margin: 0; }
@@ -22,7 +24,7 @@ p { margin: 0; }
 .sim { display: inline-block; font: 600 10.5px/1.6 var(--font-body); letter-spacing: .08em; padding: 0 6px;
   border: 1px solid var(--pause); color: var(--pause); border-radius: 4px; vertical-align: 2px; }
 .top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px; align-items: stretch; }
-@media (max-width: 760px) { .top { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .top { grid-template-columns: minmax(0, 1fr); } }
 .box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; min-width: 0; }
 .status { border-left: 5px solid var(--muted); display: grid; gap: 6px; }
 .status[data-mode="RUNNING"] { border-left-color: var(--up); }
@@ -65,7 +67,8 @@ th.l, td.l { text-align: left; }
 .mono { font-family: var(--font-mono); font-size: 12px; }
 details summary { cursor: pointer; font-weight: 600; } details ul { margin: 10px 0 0; padding-left: 1.2em; max-width: 85ch; color: var(--muted); }
 .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
-@media (max-width: 760px) { .two { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .two { grid-template-columns: minmax(0, 1fr); } }
+section { min-width: 0; } .hist li { overflow-wrap: anywhere; }
 a { color: var(--accent); }
 .pf-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
 .pf { padding: 6px 12px; font-size: 13px; border-radius: 999px; }
@@ -100,12 +103,27 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
 .feed div { display: grid; grid-template-columns: 64px 150px minmax(0,1fr); gap: 10px; color: #a9c7df; }
 .feed .t { color: #4f6f88; } .feed .a { color: #7cc4ff; } .feed .lvl-warn { color: var(--pause); } .feed .lvl-error { color: var(--down); }
 @media (max-width: 560px) { .feed div { grid-template-columns: 52px minmax(0,1fr); } .feed .a { display: none; } }
+.swipe { display: none; font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+@media (max-width: 560px) {
+  .wrap { gap: 22px; padding-block: 14px 40px; } h1 { font-size: 24px; }
+  .box { padding: 14px; } .mode { font-size: 30px; }
+  button { min-height: 46px; }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .card { padding: 11px; } .big { font-size: 24px; }
+  .card dl { font-size: 11.5px; gap: 1px 6px; }
+  th, td { padding: 6px 8px; }
+  .wrapx { max-height: 62vh; overflow: auto; -webkit-overflow-scrolling: touch; }
+  .hud { padding: 12px 10px 8px; } .hud-title { letter-spacing: .14em; } .hud-head { gap: 4px 14px; }
+  .hud-flow svg { min-width: 760px; }
+  .swipe { display: block; }
+  details ul { padding-left: 1em; }
+}
+@media (max-width: 340px) { .cards { grid-template-columns: 1fr; } }
 </style>
 
 <div class="wrap">
   <header style="display:grid;gap:6px">
     <h1>Atlantis Live</h1>
-    <p class="muted"><span class="sim">SIMULATION</span> Five virtual $200 paper accounts with Saxo-calibrated costs. Prices come from Dukascopy (bid/ask), not Saxo. No real money or broker is involved.</p>
+    <p class="muted"><span class="sim">SIMULATION</span> Six virtual $200 paper accounts with Saxo-calibrated costs. Prices come from Dukascopy (bid/ask), not Saxo. No real money or broker is involved.</p>
     <p class="muted" id="runline">Waiting for the latest run…</p>
   </header>
 
@@ -141,6 +159,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
       <span class="hud-stat">NEXT RUN <b id="hud-next">—</b></span>
     </div>
     <div class="hud-flow"><svg id="hud-svg" viewBox="0 0 1000 250" role="img" aria-label="Data flow between the Atlantis agents; the active stage is highlighted"></svg></div>
+    <p class="swipe">Swipe the diagram and the tables sideways to see more.</p>
     <div class="feed" id="feed" aria-live="polite"><div><span class="t">--:--</span><span class="a">system</span><span>Waiting for the first agent report. Agents report here live while a run is working.</span></div></div>
   </section>
 
@@ -155,7 +174,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
   <section id="portfolio">
     <h2>Portfolio: what you hold</h2>
     <div class="pf-bar" role="group" aria-label="Show account">
-      <button type="button" class="pf on" data-acct="">All</button><button type="button" class="pf" data-acct="A">A</button><button type="button" class="pf" data-acct="B">B</button><button type="button" class="pf" data-acct="C">C</button><button type="button" class="pf" data-acct="D">D</button><button type="button" class="pf" data-acct="E">E</button>
+      <button type="button" class="pf on" data-acct="">All</button><button type="button" class="pf" data-acct="A">A</button><button type="button" class="pf" data-acct="B">B</button><button type="button" class="pf" data-acct="C">C</button><button type="button" class="pf" data-acct="D">D</button><button type="button" class="pf" data-acct="E">E</button><button type="button" class="pf" data-acct="F">F</button>
     </div>
     <div class="wrapx"><table id="t-port"></table></div>
     <p class="muted" style="margin-top:6px">Cost = what was paid at entry. Value = what closing now at the bid/ask would be worth. Share = position size compared with the account's equity; above 100% means leverage.</p>

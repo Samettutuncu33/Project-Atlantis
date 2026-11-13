@@ -24,8 +24,7 @@ assert "<script>" in src and '<p class="muted" id="runline">' in src
 html = ('<!doctype html>\n<html lang="en"><head><meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n' + src)
 html = html.replace("<script>", SHIM + "<script>", 1)
-html = html.replace("<style>", "<style>\n*, *::before, *::after { box-sizing: border-box; } [hidden] { display: none !important; }\n"
-                    "html, body { margin: 0; overflow-x: hidden; } #ctlbox { display: none; } .wrap { grid-template-columns: minmax(0, 1fr); }\n", 1)
+html = html.replace("<style>", "<style>\n#ctlbox { display: none; }\n", 1)
 html = html.replace('<section class="box">\n      <h2>Controls</h2>', '<section class="box" id="ctlbox">\n      <h2>Controls</h2>', 1)
 html = html.replace('<p class="muted" id="runline">', NOTE + '\n    <p class="muted" id="runline">', 1)
 out = Path("site")

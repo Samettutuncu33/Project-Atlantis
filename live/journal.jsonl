@@ -23,3 +23,4 @@
 {"account": "F", "ts": "2026-11-13T15:00:00+00:00", "symbol": "JPNIDXJPY", "side": "BUY", "qty": 0.7, "price": 60934.532}
 {"account": "F", "ts": "2026-11-13T15:00:00+00:00", "symbol": "USA500IDXUSD", "side": "BUY", "qty": 0.1, "price": 7564.076}
 {"account": "F", "ts": "2026-11-13T20:00:00+00:00", "symbol": "USA500IDXUSD", "side": "SELL", "qty": 0.1, "price": 7556.552}
+{"account": "F", "ts": "2026-11-13T21:00:00+00:00", "symbol": "JPNIDXJPY", "side": "SELL", "qty": 0.19999999999999996, "price": 60994.519}

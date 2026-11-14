@@ -1,5 +1,5 @@
 {
- "asof": "2026-11-12",
+ "asof": "2026-11-13",
  "predictors": [
   "no_view",
   "rule_trend",
@@ -10,166 +10,166 @@
   "llm_analyst"
  ],
  "eta": {
-  "fx_spot": 0.031860334795131354,
-  "index_cfd": 0.03502617283840427,
-  "commodity_cfd": 0.07822540703125416,
-  "metal_cfd": 0.07822540703125416,
-  "stock_cfd": 0.037542529005789166,
-  "crypto_fx": 0.06015492394679548
+  "fx_spot": 0.03185410416345055,
+  "index_cfd": 0.035019273984101984,
+  "commodity_cfd": 0.07821003707196811,
+  "metal_cfd": 0.07821003707196811,
+  "stock_cfd": 0.03753403425989339,
+  "crypto_fx": 0.060140945806965364
  },
  "rounds": {
-  "fx_spot": 15336,
-  "index_cfd": 12689,
-  "commodity_cfd": 2544,
-  "metal_cfd": 2544,
-  "stock_cfd": 11045,
-  "crypto_fx": 4302
+  "fx_spot": 15342,
+  "index_cfd": 12694,
+  "commodity_cfd": 2545,
+  "metal_cfd": 2545,
+  "stock_cfd": 11050,
+  "crypto_fx": 4304
  },
  "cum_loss": {
   "fx_spot": {
-   "llm_analyst": 3834.6883806336605,
-   "no_view": 3834.0,
-   "rule_trend": 4011.449999999904,
-   "rule_breakout": 3907.139252737998,
-   "rule_reversal": 3874.282800042715,
-   "ml_logistic": 3871.6976456199827,
-   "ml_lightgbm": 3913.835011264593
+   "llm_analyst": 3836.2084776251877,
+   "no_view": 3835.5,
+   "rule_trend": 4012.8099999999035,
+   "rule_breakout": 3908.371429128898,
+   "rule_reversal": 3876.066015496715,
+   "ml_logistic": 3873.1537496416827,
+   "ml_lightgbm": 3915.4364586704933
   },
   "index_cfd": {
-   "llm_analyst": 3133.818123353299,
-   "no_view": 3172.25,
-   "rule_trend": 3177.0399999998463,
-   "rule_breakout": 3174.628755080687,
-   "rule_reversal": 3231.8094981434906,
-   "ml_logistic": 3140.3080017111133,
-   "ml_lightgbm": 3170.8303468669037
+   "llm_analyst": 3134.8899071180927,
+   "no_view": 3173.5,
+   "rule_trend": 3177.8399999998455,
+   "rule_breakout": 3176.127223017687,
+   "rule_reversal": 3232.794203555991,
+   "ml_logistic": 3141.3519483217133,
+   "ml_lightgbm": 3171.7439181468035
   },
   "commodity_cfd": {
-   "llm_analyst": 634.638130698651,
-   "no_view": 636.0,
-   "rule_trend": 664.1300000000159,
-   "rule_breakout": 638.1768053648999,
-   "rule_reversal": 648.0331942805991,
-   "ml_logistic": 643.8400861947009,
-   "ml_lightgbm": 652.1671368886005
+   "llm_analyst": 634.9146534864003,
+   "no_view": 636.25,
+   "rule_trend": 664.4900000000159,
+   "rule_breakout": 638.4064092537999,
+   "rule_reversal": 648.3878740830991,
+   "ml_logistic": 644.1564924447009,
+   "ml_lightgbm": 652.4820935527005
   },
   "metal_cfd": {
-   "llm_analyst": 628.4612614948693,
-   "no_view": 636.0,
-   "rule_trend": 654.0400000000121,
-   "rule_breakout": 637.0362174834004,
-   "rule_reversal": 645.9927994857001,
-   "ml_logistic": 626.4509127218989,
-   "ml_lightgbm": 634.7602458131984
+   "llm_analyst": 628.7097740371564,
+   "no_view": 636.25,
+   "rule_trend": 654.2000000000121,
+   "rule_breakout": 637.2373787035003,
+   "rule_reversal": 646.1598678733001,
+   "ml_logistic": 626.728673342799,
+   "ml_lightgbm": 635.0555945847983
   },
   "stock_cfd": {
-   "llm_analyst": 2738.547258184841,
-   "no_view": 2761.25,
-   "rule_trend": 2801.199999999938,
-   "rule_breakout": 2760.3952441877045,
-   "rule_reversal": 2814.052905211502,
-   "ml_logistic": 2776.0695113855936,
-   "ml_lightgbm": 2780.264266461604
+   "llm_analyst": 2739.754650753406,
+   "no_view": 2762.5,
+   "rule_trend": 2802.1999999999375,
+   "rule_breakout": 2761.609461318604,
+   "rule_reversal": 2815.464942357602,
+   "ml_logistic": 2777.2695361030933,
+   "ml_lightgbm": 2781.498000721604
   },
   "crypto_fx": {
-   "llm_analyst": 1073.8900506138057,
-   "no_view": 1075.5,
-   "rule_trend": 1104.5200000000048,
-   "rule_breakout": 1086.8200164211994,
-   "rule_reversal": 1088.5003007321013,
-   "ml_logistic": 1118.7305427879,
-   "ml_lightgbm": 1086.575322467398
+   "llm_analyst": 1074.3662969718735,
+   "no_view": 1076.0,
+   "rule_trend": 1104.840000000005,
+   "rule_breakout": 1087.1693922503994,
+   "rule_reversal": 1089.0427774318011,
+   "ml_logistic": 1119.2847188008002,
+   "ml_lightgbm": 1087.135833437898
   }
  },
  "counts": {
   "fx_spot": {
-   "no_view": 15336,
-   "rule_trend": 15336,
-   "rule_breakout": 15336,
-   "rule_reversal": 15336,
-   "ml_logistic": 15336,
-   "ml_lightgbm": 15336
+   "no_view": 15342,
+   "rule_trend": 15342,
+   "rule_breakout": 15342,
+   "rule_reversal": 15342,
+   "ml_logistic": 15342,
+   "ml_lightgbm": 15342
   },
   "index_cfd": {
-   "no_view": 12689,
-   "rule_trend": 12689,
-   "rule_breakout": 12689,
-   "rule_reversal": 12689,
-   "ml_logistic": 12689,
-   "ml_lightgbm": 12689
+   "no_view": 12694,
+   "rule_trend": 12694,
+   "rule_breakout": 12694,
+   "rule_reversal": 12694,
+   "ml_logistic": 12694,
+   "ml_lightgbm": 12694
   },
   "commodity_cfd": {
-   "no_view": 2544,
-   "rule_trend": 2544,
-   "rule_breakout": 2544,
-   "rule_reversal": 2544,
-   "ml_logistic": 2544,
-   "ml_lightgbm": 2544
+   "no_view": 2545,
+   "rule_trend": 2545,
+   "rule_breakout": 2545,
+   "rule_reversal": 2545,
+   "ml_logistic": 2545,
+   "ml_lightgbm": 2545
   },
   "metal_cfd": {
-   "no_view": 2544,
-   "rule_trend": 2544,
-   "rule_breakout": 2544,
-   "rule_reversal": 2544,
-   "ml_logistic": 2544,
-   "ml_lightgbm": 2544
+   "no_view": 2545,
+   "rule_trend": 2545,
+   "rule_breakout": 2545,
+   "rule_reversal": 2545,
+   "ml_logistic": 2545,
+   "ml_lightgbm": 2545
   },
   "stock_cfd": {
-   "no_view": 11045,
-   "rule_trend": 11045,
-   "rule_breakout": 11045,
-   "rule_reversal": 11045,
-   "ml_logistic": 11045,
-   "ml_lightgbm": 11045
+   "no_view": 11050,
+   "rule_trend": 11050,
+   "rule_breakout": 11050,
+   "rule_reversal": 11050,
+   "ml_logistic": 11050,
+   "ml_lightgbm": 11050
   },
   "crypto_fx": {
-   "no_view": 4302,
-   "rule_trend": 4302,
-   "rule_breakout": 4302,
-   "rule_reversal": 4302,
-   "ml_logistic": 4302,
-   "ml_lightgbm": 4302
+   "no_view": 4304,
+   "rule_trend": 4304,
+   "rule_breakout": 4304,
+   "rule_reversal": 4304,
+   "ml_logistic": 4304,
+   "ml_lightgbm": 4304
   }
  },
  "hits": {
   "fx_spot": {
-   "rule_trend": 7547,
-   "rule_breakout": 7507,
-   "rule_reversal": 7771,
-   "ml_logistic": 7717,
-   "ml_lightgbm": 7463
+   "rule_trend": 7551,
+   "rule_breakout": 7513,
+   "rule_reversal": 7772,
+   "ml_logistic": 7720,
+   "ml_lightgbm": 7464
   },
   "index_cfd": {
-   "rule_trend": 6955,
+   "rule_trend": 6960,
    "rule_breakout": 6712,
-   "rule_reversal": 6253,
-   "ml_logistic": 7052,
-   "ml_lightgbm": 6908
+   "rule_reversal": 6258,
+   "ml_logistic": 7057,
+   "ml_lightgbm": 6913
   },
   "commodity_cfd": {
    "rule_trend": 1258,
-   "rule_breakout": 1274,
+   "rule_breakout": 1275,
    "rule_reversal": 1256,
    "ml_logistic": 1311,
    "ml_lightgbm": 1306
   },
   "metal_cfd": {
-   "rule_trend": 1309,
-   "rule_breakout": 1313,
-   "rule_reversal": 1289,
+   "rule_trend": 1310,
+   "rule_breakout": 1314,
+   "rule_reversal": 1290,
    "ml_logistic": 1429,
    "ml_lightgbm": 1387
   },
   "stock_cfd": {
-   "rule_trend": 5875,
-   "rule_breakout": 5866,
-   "rule_reversal": 5454,
-   "ml_logistic": 6097,
-   "ml_lightgbm": 5979
+   "rule_trend": 5879,
+   "rule_breakout": 5869,
+   "rule_reversal": 5456,
+   "ml_logistic": 6100,
+   "ml_lightgbm": 5982
   },
   "crypto_fx": {
-   "rule_trend": 2221,
-   "rule_breakout": 2210,
+   "rule_trend": 2223,
+   "rule_breakout": 2212,
    "rule_reversal": 2199,
    "ml_logistic": 2191,
    "ml_lightgbm": 2175
@@ -177,146 +177,146 @@
  },
  "directional": {
   "fx_spot": {
-   "rule_trend": 15335,
-   "rule_breakout": 15334,
-   "rule_reversal": 15335,
-   "ml_logistic": 15156,
-   "ml_lightgbm": 15156
+   "rule_trend": 15341,
+   "rule_breakout": 15340,
+   "rule_reversal": 15341,
+   "ml_logistic": 15162,
+   "ml_lightgbm": 15162
   },
   "index_cfd": {
-   "rule_trend": 12689,
-   "rule_breakout": 12689,
-   "rule_reversal": 12685,
-   "ml_logistic": 12539,
-   "ml_lightgbm": 12539
+   "rule_trend": 12694,
+   "rule_breakout": 12694,
+   "rule_reversal": 12690,
+   "ml_logistic": 12544,
+   "ml_lightgbm": 12544
   },
   "commodity_cfd": {
-   "rule_trend": 2543,
-   "rule_breakout": 2544,
-   "rule_reversal": 2543,
-   "ml_logistic": 2514,
-   "ml_lightgbm": 2514
+   "rule_trend": 2544,
+   "rule_breakout": 2545,
+   "rule_reversal": 2544,
+   "ml_logistic": 2515,
+   "ml_lightgbm": 2515
   },
   "metal_cfd": {
-   "rule_trend": 2544,
-   "rule_breakout": 2544,
-   "rule_reversal": 2544,
-   "ml_logistic": 2514,
-   "ml_lightgbm": 2514
+   "rule_trend": 2545,
+   "rule_breakout": 2545,
+   "rule_reversal": 2545,
+   "ml_logistic": 2515,
+   "ml_lightgbm": 2515
   },
   "stock_cfd": {
-   "rule_trend": 11045,
-   "rule_breakout": 11045,
-   "rule_reversal": 11042,
-   "ml_logistic": 11045,
-   "ml_lightgbm": 11045
+   "rule_trend": 11050,
+   "rule_breakout": 11050,
+   "rule_reversal": 11047,
+   "ml_logistic": 11050,
+   "ml_lightgbm": 11050
   },
   "crypto_fx": {
-   "rule_trend": 4302,
-   "rule_breakout": 4302,
-   "rule_reversal": 4299,
-   "ml_logistic": 4302,
-   "ml_lightgbm": 4302
+   "rule_trend": 4304,
+   "rule_breakout": 4304,
+   "rule_reversal": 4301,
+   "ml_logistic": 4304,
+   "ml_lightgbm": 4304
   }
  },
  "weights": {
   "fx_spot": {
-   "no_view": 0.3655463140503737,
-   "rule_trend": 0.001281173655268528,
-   "rule_breakout": 0.035557528518185375,
-   "rule_reversal": 0.1012881565231205,
-   "ml_logistic": 0.10998383219556852,
-   "ml_lightgbm": 0.028726579182832487,
-   "llm_analyst": 0.35761641587465093
+   "no_view": 0.3657959054980884,
+   "rule_trend": 0.001289203174576903,
+   "rule_breakout": 0.035903021223706276,
+   "rule_reversal": 0.100472238899546,
+   "ml_logistic": 0.11023881736461902,
+   "ml_lightgbm": 0.028667705969167952,
+   "llm_analyst": 0.35763310787029545
   },
   "index_cfd": {
-   "no_view": 0.09221315661634967,
-   "rule_trend": 0.07797025821055659,
-   "rule_breakout": 0.08484144234140058,
-   "rule_reversal": 0.011449677237399685,
-   "ml_logistic": 0.28228262058959336,
-   "ml_lightgbm": 0.09691437269102911,
-   "llm_analyst": 0.3543284723136711
+   "no_view": 0.09167484102429795,
+   "rule_trend": 0.07874890168470179,
+   "rule_breakout": 0.0836168067161114,
+   "rule_reversal": 0.011493802991669142,
+   "ml_logistic": 0.2826047871036,
+   "ml_lightgbm": 0.09748950112033666,
+   "llm_analyst": 0.3543713593592831
   },
   "commodity_cfd": {
-   "no_view": 0.23361184517373312,
-   "rule_trend": 0.025872490385709206,
-   "rule_breakout": 0.1970346242779974,
-   "rule_reversal": 0.09113659602340254,
-   "ml_logistic": 0.12651577741103742,
-   "ml_lightgbm": 0.06595548818793406,
-   "llm_analyst": 0.25987317854018627
+   "no_view": 0.23410763923937503,
+   "rule_trend": 0.025716416426366382,
+   "rule_breakout": 0.19777463169416784,
+   "rule_reversal": 0.09060210296620234,
+   "ml_logistic": 0.12614271681949601,
+   "ml_lightgbm": 0.06577687730464402,
+   "llm_analyst": 0.2598796155497484
   },
   "metal_cfd": {
-   "no_view": 0.13089745957789273,
-   "rule_trend": 0.03191984518681794,
-   "rule_breakout": 0.12070574580222551,
-   "rule_reversal": 0.05990281255705348,
-   "ml_logistic": 0.2762746568691964,
-   "ml_lightgbm": 0.144227878920673,
-   "llm_analyst": 0.23607160108614095
+   "no_view": 0.13090473632728816,
+   "rule_trend": 0.03215602029505276,
+   "rule_breakout": 0.12117635090467183,
+   "rule_reversal": 0.060305223265658,
+   "ml_logistic": 0.2756503365275577,
+   "ml_lightgbm": 0.1437224985376412,
+   "llm_analyst": 0.23608483414213027
   },
   "stock_cfd": {
-   "no_view": 0.17236474706859478,
-   "rule_trend": 0.038466541833856366,
-   "rule_breakout": 0.1779855823246035,
-   "rule_reversal": 0.02374229966950026,
-   "ml_logistic": 0.09881514850142127,
-   "ml_lightgbm": 0.08441703382424498,
-   "llm_analyst": 0.4042086467777788
+   "no_view": 0.17213882673470163,
+   "rule_trend": 0.03879146015556593,
+   "rule_breakout": 0.17798989745546054,
+   "rule_reversal": 0.023577982282141533,
+   "ml_logistic": 0.09888336352273225,
+   "ml_lightgbm": 0.08437150055946253,
+   "llm_analyst": 0.4042469692899356
   },
   "crypto_fx": {
-   "no_view": 0.26125373229558335,
-   "rule_trend": 0.045594914972423004,
-   "rule_breakout": 0.1322292769701085,
-   "rule_reversal": 0.11951716337781303,
-   "ml_logistic": 0.019393967728579313,
-   "ml_lightgbm": 0.13419002719366277,
-   "llm_analyst": 0.28782091746183003
+   "no_view": 0.26090336432217953,
+   "rule_trend": 0.046048040492111954,
+   "rule_breakout": 0.13327468152466007,
+   "rule_reversal": 0.11907399617081761,
+   "ml_logistic": 0.01931662568325633,
+   "ml_lightgbm": 0.13354393593446662,
+   "llm_analyst": 0.287839355872508
   }
  },
  "lessons": [
-  "FX \u00b7 ml_lightgbm: 7463/15156 directional calls correct (49%), Brier 0.2552, weight 3%",
-  "FX \u00b7 ml_logistic: 7717/15156 directional calls correct (51%), Brier 0.2525, weight 11%",
+  "FX \u00b7 ml_lightgbm: 7464/15162 directional calls correct (49%), Brier 0.2552, weight 3%",
+  "FX \u00b7 ml_logistic: 7720/15162 directional calls correct (51%), Brier 0.2525, weight 11%",
   "FX \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 37%",
-  "FX \u00b7 rule_breakout: 7507/15334 directional calls correct (49%), Brier 0.2548, weight 4%",
-  "FX \u00b7 rule_reversal: 7771/15335 directional calls correct (51%), Brier 0.2526, weight 10%",
-  "FX \u00b7 rule_trend: 7547/15335 directional calls correct (49%), Brier 0.2616, weight 0%",
+  "FX \u00b7 rule_breakout: 7513/15340 directional calls correct (49%), Brier 0.2547, weight 4%",
+  "FX \u00b7 rule_reversal: 7772/15341 directional calls correct (51%), Brier 0.2526, weight 10%",
+  "FX \u00b7 rule_trend: 7551/15341 directional calls correct (49%), Brier 0.2616, weight 0%",
   "FX: currently trusts no_view most (37%).",
-  "Indices \u00b7 ml_lightgbm: 6908/12539 directional calls correct (55%), Brier 0.2499, weight 10%",
-  "Indices \u00b7 ml_logistic: 7052/12539 directional calls correct (56%), Brier 0.2475, weight 28%",
+  "Indices \u00b7 ml_lightgbm: 6913/12544 directional calls correct (55%), Brier 0.2499, weight 10%",
+  "Indices \u00b7 ml_logistic: 7057/12544 directional calls correct (56%), Brier 0.2475, weight 28%",
   "Indices \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 9%",
-  "Indices \u00b7 rule_breakout: 6712/12689 directional calls correct (53%), Brier 0.2502, weight 8%",
-  "Indices \u00b7 rule_reversal: 6253/12685 directional calls correct (49%), Brier 0.2547, weight 1%",
-  "Indices \u00b7 rule_trend: 6955/12689 directional calls correct (55%), Brier 0.2504, weight 8%",
+  "Indices \u00b7 rule_breakout: 6712/12694 directional calls correct (53%), Brier 0.2502, weight 8%",
+  "Indices \u00b7 rule_reversal: 6258/12690 directional calls correct (49%), Brier 0.2547, weight 1%",
+  "Indices \u00b7 rule_trend: 6960/12694 directional calls correct (55%), Brier 0.2503, weight 8%",
   "Indices: currently trusts llm_analyst most (35%).",
-  "Oil \u00b7 ml_lightgbm: 1306/2514 directional calls correct (52%), Brier 0.2564, weight 7%",
-  "Oil \u00b7 ml_logistic: 1311/2514 directional calls correct (52%), Brier 0.2531, weight 13%",
+  "Oil \u00b7 ml_lightgbm: 1306/2515 directional calls correct (52%), Brier 0.2564, weight 7%",
+  "Oil \u00b7 ml_logistic: 1311/2515 directional calls correct (52%), Brier 0.2531, weight 13%",
   "Oil \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 23%",
-  "Oil \u00b7 rule_breakout: 1274/2544 directional calls correct (50%), Brier 0.2509, weight 20%",
-  "Oil \u00b7 rule_reversal: 1256/2543 directional calls correct (49%), Brier 0.2547, weight 9%",
-  "Oil \u00b7 rule_trend: 1258/2543 directional calls correct (49%), Brier 0.2611, weight 3%",
+  "Oil \u00b7 rule_breakout: 1275/2545 directional calls correct (50%), Brier 0.2508, weight 20%",
+  "Oil \u00b7 rule_reversal: 1256/2544 directional calls correct (49%), Brier 0.2548, weight 9%",
+  "Oil \u00b7 rule_trend: 1258/2544 directional calls correct (49%), Brier 0.2611, weight 3%",
   "Oil: currently trusts llm_analyst most (26%).",
-  "Gold \u00b7 ml_lightgbm: 1387/2514 directional calls correct (55%), Brier 0.2495, weight 14%",
-  "Gold \u00b7 ml_logistic: 1429/2514 directional calls correct (57%), Brier 0.2462, weight 28%",
+  "Gold \u00b7 ml_lightgbm: 1387/2515 directional calls correct (55%), Brier 0.2495, weight 14%",
+  "Gold \u00b7 ml_logistic: 1429/2515 directional calls correct (57%), Brier 0.2463, weight 28%",
   "Gold \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 13%",
-  "Gold \u00b7 rule_breakout: 1313/2544 directional calls correct (52%), Brier 0.2504, weight 12%",
-  "Gold \u00b7 rule_reversal: 1289/2544 directional calls correct (51%), Brier 0.2539, weight 6%",
-  "Gold \u00b7 rule_trend: 1309/2544 directional calls correct (51%), Brier 0.2571, weight 3%",
+  "Gold \u00b7 rule_breakout: 1314/2545 directional calls correct (52%), Brier 0.2504, weight 12%",
+  "Gold \u00b7 rule_reversal: 1290/2545 directional calls correct (51%), Brier 0.2539, weight 6%",
+  "Gold \u00b7 rule_trend: 1310/2545 directional calls correct (51%), Brier 0.2571, weight 3%",
   "Gold: currently trusts ml_logistic most (28%).",
-  "Stocks \u00b7 ml_lightgbm: 5979/11045 directional calls correct (54%), Brier 0.2517, weight 8%",
-  "Stocks \u00b7 ml_logistic: 6097/11045 directional calls correct (55%), Brier 0.2513, weight 10%",
+  "Stocks \u00b7 ml_lightgbm: 5982/11050 directional calls correct (54%), Brier 0.2517, weight 8%",
+  "Stocks \u00b7 ml_logistic: 6100/11050 directional calls correct (55%), Brier 0.2513, weight 10%",
   "Stocks \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 17%",
-  "Stocks \u00b7 rule_breakout: 5866/11045 directional calls correct (53%), Brier 0.2499, weight 18%",
-  "Stocks \u00b7 rule_reversal: 5454/11042 directional calls correct (49%), Brier 0.2548, weight 2%",
-  "Stocks \u00b7 rule_trend: 5875/11045 directional calls correct (53%), Brier 0.2536, weight 4%",
+  "Stocks \u00b7 rule_breakout: 5869/11050 directional calls correct (53%), Brier 0.2499, weight 18%",
+  "Stocks \u00b7 rule_reversal: 5456/11047 directional calls correct (49%), Brier 0.2548, weight 2%",
+  "Stocks \u00b7 rule_trend: 5879/11050 directional calls correct (53%), Brier 0.2536, weight 4%",
   "Stocks: currently trusts llm_analyst most (40%).",
-  "Crypto \u00b7 ml_lightgbm: 2175/4302 directional calls correct (51%), Brier 0.2526, weight 13%",
-  "Crypto \u00b7 ml_logistic: 2191/4302 directional calls correct (51%), Brier 0.2600, weight 2%",
+  "Crypto \u00b7 ml_lightgbm: 2175/4304 directional calls correct (51%), Brier 0.2526, weight 13%",
+  "Crypto \u00b7 ml_logistic: 2191/4304 directional calls correct (51%), Brier 0.2601, weight 2%",
   "Crypto \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 26%",
-  "Crypto \u00b7 rule_breakout: 2210/4302 directional calls correct (51%), Brier 0.2526, weight 13%",
-  "Crypto \u00b7 rule_reversal: 2199/4299 directional calls correct (51%), Brier 0.2530, weight 12%",
-  "Crypto \u00b7 rule_trend: 2221/4302 directional calls correct (52%), Brier 0.2567, weight 5%",
+  "Crypto \u00b7 rule_breakout: 2212/4304 directional calls correct (51%), Brier 0.2526, weight 13%",
+  "Crypto \u00b7 rule_reversal: 2199/4301 directional calls correct (51%), Brier 0.2530, weight 12%",
+  "Crypto \u00b7 rule_trend: 2223/4304 directional calls correct (52%), Brier 0.2567, weight 5%",
   "Crypto: currently trusts llm_analyst most (29%)."
  ]
 }

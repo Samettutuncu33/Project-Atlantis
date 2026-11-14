@@ -1,0 +1,224 @@
+{
+ "date": "2026-11-13",
+ "made_at": "2026-11-14T01:46:07+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "US stocks were mixed-to-lower on Friday Nov 13: the S&P 500 fell 0.4% but gained 2.5% on the week, and the Nasdaq composite fell 0.9%. Nvidia slid again after CEO Jensen Huang resigned and HSBC downgraded the stock; it is on course for its worst week since January 2025, with results due late Tuesday Nov 17. Apple hit a record high as investors moved away from AI names. October PPI came in softer than expected, but rate-hike expectations remain (BofA now sees hikes at the next three Fed meetings), and a strong dollar coincided with Bitcoin falling below $70k and ether below $2k. The EIA raised its Brent forecasts again, while the IEA reported that observed global oil inventories rebounded in October. Key data next week: October CPI and Existing Home Sales (exact days not confirmed in the sources).",
+ "calendar": [
+  {
+   "when": "2026-11-16T13:30:00+00:00",
+   "event": "NY Fed Empire State Manufacturing Survey (Nov); consensus 19 vs 25.5 prior",
+   "region": "US",
+   "importance": "medium",
+   "symbols": [
+    "USA500IDXUSD",
+    "EURUSD",
+    "USDJPY"
+   ],
+   "source": "https://economicweekly.substack.com/p/economic-weekly-november-13-2026"
+  },
+  {
+   "when": "2026-11-17T00:00:00+00:00",
+   "event": "Nvidia earnings report (after close)",
+   "region": "US",
+   "importance": "high",
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD",
+    "USA500IDXUSD"
+   ],
+   "source": "https://www.schwab.com/learn/story/stock-market-update-open"
+  }
+ ],
+ "items": [
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "How major US stock indexes fared Friday 11/13/2026: S&P 500 -0.4%, weekly gain 2.5%; Nasdaq -0.9%",
+   "source": "https://www.washingtonpost.com/business/2026/11/13/wall-street-stocks-dow-nasdaq/f15a10e2-dfa7-11f1-912c-4fbb80d73f7f_story.html",
+   "published_at": "2026-11-13T21:19:00+00:00",
+   "tone": -0.1,
+   "relevance": "high",
+   "note": "Index closes for the session and the week"
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Nvidia stock falls after Huang resigns, weighing on broader market",
+   "source": "https://nbcnews.com/business/markets/nvidia-stock-huang-resigns-rcna608958",
+   "published_at": "2026-11-12T15:00:00+00:00",
+   "tone": -0.6,
+   "relevance": "high",
+   "note": "CEO resignation; roughly $500B of market value erased; CFO Colette Kress is interim CEO"
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD"
+   ],
+   "headline": "Stock Market Today, Nov. 13: Nvidia Slides After HSBC Downgrades Stock to Hold on CEO Uncertainty",
+   "source": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-13-222002466.html",
+   "published_at": "2026-11-13T22:20:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "Analyst downgrade ahead of earnings; NVDA -3.26%, AMD -10.84%, AVGO -6.27% per the page"
+  },
+  {
+   "symbols": [
+    "USATECHIDXUSD",
+    "NVDAUSUSD"
+   ],
+   "headline": "Stock Market Today, Nov. 13: AMD Sinks 8.75% on Sector AI-Chip Sell-Off After Early Gains Reverse",
+   "source": "https://www.fool.com/coverage/stock-market-today/2026/11/13/stock-market-today-nov-13-amd-sinks-8-75-on-sector-ai-chip-sell-off-after-early-gains-reverse/",
+   "published_at": "2026-11-13T21:53:00+00:00",
+   "tone": -0.3,
+   "relevance": "medium",
+   "note": "Sell-off spreading across AI chip stocks"
+  },
+  {
+   "symbols": [
+    "AAPLUSUSD",
+    "MSFTUSUSD",
+    "NVDAUSUSD"
+   ],
+   "headline": "Stocks making the biggest moves Friday: Nvidia, Cisco Systems, AMD, Apple, Modine & more",
+   "source": "https://www.cnbc.com/2026/11/13/stocks-moving-the-most-today-live-updates.html",
+   "published_at": "2026-11-13T00:00:00+00:00",
+   "tone": 0.2,
+   "relevance": "medium",
+   "note": "Apple at an intraday record of $360.80 (market value above $5.2T) as investors seek safety from the AI sell-off; tone reflects AAPL"
+  },
+  {
+   "symbols": [
+    "MSFTUSUSD"
+   ],
+   "headline": "Stocks fall but Wall Street notches a winning week after several turbulent days",
+   "source": "https://whdh.com/news/stocks-fall-but-wall-street-notches-a-winning-week-after-several-turbulent-days/",
+   "published_at": "2026-11-13T00:00:00+00:00",
+   "tone": 0.0,
+   "relevance": "low",
+   "note": "Microsoft rose 0.2% despite a global outage of its web services"
+  },
+  {
+   "symbols": [
+    "MACRO",
+    "USA500IDXUSD",
+    "EURUSD",
+    "USDJPY"
+   ],
+   "headline": "Stocks Up as PPI Cools, Nvidia Attempts Rebound",
+   "source": "https://www.schwab.com/learn/story/stock-market-update-open",
+   "published_at": "2026-11-13T00:00:00+00:00",
+   "tone": 0.1,
+   "relevance": "medium",
+   "note": "October PPI +0.3% m/m, below expectations"
+  },
+  {
+   "symbols": [
+    "MACRO",
+    "USA500IDXUSD",
+    "EURUSD",
+    "USDJPY"
+   ],
+   "headline": "Stock Market Today: BofA Now Sees Fed Hikes at Next Three Meetings",
+   "source": "https://pro.thestreet.com/stock-market-today/2026-11-13#update-wp:30345",
+   "published_at": "2026-11-13T00:00:00+00:00",
+   "tone": -0.2,
+   "relevance": "high",
+   "note": "Expectations for further Fed tightening are rising; tone reflects equities"
+  },
+  {
+   "symbols": [
+    "BTCUSD"
+   ],
+   "headline": "Current price of Bitcoin for November 13, 2026",
+   "source": "https://fortune.com/article/price-of-bitcoin-11-13-2026/",
+   "published_at": "2026-11-13T13:30:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "BTC $69,134.72, down about 5.6% from the previous morning"
+  },
+  {
+   "symbols": [
+    "ETHUSD"
+   ],
+   "headline": "Current price of Ethereum for November 13, 2026",
+   "source": "https://fortune.com/article/price-of-ethereum-11-13-2026/",
+   "published_at": "2026-11-13T13:30:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "ETH $1,953.96, down 4.1% on the day and 19% over a month; ETF outflows also reported"
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "EIA Raises 2026, 2027 Oil Price Forecasts Yet Again",
+   "source": "https://www.rigzone.com/news/eia_raises_2026_2027_oil_price_forecasts_yet_again-12-nov-2026-185067-article/",
+   "published_at": "2026-11-12T15:22:00+00:00",
+   "tone": 0.2,
+   "relevance": "medium",
+   "note": "STEO: falling inventories and Gulf tanker attacks support prices"
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "Oil Market Report - November 2026 (IEA)",
+   "source": "https://www.iea.org/reports/oil-market-report-november-2026",
+   "published_at": "2026-11-13T00:00:00+00:00",
+   "tone": -0.1,
+   "relevance": "medium",
+   "note": "Observed inventories rose 52 mb in October, the first increase since June, though on-land stocks kept falling"
+  }
+ ],
+ "views": {
+  "NVDAUSUSD": {
+   "tone": -0.4,
+   "event_risk": "high",
+   "reason": "CEO resignation, HSBC downgrade, earnings due Nov 17"
+  },
+  "USATECHIDXUSD": {
+   "tone": -0.2,
+   "event_risk": "high",
+   "reason": "AI-chip sell-off; Nvidia earnings and CPI next week"
+  },
+  "USA500IDXUSD": {
+   "tone": -0.1,
+   "event_risk": "high",
+   "reason": "Up 2.5% on the week, but Fed-hike expectations and CPI ahead"
+  },
+  "AAPLUSUSD": {
+   "tone": 0.2,
+   "event_risk": "normal",
+   "reason": "Record high as investors rotate away from AI names"
+  },
+  "MSFTUSUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "Outage with limited price impact"
+  },
+  "BTCUSD": {
+   "tone": -0.4,
+   "event_risk": "normal",
+   "reason": "Below $70k, liquidations, strong dollar"
+  },
+  "ETHUSD": {
+   "tone": -0.4,
+   "event_risk": "normal",
+   "reason": "Below $2k, ETF outflows"
+  },
+  "LIGHTCMDUSD": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "Middle East supply risk vs October inventory rebuild"
+  },
+  "MACRO": {
+   "tone": 0.0,
+   "event_risk": "high",
+   "reason": "Fed hike pricing; October CPI next week"
+  }
+ }
+}

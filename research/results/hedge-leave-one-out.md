@@ -27,7 +27,7 @@ Delta = Brier(arm) - Brier(full); full holdout Brier 0.24672.
 - C2 FAIL: Spearman(rule_trend, rule_breakout) = 0.362, 95% CI [0.313, 0.410] (n=10,240); needs point >= 0.50 and lower >= 0.40.
 - C3 PASS: null-control (drop llm_analyst) delta -0.000004 (|.| <= 0.0005).
 - C4 PASS: drop rule_trend within margin in 5 of 6 classes, drop rule_breakout in 6 of 6 (all 6 classes have >= 500 rows).
-  Not exceeded: index_cfd +0.000753 and metal_cfd +0.000493 (trend arm; the latter is within margin) - see scratchpad/metrics.json for all values.
+  The one class over margin for the trend arm is index_cfd (+0.000753); metal_cfd is +0.000493 (within margin).
 - C5 PASS: development delta drop rule_trend -0.000374, drop rule_breakout +0.000114 (both <= 0.0005).
 - C6 (reported, not gated): holdout BSS vs trailing-252 base rate: full 0.0031 [-0.0098, 0.0153]; drop trend 0.0022; drop breakout 0.0043.
   The full-ensemble BSS CI includes 0: redundancy was tested on an ensemble with no demonstrated skill.

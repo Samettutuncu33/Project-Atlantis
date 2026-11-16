@@ -1,4 +1,5 @@
 """Portfolio table: hand-calculated cost, value, P&L, share of account and the bought/sold summary."""
+import json
 from pathlib import Path
 import pytest
 
@@ -97,3 +98,54 @@ def test_command_view_tables_come_from_the_run_itself():
     msgs = " | ".join(a["msg"] for a in act)
     assert "bought 0.3 Nikkei 225" in msgs and "order rejected" in msgs and "b: boom" in msgs
     assert "1 of 2 checks passed" in msgs and act[0]["at"] >= act[-1]["at"]       # newest first
+
+
+# ---- AI team (account G) ---------------------------------------------------------------------------
+def _agent_doc(agent="news", **kw):
+    d = {"made_at": "2026-11-16T15:20:00+00:00", "agent": agent, "summary": "s", "probs": {"EURUSD": 0.6, "XAUUSD": 0.4},
+         "evidence": [{"symbols": ["EURUSD"], "claim": "c", "source": "https://example.com/a",
+                       "published_at": "2026-11-16T09:00:00+00:00"}]}
+    d.update(kw)
+    return d
+
+
+def test_agent_file_needs_sources_and_cannot_be_backdated():
+    import pytest
+    from atlantis.intel.agents import AgentFileError, validate
+    clean, rep = validate(_agent_doc(), "2026-11-16T14")
+    assert clean["probs"] == {"EURUSD": 0.6}                         # XAUUSD had no evidence: dropped
+    assert rep["dropped"]["probability without evidence for that symbol"] == 1
+    clean, _ = validate(_agent_doc(evidence=[{"symbols": ["EURUSD"], "claim": "c", "source": "a rumour"}]), "2026-11-16T14")
+    assert clean["probs"] == {}                                       # unsourced evidence backs nothing
+    with pytest.raises(AgentFileError, match="back-dating"):
+        validate(_agent_doc(), "2026-11-10T14")                       # a file for a bar days before it was made
+
+
+def test_agent_files_are_forward_only_and_expire(tmp_path):
+    from atlantis.intel.agents import AgentFiles, Approvals
+    (tmp_path / "news").mkdir()
+    (tmp_path / "news" / "2026-11-16T14.json").write_text(json.dumps(_agent_doc()))
+    f = AgentFiles("news", tmp_path)
+    assert f.probs("2026-11-16T13:00:00+00:00") == {}                 # not visible to an earlier bar
+    assert f.probs("2026-11-16T14:00:00+00:00") == {"EURUSD": 0.6}
+    assert f.probs("2026-11-16T22:00:00+00:00") == {"EURUSD": 0.6}    # 8 hours later: still in force
+    assert f.probs("2026-11-16T23:00:00+00:00") == {}                 # expired
+    (tmp_path / "atlantis").mkdir()
+    (tmp_path / "atlantis" / "2026-11-16T14.json").write_text(json.dumps(
+        {"made_at": "2026-11-16T15:25:00+00:00", "agent": "atlantis", "summary": "s",
+         "decisions": {"EURUSD": {"approve": True, "reason": "two agents agree"}, "XAUUSD": {"approve": False, "reason": "event risk"}}}))
+    a = Approvals(tmp_path)
+    assert a.decision("2026-11-16T14:00:00+00:00", "EURUSD")[0] is True
+    assert a.decision("2026-11-16T14:00:00+00:00", "XAUUSD")[0] is False
+    assert a.decision("2026-11-16T14:00:00+00:00", "BTCUSD")[0] is False        # not listed = not approved
+    assert a.decision("2026-11-16T15:00:00+00:00", "EURUSD")[0] is False        # an approval is for one bar only
+
+
+def test_log_odds_pool_rewards_agreement_and_cancels_disagreement():
+    from atlantis.quant.learn.knowhow import HedgeWeights
+    h = HedgeWeights(["no_view", "a", "b", "c"])
+    one = h.combine("fx", {"no_view": 0.5, "a": 0.6, "b": None, "c": None}, "logodds")
+    two = h.combine("fx", {"no_view": 0.5, "a": 0.6, "b": 0.6, "c": None}, "logodds")
+    clash = h.combine("fx", {"no_view": 0.5, "a": 0.6, "b": 0.4, "c": None}, "logodds")
+    assert abs(one - 0.6) < 1e-9 and two > one and abs(clash - 0.5) < 1e-9
+    assert h.combine("fx", {"no_view": 0.5, "a": None, "b": None, "c": None}, "logodds") == 0.5

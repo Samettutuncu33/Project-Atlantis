@@ -298,6 +298,7 @@ def step(now: datetime | None = None, write: bool = True) -> dict:
     # ---- Account E: Atlantis Adaptive (multi-asset, self-learning) ---------------------
     checks += adaptive_section(f, until, now, quotes, rows, journal_new, write)
     checks += adaptive_section(f, until, now, quotes, rows, journal_new, write, acct="F", hourly=True)
+    checks += adaptive_section(f, until, now, quotes, rows, journal_new, write, acct="G", hourly=True, team=True)
     plog.end("simulation", "accounts A-F replayed bar by bar")
     plog.start("checks")
     # append-only journal verification
@@ -370,12 +371,14 @@ INTRADAY_DATA_FROM = "2026-01-01"     # hourly history start (frozen)
 INTRADAY_LEARN_FROM = "2026-02-02"    # after ~250 hourly bars of feature warm-up
 INTRADAY_START = "2026-11-09T17:00:00+00:00"   # first hourly bar whose close may trade (account F)
 INTRADAY_HORIZON = 4                  # predictions are about the next 4 hours (pre-registered)
+TEAM_START = "2026-11-16T12:00:00+00:00"       # account G (AI team): first hourly bar it may predict and trade
+TEAM_HORIZON = 24                     # the team predicts the next 24 trading hours (pre-registered)
 ADAPTIVE_LEARN_FROM = "2017-01-01"   # replay history from here when cached (needs 250 bars of warm-up)
 
 
 def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows: dict,
                      journal_new: list, write: bool = True, acct: str = "E",
-                     hourly: bool = False) -> list[dict]:
+                     hourly: bool = False, team: bool = False) -> list[dict]:
     """Account E: daily bars, 5-day predictions. Account F: hourly bars, 4-hour predictions,
     with daily/weekly context features and the hourly AI analyst."""
     from atlantis.adaptive import CLASS_NAMES, run_adaptive
@@ -398,12 +401,35 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
         missing = [c["detail"] for c in checks if c["check"].startswith(("data_unavailable", "hourly_data_unavailable"))]
         if missing:   # a skipped instrument would change the replayed history; stop instead, next run retries
             raise RuntimeError(f"account {acct}: incomplete market data this run, nothing recorded: {missing[:3]}")
-        learn_from = pd.Timestamp(INTRADAY_LEARN_FROM, tz="UTC")
-        live_start = INTRADAY_START
-        res = run_adaptive(data, CAPITAL, start=INTRADAY_LEARN_FROM, trade_from=INTRADAY_START,
-                           controls=CONTROLS(), horizon=INTRADAY_HORIZON, bars_per_day=24.0,
-                           context_daily=daily, llm_root=ROOT / "data" / "llm" / "hourly", llm_key_len=13,
-                           strategy_id="intraday")
+        if team:
+            # Account G: every probability comes from the AI team's files, pooled in log-odds;
+            # the lead agent ("Atlantis") must approve each new or larger position. No warm-up history.
+            from atlantis.intel.agents import Approvals
+            from atlantis.quant.predict.models import team_predictors
+            learn_from = pd.Timestamp(TEAM_START)
+            live_start = TEAM_START
+            # Only the team's own hourly session (ATLANTIS_TEAM=1) may decide NEW bars for G: it writes the
+            # agents' files first. Any other run (the GitHub backup) only replays the bars G already decided,
+            # so it can never decide a bar before the team has looked at it.
+            import os
+            tp = LIVE_DIR / "predictions_team.jsonl"
+            done = [json.loads(x).get("made_at") for x in tp.read_text().splitlines() if x.strip()] if tp.exists() else []
+            done = max((d for d in done if d), default=None)
+            team_end = None if os.environ.get("ATLANTIS_TEAM") == "1" else done
+            if team_end is None and os.environ.get("ATLANTIS_TEAM") != "1":
+                checks.append({"check": "team_account:G", "status": "INFO",
+                               "detail": "not started: G is advanced only by the AI team's hourly session"})
+                return checks
+            res = run_adaptive(data, CAPITAL, start=TEAM_START, end=team_end, trade_from=TEAM_START, controls=CONTROLS(),
+                               horizon=TEAM_HORIZON, bars_per_day=24.0, context_daily=daily, strategy_id="team",
+                               predictors=team_predictors(), pool="logodds", approvals=Approvals())
+        else:
+            learn_from = pd.Timestamp(INTRADAY_LEARN_FROM, tz="UTC")
+            live_start = INTRADAY_START
+            res = run_adaptive(data, CAPITAL, start=INTRADAY_LEARN_FROM, trade_from=INTRADAY_START,
+                               controls=CONTROLS(), horizon=INTRADAY_HORIZON, bars_per_day=24.0,
+                               context_daily=daily, llm_root=ROOT / "data" / "llm" / "hourly", llm_key_len=13,
+                               strategy_id="intraday")
     else:
         missing = [c["detail"] for c in checks if c["check"].startswith("data_unavailable")]
         if missing:   # a skipped instrument would change the replayed history; stop instead, next run retries
@@ -424,14 +450,14 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
     checks.append({"check": f"reconciliation:{acct}", "status": "OK" if not breaks else "ERROR",
                    "detail": "; ".join(breaks) or "engine ledger == independent FIFO recomputation"})
     # prediction ledger: append-only across runs (hash chain must extend the stored one)
-    ppath = LIVE_DIR / ("predictions_intraday.jsonl" if hourly else "predictions.jsonl")
+    ppath = LIVE_DIR / ("predictions_team.jsonl" if team else "predictions_intraday.jsonl" if hourly else "predictions.jsonl")
     stored = [json.loads(x) for x in ppath.read_text().splitlines() if x.strip()] if ppath.exists() else []
     recs = [json.loads(json.dumps(r, default=str)) for r in res.ledger.records]
     if hourly:
         # Hourly warm-up is ~100k records: store a checkpoint (the chain hash just before the
         # live start) plus every live record. The chain still covers the whole history.
         cut = next((i for i, r in enumerate(recs)
-                    if (r.get("made_at") or r.get("resolved_at") or "") >= INTRADAY_START), len(recs))
+                    if (r.get("made_at") or r.get("resolved_at") or "") >= live_start), len(recs))
         tip = recs[cut - 1]["hash"] if cut else "genesis"
         recs = [{"kind": "checkpoint", "hash": tip, "warmup_records": cut}] + recs[cut:]
     ok, detail, merged = extend_ledger(stored, recs)
@@ -465,9 +491,10 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
     t = led.totals
     mdd = M.max_drawdown(pd.concat([pd.Series([CAPITAL]), eq.reset_index(drop=True), pd.Series([equity_live])]))
     rows["accounts"].append({
-        "account": acct, "name": ("Atlantis Intraday · hourly, news + daily/weekly context" if hourly
+        "account": acct, "name": ("Atlantis AI team · research agents decide, Atlantis approves" if team
+                 else "Atlantis Intraday · hourly, news + daily/weekly context" if hourly
                  else "Atlantis Adaptive · multi-asset, self-learning"),
-        "strategy": "intraday" if hourly else "adaptive", "sizing": "half Kelly, edge > cost", "start_capital": CAPITAL, "equity": round(equity_live, 2),
+        "strategy": "team" if team else "intraday" if hourly else "adaptive", "sizing": "half Kelly, edge > cost", "start_capital": CAPITAL, "equity": round(equity_live, 2),
         "return_pct": round((equity_live / CAPITAL - 1) * 100, 2), "cash": round(led.cash, 2),
         "unrealised": round(sum(unreal_by.values()), 2), "realised": round(t["realised_gross"], 2),
         "commissions": round(t["commissions"], 2), "financing": round(t["financing"], 4),
@@ -534,12 +561,42 @@ def adaptive_section(f: Fetcher, until: date, now: datetime, quotes: dict, rows:
                             "recent_hit_rate": round(np.mean([p["correct"] for p in resolved
                                                               if p["correct"] is not None]), 4)
                             if resolved else None})
-    knowhow_path = ROOT / "knowledge" / ("knowhow_intraday.json" if hourly else "knowhow.json")
+    knowhow_path = ROOT / "knowledge" / ("knowhow_team.json" if team else "knowhow_intraday.json" if hourly else "knowhow.json")
+    if team:
+        rows["team"] = team_rows(res, now)
     knowhow_path.parent.mkdir(exist_ok=True)
     if write:
         knowhow_path.write_text(json.dumps({"asof": str(res.equity.index[-1].date()), **res.hedge.to_dict(),
                                         "lessons": res.lessons}, indent=1, default=str))
     return checks
+
+
+def team_rows(res, now: datetime) -> list[dict]:
+    """The AI team's latest view per instrument: each agent's probability, the pooled result, and
+    Atlantis's decision. Read from the prediction ledger and the agents' own files."""
+    from atlantis.instruments.spec import universe
+    from atlantis.intel.agents import LEAD, RESEARCH_AGENTS, AgentFiles, Approvals
+    names = universe().get("names", {})
+    preds = res.ledger.predictions()
+    if not preds:
+        return []
+    last = max(p["made_at"] for p in preds)
+    appr, out = Approvals(), []
+    why = {p["symbol"]: p["reason"] for p in res.proposals if p["ts"] == last}
+    for p in (x for x in preds if x["made_at"] == last):
+        ok, note = appr.decision(pd.Timestamp(last), p["symbol"])
+        row = {"bar": last, "symbol": p["symbol"], "name": names.get(p["symbol"], p["symbol"])}
+        for a in RESEARCH_AGENTS:
+            row[a] = p["predictor_probs"].get(f"agent_{a}")
+        row.update(pooled=p["p_raw"], final=p["p_final"], atlantis="approved" if ok else "not approved",
+                   atlantis_reason=note, outcome=why.get(p["symbol"], ""))
+        out.append(row)
+    summaries = []
+    for a in RESEARCH_AGENTS + (LEAD,):
+        key, doc = AgentFiles(a).in_force(pd.Timestamp(last))
+        summaries.append({"bar": last, "symbol": "", "name": f"[{a}] file {key or 'none in force'}",
+                          "atlantis_reason": doc.get("summary", "") if doc else "", "outcome": ""})
+    return sorted(out, key=lambda r: -abs((r["final"] or 0.5) - 0.5)) + summaries
 
 
 def agents_rows(rows: dict, now: datetime) -> list[dict]:
@@ -594,6 +651,19 @@ def agents_rows(rows: dict, now: datetime) -> list[dict]:
     out.append({"agent": "Research loop (researcher → planner → tester)", "role": "one tested improvement idea per week",
                 "last": r.stem[:10] if r else None, "hours_ago": None,
                 "did": f"latest: {r.relative_to(ROOT)}" if r else "first run Saturday 10:23 UTC"})
+    from atlantis.intel.agents import LEAD, RESEARCH_AGENTS, VALID_HOURS
+    roles = {"news": "team: news and posts reported in the news (every 6 h)", "history": "team: what similar past setups did (daily)",
+             "papers": "team: published research and its maths (weekly)", "scanner": "team: catalysts from finance sites (daily)",
+             LEAD: "team lead: reads every summary, approves or refuses each new trade (hourly)"}
+    for a in RESEARCH_AGENTS + (LEAD,):
+        fl = latest(f"data/agents/{a}/*.json")
+        dj = json.loads(fl.read_text()) if fl else {}
+        n = len(dj.get("decisions", {})) if a == LEAD else len(dj.get("probs", {}))
+        out.append({"agent": "Atlantis (team lead)" if a == LEAD else f"Team · {a}", "role": roles[a],
+                    "last": dj.get("made_at"), "hours_ago": age(dj.get("made_at")),
+                    "did": (f"file {fl.stem}: " + (f"{sum(1 for d in dj['decisions'].values() if d.get('approve'))} approved of {n} reviewed"
+                                                   if a == LEAD else f"{n} probabilities, {len(dj.get('evidence', []))} sourced items")
+                            + f" · {str(dj.get('summary', ''))[:140]}") if fl else "no file yet"})
     return out
 
 

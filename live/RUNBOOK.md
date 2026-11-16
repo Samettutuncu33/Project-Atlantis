@@ -5,16 +5,22 @@
      news brief with web search + daily AI analyst (account E) once per completed daily bar; hourly AI analyst (account F) at most every 5 hours.
      Every call's real cost goes to `live/api_spend.jsonl`; calls stop when the month would pass $18.
   2. `python -m atlantis.live step` (accounts A–F), then `live/STATUS.md` (readable on GitHub), then commit.
-- **Claude plan session: ON, page sync only, every 3 hours** (minute 02 of 00, 03, 06 ... 21 UTC). Do ONLY this, briefly:
-  1. `git pull origin main`.
-  2. Control Panel: step 2 below (`scripts/sync_controls.py`), then commit and push `live/controls.jsonl` if it changed.
-  3. If it is Monday to Friday and the `run_utc` in `live/out/run.json` is more than 2 hours old, ask GitHub to start a run:
-     `gh api -X POST repos/Samettutuncu33/Project-Atlantis/actions/workflows/hourly-simulation.yml/dispatches -f ref=main`.
-     If GitHub refuses, say so in your report and carry on; do not retry and do not run the simulation yourself.
-  4. Upload `live/out/live.json` to the page and set `status/latest` (step 6 below). Skip if `run_utc` equals the page's current one.
-  5. Report in 3 lines: run time shown on the page, whether a GitHub run was requested, any failed check.
-  Never run `python -m atlantis.live step`. Never write news or forecast files (the API runner in GitHub Actions does).
-  Do NOT report stages to the command view (pipeline/run, activity): the page replays the real run from live.json.
+- **Claude plan session: the AI TEAM, every hour** (minute 02). This is the main runner. Each hour, in this order:
+  1. `git pull origin main`; `pip install -q -e . lightgbm scikit-learn` if needed.
+  2. Control Panel: step 2 below (`scripts/sync_controls.py`).
+  3. `python scripts/team_brief.py > /tmp/team_brief.txt` and read it. If it prints SKIP, go to step 6.
+  4. For every research agent marked DUE (news, history, papers, scanner), run that agent (`.claude/agents/atlantis-team-<name>.md`)
+     with the briefing; it writes and validates `data/agents/<name>/<key>.json`. Run at most the DUE ones; never rewrite an existing file.
+  5. Run the lead, `atlantis-team-lead` ("Atlantis"): it reads the briefing again (`python scripts/team_brief.py` shows the new files),
+     writes and validates `data/agents/atlantis/<key>.json` with its approvals.
+  6. `ATLANTIS_TEAM=1 python -m atlantis.live step` (exit code 2 = a check failed; still publish). Only this session sets ATLANTIS_TEAM=1,
+     so only this session decides new bars for account G. Then `python scripts/write_status.py`.
+  7. Commit `live/ knowledge/ data/agents/ data/llm/ data/raw/dukascopy_live/` as `team run <UTC time>`, `git pull --rebase origin main`, push.
+  8. Upload `live/out/live.json` to the page and set `status/latest` (step 6 below).
+  9. Report in 5 lines: bar decided, agents that ran, what Atlantis approved or refused, G's equity and new fills, any failed check.
+  Rules: SIMULATION ONLY. Never call any broker, order, account, balance or position tool. Never edit code, risk policy, or past files in
+  `data/agents/`, `live/journal.jsonl`, `live/predictions*.jsonl`. Do NOT report stages to the command view (the page replays the run from live.json).
+  If the simulation step crashes, report the error and stop; do not retry more than once.
 
 # Scheduled live-simulation run
 

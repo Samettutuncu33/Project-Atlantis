@@ -113,11 +113,21 @@ class HedgeWeights:
                 self.directional[cls][p] = self.directional[cls].get(p, 0) + 1
                 self.hits[cls][p] = self.hits[cls].get(p, 0) + int((prob > 0.5) == (outcome > 0.5))
 
-    def combine(self, cls: str, probs: dict[str, float | None]) -> float:
+    def combine(self, cls: str, probs: dict[str, float | None], pool: str = "linear") -> float:
+        """linear: weighted average of probabilities. logodds: weighted SUM of log-odds, so independent
+        sources that agree move the result further from 0.5 and sources that disagree cancel
+        (logarithmic opinion pool; Genest & Zidek 1986). Abstaining sources contribute nothing."""
         w = self.weights(cls)
         avail = [p for p in self.predictors if probs.get(p) is not None]
         z = sum(w[p] for p in avail)
-        return float(sum(w[p] * probs[p] for p in avail) / z) if z > 0 else 0.5
+        if z <= 0:
+            return 0.5
+        if pool == "logodds":
+            n = len(self.predictors)
+            lo = sum(n * w[p] * math.log(min(max(probs[p], 0.02), 0.98) / (1 - min(max(probs[p], 0.02), 0.98)))
+                     for p in avail)
+            return float(1 / (1 + math.exp(-max(-4.0, min(4.0, lo)))))
+        return float(sum(w[p] * probs[p] for p in avail) / z)
 
     def to_dict(self) -> dict:
         return {"predictors": self.predictors, "eta": {c: self.eta_for(c) for c in self.rounds},

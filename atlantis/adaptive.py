@@ -40,6 +40,7 @@ from atlantis.quant.predict.models import LLMAnalyst, default_predictors, traini
 
 HORIZON = 5           # trading bars; the predictions are about the next week
 STRATEGY_ID = "adaptive"
+UNPROVEN_N, UNPROVEN_CAP = 200, 0.60   # AI team: no pooled probability beyond 40-60% before 200 scored predictions
 CLASS_NAMES = {"fx_spot": "FX", "crypto_fx": "Crypto", "stock_cfd": "Stocks", "index_cfd": "Indices",
                "commodity_cfd": "Oil", "metal_cfd": "Gold"}
 
@@ -71,7 +72,8 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
                  trade_from: str | None = None, controls=None, horizon: int = HORIZON,
                  bars_per_day: float = 1.0, context_daily: dict | None = None,
                  llm_root: Path | None = None, llm_key_len: int = 10,
-                 strategy_id: str = STRATEGY_ID) -> AdaptiveResult:
+                 strategy_id: str = STRATEGY_ID, predictors: list | None = None,
+                 pool: str = "linear", approvals=None) -> AdaptiveResult:
     """`trade_from`: before this date the account predicts and learns but never trades
     (warm-up of the know-how on real outcomes); equity stays at `capital`."""
     instruments = instruments or {s: make_instrument(s) for s in data}
@@ -83,8 +85,9 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
         feats = add_context(feats, build_panels(context_daily))
         cols += CONTEXT
     labels = forward_labels(panels, horizon)
-    predictors = default_predictors()
-    for i, p in enumerate(predictors):
+    custom = predictors is not None
+    predictors = list(predictors) if custom else default_predictors()
+    for i, p in enumerate(predictors if not custom else []):
         if hasattr(p, "cols"):
             p.cols = cols
         if isinstance(p, LLMAnalyst):
@@ -169,7 +172,11 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
         for i, sym in enumerate(today.index):
             inst = instruments[sym]
             probs = {n: (None if raw[n][i] is None else float(raw[n][i])) for n in names}
-            p_raw = hedge.combine(inst.asset_class, probs)
+            p_raw = hedge.combine(inst.asset_class, probs, pool)
+            if pool == "logodds" and len(resolved_p) < UNPROVEN_N:
+                # Summing log-odds treats the agents as independent; they are not (they read the same market).
+                # Until the team has UNPROVEN_N scored predictions to calibrate on, cap its confidence.
+                p_raw = min(max(p_raw, 1 - UNPROVEN_CAP), UNPROVEN_CAP)
             p_final = calib(p_raw)
             lab = labels.loc[(t, sym)] if (t, sym) in labels.index else None
             outcome_at = lab["known_at"] if lab is not None else None
@@ -190,10 +197,18 @@ def run_adaptive(data: dict[str, pd.DataFrame], capital: float = 200.0, start: s
             pp = propose(sym, p_final, float(today.at[sym, "vol20"]), horizon, equity, usd_per_unit,
                          spread, mids[sym], inst, horizon_days=horizon / bars_per_day * 7 / 5)
             cur = broker.ledger.position(sym)
+            note = ""
+            if approvals is not None and pp.target_qty != 0 and abs(pp.target_qty) > abs(cur) * (1 if (pp.target_qty > 0) == (cur > 0) else 0):
+                ok, note = approvals.decision(t, sym)      # opening or enlarging needs the lead agent's approval
+                if not ok:
+                    props_out.append({"ts": ts, "symbol": sym, "p": round(p_final, 4), "target": cur, "current": cur,
+                                      "edge_usd": round(pp.edge_usd, 2), "cost_usd": round(pp.cost_usd, 2),
+                                      "reason": f"{pp.reason}; NOT TRADED: {note}"})
+                    continue
             delta = pp.target_qty - cur
             props_out.append({"ts": ts, "symbol": sym, "p": round(p_final, 4), "target": pp.target_qty,
                               "current": cur, "edge_usd": round(pp.edge_usd, 2),
-                              "cost_usd": round(pp.cost_usd, 2), "reason": pp.reason})
+                              "cost_usd": round(pp.cost_usd, 2), "reason": pp.reason + (f"; {note}" if note else "")})
             if abs(delta) < inst.min_size / 2 or (pp.target_qty and abs(delta) < 0.25 * abs(pp.target_qty)):
                 continue                       # buffer: don't pay commissions for tiny resizes
             for o in broker.orders:

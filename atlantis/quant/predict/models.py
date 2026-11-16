@@ -148,6 +148,28 @@ class LLMAnalyst(Predictor):
         raise NotImplementedError("use predict_symbols(ts, symbols)")
 
 
+class FileAgent(Predictor):
+    """One research agent of the AI team (account G): probabilities come from that agent's dated,
+    validated file in force for the bar; no file in force = abstain (None). Forward-only."""
+
+    def __init__(self, agent: str, root=None):
+        from atlantis.intel.agents import AgentFiles
+        self.name = f"agent_{agent}"
+        self.files = AgentFiles(agent, root)
+
+    def predict_symbols(self, ts, symbols) -> list:
+        d = self.files.probs(ts)
+        return [float(d[s]) if s in d else None for s in symbols]
+
+    def predict(self, X):
+        raise NotImplementedError("use predict_symbols(ts, symbols)")
+
+
+def team_predictors(root=None) -> list[Predictor]:
+    from atlantis.intel.agents import RESEARCH_AGENTS
+    return [NoView()] + [FileAgent(a, root) for a in RESEARCH_AGENTS]
+
+
 def default_predictors() -> list[Predictor]:
     return [NoView(), TrendRule(), BreakoutRule(), ReversalRule(), Logistic(), GradientBoosting(),
             LLMAnalyst()]

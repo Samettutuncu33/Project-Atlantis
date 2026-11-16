@@ -6,7 +6,7 @@
   color-scheme: dark;
   --bg: #000000; --panel: #0d0f12; --panel2: #14171c; --fg: #eef1f5; --muted: #8b939e; --line: #23272e;
   --up: #4da3ff; --down: #ff5c5c; --pause: #f2b13d; --accent: #9db8ff; --stop: #ff5c5c;
-  --s1: #4da3ff; --s2: #f2b13d; --s3: #c38bff; --s4: #ff8fb1; --s5: #e8e8e8; --s6: #6fd3e8;
+  --s1: #4da3ff; --s2: #f2b13d; --s3: #c38bff; --s4: #ff8fb1; --s5: #e8e8e8; --s6: #6fd3e8; --s7: #ffd166;
   --font-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
@@ -146,7 +146,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
 <div class="wrap">
   <header style="display:grid;gap:6px">
     <h1>Atlantis Live</h1>
-    <p class="muted"><span class="sim">SIMULATION</span> Six virtual $200 paper accounts with Saxo-calibrated costs. Prices come from Dukascopy (bid/ask), not Saxo. No real money or broker is involved.</p>
+    <p class="muted"><span class="sim">SIMULATION</span> Seven virtual $200 paper accounts with Saxo-calibrated costs. Prices come from Dukascopy (bid/ask), not Saxo. No real money or broker is involved.</p>
     <p class="fresh" id="fresh" hidden></p>
     <p class="muted" id="runline">Waiting for the latest run…</p>
   </header>
@@ -217,6 +217,14 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
 
   <section id="accounts"><h2>Accounts</h2><div class="cards" id="cards"></div></section>
 
+  <section id="team">
+    <h2>AI team (account G): what each agent says and what Atlantis approved</h2>
+    <p class="muted" id="team-line" style="margin-bottom:8px">No team decision in this run yet.</p>
+    <div class="wrapx"><table id="t-team"></table></div>
+    <ul class="hist" id="team-notes" style="margin-top:8px"></ul>
+    <p class="muted" style="margin-top:6px">Each number is that agent's probability that the price is higher 24 trading hours later; blank = the agent has no evidence. "Pooled" combines them: agreement moves it away from 50%, disagreement cancels. A new position needs Atlantis's approval, and the risk checks still apply after that. Simulated.</p>
+  </section>
+
   <section id="scorecard">
     <h2>Scorecard since the live start <span class="muted">(simulated; too early to tell skill from luck)</span></h2>
     <div class="wrapx"><table id="t-score"></table></div>
@@ -226,7 +234,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
   <section id="portfolio">
     <h2>Portfolio: what you hold</h2>
     <div class="pf-bar" role="group" aria-label="Show account">
-      <button type="button" class="pf on" data-acct="">All</button><button type="button" class="pf" data-acct="A">A</button><button type="button" class="pf" data-acct="B">B</button><button type="button" class="pf" data-acct="C">C</button><button type="button" class="pf" data-acct="D">D</button><button type="button" class="pf" data-acct="E">E</button><button type="button" class="pf" data-acct="F">F</button>
+      <button type="button" class="pf on" data-acct="">All</button><button type="button" class="pf" data-acct="A">A</button><button type="button" class="pf" data-acct="B">B</button><button type="button" class="pf" data-acct="C">C</button><button type="button" class="pf" data-acct="D">D</button><button type="button" class="pf" data-acct="E">E</button><button type="button" class="pf" data-acct="F">F</button><button type="button" class="pf" data-acct="G">G</button>
     </div>
     <div class="wrapx"><table id="t-port"></table></div>
     <p class="muted" style="margin-top:6px">Cost = what was paid at entry. Value = what closing now at the bid/ask would be worth. Share = position size compared with the account's equity; above 100% means leverage.</p>
@@ -280,7 +288,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
   const pct = (v, d = 1) => (v == null || isNaN(v)) ? '' : (v * 100).toFixed(d) + '%';
   const num = (v) => (v == null || isNaN(v)) ? '' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 5 });
   const ts = (s) => s ? String(s).replace('T', ' ').replace(/\.\d+/, '').replace(/(:00)?\+00:00$/, '').replace('Z', '') : '';
-  const color = (a) => `var(--s${'ABCDEF'.indexOf(a) + 1})`;
+  const color = (a) => `var(--s${'ABCDEFG'.indexOf(a) + 1})`;
   const label = { RUNNING: 'Running', PAUSED: 'Paused', FLATTEN: 'Stopped' };
 
   function table(el, cols, rows, empty = 'None yet.') {
@@ -340,18 +348,25 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
   setInterval(freshness, 60000);
   function scorecard(b) {
     const rows = (b.accounts || []).map((a) => {
-      const k = (b.knowhow || []).filter((r) => r.account === a.account && r.predictor === 'llm_analyst');
+      const k = (b.knowhow || []).filter((r) => r.account === a.account && (r.predictor === 'llm_analyst' || String(r.predictor).startsWith('agent_')));
       const calls = k.reduce((n, r) => n + (r.directional_calls || 0), 0), right = k.reduce((n, r) => n + (r.correct || 0), 0);
       return { ...a, costs: (a.commissions || 0) + (a.financing || 0) + (a.conversion_fees || 0), calls, right };
     });
     table($('t-score'), [['Acct', (r) => r.account, 'l'], ['Strategy', (r) => r.name, 'l'], ['Equity', (r) => usd(r.equity)],
       ['Return', (r) => [`${r.return_pct >= 0 ? '+' : ''}${Number(r.return_pct).toFixed(2)}%`, r.return_pct > 0 ? 'pos' : r.return_pct < 0 ? 'neg' : '']],
       ['Trades', (r) => r.fills], ['Costs paid', (r) => usd(r.costs)], ['Worst drop', (r) => `${Number(r.max_drawdown_pct).toFixed(1)}%`],
-      ['AI calls right', (r) => r.calls ? `${r.right} of ${r.calls} (${Math.round(100 * r.right / r.calls)}%)` : (/E|F/.test(r.account) ? 'none scored yet' : 'no AI')]], rows);
+      ['AI calls right', (r) => r.calls ? `${r.right} of ${r.calls} (${Math.round(100 * r.right / r.calls)}%)` : (/E|F|G/.test(r.account) ? 'none scored yet' : 'no AI')]], rows);
   }
   function render(b) {
     bundle = b;
     showRun(b); freshness(); scorecard(b);
+    const team = (b.team || []).filter((r) => r.symbol), notes = (b.team || []).filter((r) => !r.symbol);
+    const pc = (v) => (v == null ? '' : `${Math.round(v * 100)}%`);
+    $('team-line').textContent = team.length ? `Decision for the hourly bar ${ts(team[0].bar)} UTC · ${team.filter((r) => r.atlantis === 'approved').length} of ${team.length} instruments approved by Atlantis` : 'No team decision in this run yet. Account G starts with the first hourly team session.';
+    table($('t-team'), [['Instrument', (r) => r.name, 'l'], ['News', (r) => pc(r.news)], ['History', (r) => pc(r.history)], ['Papers', (r) => pc(r.papers)], ['Scanner', (r) => pc(r.scanner)],
+      ['Pooled', (r) => [pc(r.final), r.final > 0.5 ? 'pos' : r.final < 0.5 ? 'neg' : '']], ['Atlantis', (r) => [r.atlantis, r.atlantis === 'approved' ? 'pos' : 'muted'], 'l'],
+      ['Why', (r) => String(r.outcome || r.atlantis_reason || '').slice(0, 140), 'l']], team, 'No team decision yet.');
+    $('team-notes').replaceChildren(...notes.map((r) => { const li = document.createElement('li'); const a = document.createElement('span'); a.className = 'tag'; a.textContent = r.name; const t = document.createElement('span'); t.textContent = r.atlantis_reason || 'no summary'; li.append(a, t); return li; }));
     const run = (b.run || [])[0] || {};
     $('runline').textContent = `Last run ${ts(run.run_utc)} UTC · last completed daily bar ${run.last_completed_bar || '—'} · live start ${run.live_start || '—'} · ${run.live_started ? 'decisions after every daily bar' : 'first decision after the first live bar closes'}`;
     const ch = b.checks || []; const bad = ch.filter((c) => c.status !== 'OK' && c.status !== 'INFO');
@@ -669,7 +684,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
 
     // Small lookup tools over the loaded run data (the full file is too large to send with every question).
     const TABLES = ['accounts', 'positions', 'fills', 'trades_summary', 'plan', 'predictions', 'knowhow', 'lessons', 'calibration', 'projection',
-      'intel_summary', 'intel_items', 'intel_calendar', 'intel_views', 'checks', 'pipeline', 'activity', 'agents', 'prices'];
+      'intel_summary', 'intel_items', 'intel_calendar', 'intel_views', 'checks', 'pipeline', 'activity', 'agents', 'prices', 'team'];
     const tidy = (r) => Object.fromEntries(Object.entries(r).filter(([k, v]) => v !== null && v !== '' && k !== 'hash' && k !== 'label' && k !== 'data_source')
       .map(([k, v]) => [k, typeof v === 'number' && !Number.isInteger(v) ? +v.toPrecision(7) : v]));
     const tools = [
@@ -681,7 +696,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
             trading_mode: current, checks_total: ch.length, checks_failed: bad.map((c) => `${c.check}: ${c.detail}`.slice(0, 200)),
             accounts: (b.accounts || []).map(tidy), tables_available: TABLES.filter((t) => (b[t] || []).length) };
         } },
-      { name: 'lookup', description: `Rows of one table from the latest run. Tables: ${TABLES.join(', ')}. fills = every simulated trade; positions = open positions; plan = current signal and pending orders per instrument; predictions/knowhow/lessons = what the models predicted and learned; intel_* = dated news brief; pipeline = stages of the last run; prices = prices used. Filter by account (A-F) and/or symbol; newest rows are returned first where rows have a time.`,
+      { name: 'lookup', description: `Rows of one table from the latest run. Tables: ${TABLES.join(', ')}. team = the AI team's latest view per instrument (each agent's probability, pooled result, Atlantis's approval and reason) plus each agent's summary; fills = every simulated trade; positions = open positions; plan = current signal and pending orders per instrument; predictions/knowhow/lessons = what the models predicted and learned; intel_* = dated news brief; pipeline = stages of the last run; prices = prices used. Filter by account (A-F) and/or symbol; newest rows are returned first where rows have a time.`,
         inputSchema: { type: 'object', properties: { table: { type: 'string', enum: TABLES }, account: { type: 'string', description: 'A, B, C, D, E or F' },
           symbol: { type: 'string', description: 'e.g. EURUSD, JPNIDXJPY, or part of the name' }, limit: { type: 'integer', minimum: 1, maximum: 40 } }, required: ['table'] },
         execute: ({ table, account, symbol, limit }) => {
@@ -711,7 +726,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
     ];
     $('ask-confirm-no').onclick = () => { $('ask-confirm').hidden = true; };
 
-    const RULES = `You are "Atlantis", the assistant inside the Atlantis Live dashboard. Atlantis is a paper-trading SIMULATION: six virtual $200 accounts (A-D fixed-rule baselines, E daily self-learning, F hourly self-learning) traded on Dukascopy prices with Saxo-calibrated costs. No real money, broker or orders exist.
+    const RULES = `You are "Atlantis", the assistant inside the Atlantis Live dashboard. Atlantis is a paper-trading SIMULATION: seven virtual $200 accounts (A-D fixed-rule baselines, E daily self-learning, F hourly self-learning, G the AI team: research agents for news, history, papers and catalysts, pooled mathematically, with the lead agent approving each new position) traded on Dukascopy prices with Saxo-calibrated costs. No real money, broker or orders exist.
 Rules:
 - Answer ONLY from the tools' data. Call "overview" first for general questions and "lookup" for details. If the data does not contain the answer, say so plainly. Never invent numbers, trades, news or forecasts.
 - The data is the latest run uploaded to this page, not live prices. Mention the run time when the answer depends on freshness (compare latest_run_utc with now_utc).

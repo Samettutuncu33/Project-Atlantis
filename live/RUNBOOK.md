@@ -1,14 +1,20 @@
 # Atlantis runs: who does what (Claude API mode, from 9 Nov 2026)
 
-- **GitHub Actions, every hour at :25, Mon–Fri** (no Saxo trading hours at weekends) (`.github/workflows/hourly-simulation.yml`), no Claude plan needed:
+- **GitHub Actions, scheduled twice an hour (minutes 07 and 37), Mon–Fri** (no Saxo trading hours at weekends; GitHub often starts late or skips) (`.github/workflows/hourly-simulation.yml`), no Claude plan needed:
   1. AI agents through the Claude API (repo secret `ANTHROPIC_API_KEY`, `scripts/ai_api_runner.py`):
-     news brief with web search + daily AI analyst (account E) at 00 UTC; hourly AI analyst (account F) at 00/06/12/18 UTC.
+     news brief with web search + daily AI analyst (account E) once per completed daily bar; hourly AI analyst (account F) at most every 5 hours.
      Every call's real cost goes to `live/api_spend.jsonl`; calls stop when the month would pass $18.
   2. `python -m atlantis.live step` (accounts A–F), then `live/STATUS.md` (readable on GitHub), then commit.
-- **AI runner session on the Claude plan: ON, page sync only** (00:02 / 06:02 / 12:02 / 18:02 UTC). Do ONLY these
-  "Every run" steps: 0, 1, 2 (Control Panel -> live/controls.jsonl), 5 (commit/push controls), 6 (upload live.json +
-  status/latest), 8 (short report). SKIP steps 3, 4 and the whole "00:02 (daily)" section: the API runner in GitHub
-  Actions writes all news and forecast files. Never run `python -m atlantis.live step`. Keep it short.
+- **Claude plan session: ON, page sync only, every 3 hours** (minute 02 of 00, 03, 06 ... 21 UTC). Do ONLY this, briefly:
+  1. `git pull origin main`.
+  2. Control Panel: step 2 below (`scripts/sync_controls.py`), then commit and push `live/controls.jsonl` if it changed.
+  3. If it is Monday to Friday and the `run_utc` in `live/out/run.json` is more than 2 hours old, ask GitHub to start a run:
+     `gh api -X POST repos/Samettutuncu33/Project-Atlantis/actions/workflows/hourly-simulation.yml/dispatches -f ref=main`.
+     If GitHub refuses, say so in your report and carry on; do not retry and do not run the simulation yourself.
+  4. Upload `live/out/live.json` to the page and set `status/latest` (step 6 below). Skip if `run_utc` equals the page's current one.
+  5. Report in 3 lines: run time shown on the page, whether a GitHub run was requested, any failed check.
+  Never run `python -m atlantis.live step`. Never write news or forecast files (the API runner in GitHub Actions does).
+  Do NOT report stages to the command view (pipeline/run, activity): the page replays the real run from live.json.
 
 # Scheduled live-simulation run
 

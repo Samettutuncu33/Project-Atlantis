@@ -75,6 +75,8 @@ a { color: var(--accent); }
 .pf.on { border-color: var(--accent); color: var(--accent); }
 tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
 
+.fresh { font-size: 13.5px; font-weight: 600; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); }
+.fresh.stale { border-color: var(--pause); color: var(--pause); }
 /* ---- Ask Atlantis (chat) ---- */
 .ask { display: grid; gap: 8px; }
 .ask-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
@@ -145,6 +147,7 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
   <header style="display:grid;gap:6px">
     <h1>Atlantis Live</h1>
     <p class="muted"><span class="sim">SIMULATION</span> Six virtual $200 paper accounts with Saxo-calibrated costs. Prices come from Dukascopy (bid/ask), not Saxo. No real money or broker is involved.</p>
+    <p class="fresh" id="fresh" hidden></p>
     <p class="muted" id="runline">Waiting for the latest run…</p>
   </header>
 
@@ -213,6 +216,12 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
   </section>
 
   <section id="accounts"><h2>Accounts</h2><div class="cards" id="cards"></div></section>
+
+  <section id="scorecard">
+    <h2>Scorecard since the live start <span class="muted">(simulated; too early to tell skill from luck)</span></h2>
+    <div class="wrapx"><table id="t-score"></table></div>
+    <p class="muted" style="margin-top:6px">"AI calls right" counts the AI analyst's up/down forecasts that have been scored. Around 50% is what guessing gives; it has to stay clearly above that, after costs, over hundreds of forecasts before it means anything.</p>
+  </section>
 
   <section id="portfolio">
     <h2>Portfolio: what you hold</h2>
@@ -321,9 +330,28 @@ tr.total td { font-weight: 600; border-top: 1px solid var(--muted); }
 
   let bundle = null;
   let showRun = () => {};      // set once the command view is built
+  function freshness() {
+    const run = bundle && (bundle.run || [])[0]; if (!run || !run.run_utc) return;
+    const h = (Date.now() - new Date(run.run_utc)) / 3600000; const el = $('fresh');
+    const age = h < 1 ? `${Math.max(1, Math.round(h * 60))} min` : h < 48 ? `${h.toFixed(1)} hours` : `${Math.round(h / 24)} days`;
+    el.hidden = false; el.className = `fresh${h > 3 ? ' stale' : ''}`;
+    el.textContent = `Data from the run at ${ts(run.run_utc)} UTC · ${age} old` + (h > 3 ? ' · newer runs may exist on GitHub but have not been uploaded to this page yet' : '');
+  }
+  setInterval(freshness, 60000);
+  function scorecard(b) {
+    const rows = (b.accounts || []).map((a) => {
+      const k = (b.knowhow || []).filter((r) => r.account === a.account && r.predictor === 'llm_analyst');
+      const calls = k.reduce((n, r) => n + (r.directional_calls || 0), 0), right = k.reduce((n, r) => n + (r.correct || 0), 0);
+      return { ...a, costs: (a.commissions || 0) + (a.financing || 0) + (a.conversion_fees || 0), calls, right };
+    });
+    table($('t-score'), [['Acct', (r) => r.account, 'l'], ['Strategy', (r) => r.name, 'l'], ['Equity', (r) => usd(r.equity)],
+      ['Return', (r) => [`${r.return_pct >= 0 ? '+' : ''}${Number(r.return_pct).toFixed(2)}%`, r.return_pct > 0 ? 'pos' : r.return_pct < 0 ? 'neg' : '']],
+      ['Trades', (r) => r.fills], ['Costs paid', (r) => usd(r.costs)], ['Worst drop', (r) => `${Number(r.max_drawdown_pct).toFixed(1)}%`],
+      ['AI calls right', (r) => r.calls ? `${r.right} of ${r.calls} (${Math.round(100 * r.right / r.calls)}%)` : (/E|F/.test(r.account) ? 'none scored yet' : 'no AI')]], rows);
+  }
   function render(b) {
     bundle = b;
-    showRun(b);
+    showRun(b); freshness(); scorecard(b);
     const run = (b.run || [])[0] || {};
     $('runline').textContent = `Last run ${ts(run.run_utc)} UTC · last completed daily bar ${run.last_completed_bar || '—'} · live start ${run.live_start || '—'} · ${run.live_started ? 'decisions after every daily bar' : 'first decision after the first live bar closes'}`;
     const ch = b.checks || []; const bad = ch.filter((c) => c.status !== 'OK' && c.status !== 'INFO');

@@ -1,8 +1,12 @@
 at,agent,level,msg
-2026-11-17T08:32:52+00:00,learning,info,"Account E: 48,500 predictions scored so far, recent hit rate 39%"
-2026-11-17T08:32:52+00:00,learning,info,"Account F: 77,663 predictions scored so far, recent hit rate 41%"
-2026-11-17T08:32:52+00:00,checks,info,Run finished: 77 of 77 checks passed
-2026-11-17T08:32:51+00:00,analyst,info,"AI analyst (hourly, account F): 15 predictions for hour 2026-11-17T07 · track record: 108 predictions scored, hit rate 36%"
+2026-11-17T18:04:07+00:00,learning,info,"Account E: 48,500 predictions scored so far, recent hit rate 39%"
+2026-11-17T18:04:07+00:00,learning,info,"Account F: 77,833 predictions scored so far, recent hit rate 41%"
+2026-11-17T18:04:07+00:00,checks,info,Run finished: 77 of 77 checks passed
+2026-11-17T18:04:05+00:00,analyst,info,"AI analyst (hourly, account F): 17 predictions for hour 2026-11-17T16 · track record: 123 predictions scored, hit rate 35%"
+2026-11-17T16:00:00+00:00,broker,info,"Account F bought 0.6 Nikkei 225 index (Japan) at 58,409.7 (simulated)"
+2026-11-17T15:00:00+00:00,broker,info,"Account F sold 0.6 Nikkei 225 index (Japan) at 59,162.4 (simulated)"
+2026-11-17T12:00:00+00:00,broker,info,"Account F sold 0.2 Nikkei 225 index (Japan) at 59,264.3 (simulated)"
+2026-11-17T10:00:00+00:00,broker,info,"Account F bought 0.8 Nikkei 225 index (Japan) at 58,697.5 (simulated)"
 2026-11-17T03:00:00+00:00,broker,info,"Account F sold 0.8 Nikkei 225 index (Japan) at 58,969.5 (simulated)"
 2026-11-17T01:00:00+00:00,broker,info,"Account F bought 0.8 Nikkei 225 index (Japan) at 58,999.5 (simulated)"
 2026-11-17T00:33:16+00:00,analyst,info,"AI analyst (daily, account E): 12 predictions for bar 2026-11-16 · track record: 0 predictions scored, none scored yet"

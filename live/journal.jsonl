@@ -28,3 +28,7 @@
 {"account": "F", "ts": "2026-11-17T00:00:00+00:00", "symbol": "JPNIDXJPY", "side": "SELL", "qty": 0.7, "price": 59160.366}
 {"account": "F", "ts": "2026-11-17T01:00:00+00:00", "symbol": "JPNIDXJPY", "side": "BUY", "qty": 0.8, "price": 58999.532}
 {"account": "F", "ts": "2026-11-17T03:00:00+00:00", "symbol": "JPNIDXJPY", "side": "SELL", "qty": 0.8, "price": 58969.468}
+{"account": "F", "ts": "2026-11-17T10:00:00+00:00", "symbol": "JPNIDXJPY", "side": "BUY", "qty": 0.8, "price": 58697.481}
+{"account": "F", "ts": "2026-11-17T12:00:00+00:00", "symbol": "JPNIDXJPY", "side": "SELL", "qty": 0.20000000000000007, "price": 59264.315}
+{"account": "F", "ts": "2026-11-17T15:00:00+00:00", "symbol": "JPNIDXJPY", "side": "SELL", "qty": 0.6, "price": 59162.366}
+{"account": "F", "ts": "2026-11-17T16:00:00+00:00", "symbol": "JPNIDXJPY", "side": "BUY", "qty": 0.6, "price": 58409.685}

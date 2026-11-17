@@ -1,6 +1,11 @@
 agent,role,last,hours_ago,did
-News & market intelligence,daily brief + hourly breaking-news flash,2026-11-14T01:46:07+00:00,62.7,"daily brief 2026-11-13: 12 dated news items, 2 calendar events; no breaking-news flash yet"
-"AI analyst (daily, account E)","reads charts + news, predicts 5 days ahead",2026-11-14T01:47:36+00:00,62.6,"20 predictions for bar 2026-11-13 · track record: 0 predictions scored, none scored yet"
-"AI analyst (hourly, account F)",reads hourly charts + daily/weekly context + news,2026-11-16T16:25:09+00:00,0.0,"19 predictions for hour 2026-11-16T15 · track record: 74 predictions scored, hit rate 51%"
-Executor (scheduled run),"runs the simulation, checks, publishes, commits",2026-11-16T16:25:10+00:00,0.0,"accounts A–F replayed and reconciled; fills so far: A 0, B 4, C 0, D 4, E 2, F 17"
+News & market intelligence,daily brief + hourly breaking-news flash,2026-11-17T00:32:24+00:00,0.0,"daily brief 2026-11-16: 7 dated news items, 4 calendar events; no breaking-news flash yet"
+"AI analyst (daily, account E)","reads charts + news, predicts 5 days ahead",2026-11-17T00:33:16+00:00,0.0,"12 predictions for bar 2026-11-16 · track record: 0 predictions scored, none scored yet"
+"AI analyst (hourly, account F)",reads hourly charts + daily/weekly context + news,2026-11-17T00:33:51+00:00,0.0,"14 predictions for hour 2026-11-16T23 · track record: 94 predictions scored, hit rate 39%"
+Executor (scheduled run),"runs the simulation, checks, publishes, commits",2026-11-17T00:33:53+00:00,0.0,"accounts A–F replayed and reconciled; fills so far: A 0, B 4, C 0, D 4, E 2, F 17"
 Research loop (researcher → planner → tester),one tested improvement idea per week,2026-11-09,,latest: research/notes/2026-11-09-external-trading-ai-lessons.md
+Team · news,team: news and posts reported in the news (every 6 h),,,no file yet
+Team · history,team: what similar past setups did (daily),,,no file yet
+Team · papers,team: published research and its maths (weekly),,,no file yet
+Team · scanner,team: catalysts from finance sites (daily),,,no file yet
+Atlantis (team lead),"team lead: reads every summary, approves or refuses each new trade (hourly)",,,no file yet

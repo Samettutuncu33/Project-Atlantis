@@ -1,0 +1,251 @@
+{
+ "date": "2026-11-16",
+ "made_at": "2026-11-17T00:32:24+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "US equities sold off on Nov 16 (Nasdaq Composite -2.49%, S&P 500 -1.92%) as Nvidia's CEO exit, rising Treasury yields and prospective tighter China chip export curbs weighed on tech. Markets price a near-certain Fed rate hike in December after hot inflation data and hawkish FOMC remarks; the dollar hit a 19-month high and AUD was the weakest major. WTI fell 3.2% to ~$85.7 on supply-glut forecasts and gold touched its lowest level since Oct 2025. Bitcoin held near $64.9k after a weekend low near $62k. Key events this week: US retail sales, industrial production, Philly Fed, and an anticipated Anthropic IPO.",
+ "calendar": [
+  {
+   "when": "2026-11-19T13:30:00+00:00",
+   "event": "US Philly Fed Business Index (Nov)",
+   "region": "US",
+   "importance": "medium",
+   "symbols": [
+    "USA500IDXUSD",
+    "EURUSD",
+    "MACRO"
+   ],
+   "source": "https://www.eoption.com/weekly-event-calendar-11-16-2026-11-20-2026/"
+  },
+  {
+   "when": "2026-11-19T15:00:00+00:00",
+   "event": "US Leading Index M/M (Oct)",
+   "region": "US",
+   "importance": "low",
+   "symbols": [
+    "MACRO"
+   ],
+   "source": "https://www.eoption.com/weekly-event-calendar-11-16-2026-11-20-2026/"
+  },
+  {
+   "when": "2026-11-19T16:00:00+00:00",
+   "event": "Kansas City Fed Manufacturing (Nov)",
+   "region": "US",
+   "importance": "low",
+   "symbols": [
+    "MACRO"
+   ],
+   "source": "https://www.eoption.com/weekly-event-calendar-11-16-2026-11-20-2026/"
+  },
+  {
+   "when": "2026-11-20T00:00:00+00:00",
+   "event": "US October retail sales and industrial production (exact days within week of Nov 16 not stated in source)",
+   "region": "US",
+   "importance": "high",
+   "symbols": [
+    "EURUSD",
+    "USDJPY",
+    "USA500IDXUSD",
+    "MACRO"
+   ],
+   "source": "https://theinvestinggroup.substack.com/p/weekly-economic-brief-week-of-november-d6e"
+  }
+ ],
+ "items": [
+  {
+   "symbols": [
+    "USATECHIDXUSD",
+    "USA500IDXUSD",
+    "NVDAUSUSD"
+   ],
+   "headline": "Stock Market Today, Nov. 16: Tech Selloff Deepens as AI Leadership Crisis Rattles Nasdaq",
+   "source": "https://www.fool.com/coverage/stock-market-today/2026/11/16/stock-market-today-nov-16-tech-selloff-deepens-as-ai-leadership-crisis-rattles-nasdaq/",
+   "published_at": "2026-11-16T22:05:00+00:00",
+   "tone": -0.5,
+   "relevance": "high",
+   "note": "Nasdaq -2.49%, S&P -1.92% on Nvidia leadership shakeup, rising yields, chip export curbs."
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "What Jensen Huang's Exit Could Mean For Washington's Chip Controls",
+   "source": "https://dailycaller.com/2026/11/16/jensing-huang-nvidia-chip-controls/",
+   "published_at": "2026-11-16T15:33:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "Report says resignation may clear way for tighter AI chip export rules to China."
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "A $4.8bn chip trail and a spy probe: What Huang's fall means for AI infrastructure",
+   "source": "https://capacityglobal.com/news/what-huangs-fall-means-for-ai-infra/",
+   "published_at": "2026-11-16T12:00:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "Date-only source (time is placeholder). NVDA fell >12% intraday on resignation day, extended losses Friday."
+  },
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Stock Market News for Nov 16, 2026",
+   "source": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-16-132700717.html",
+   "published_at": "2026-11-16T12:00:00+00:00",
+   "tone": -0.3,
+   "relevance": "medium",
+   "note": "Date-only source (time is placeholder). S&P -0.4% Friday to 7,561.67; Anthropic IPO anticipated, AI stocks pressured post-midterms."
+  },
+  {
+   "symbols": [
+    "MACRO",
+    "EURUSD",
+    "USDJPY",
+    "GBPUSD"
+   ],
+   "headline": "Weekly Economic Brief - Week of November 16, 2026",
+   "source": "https://theinvestinggroup.substack.com/p/weekly-economic-brief-week-of-november-d6e",
+   "published_at": "2026-11-16T12:00:00+00:00",
+   "tone": 0.0,
+   "relevance": "high",
+   "note": "Date-only source (time is placeholder). Markets price near-certain December Fed hike; CPI +0.4% m/m. USD-supportive."
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD",
+    "XAUUSD",
+    "AUDUSD"
+   ],
+   "headline": "Financial & Forex Market Recap: Nov. 16, 2026",
+   "source": "https://www.babypips.com/news/daily-financial-forex-market-recap-2026-11-16",
+   "published_at": "2026-11-16T12:00:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "Date-only source (time is placeholder). WTI -3.2% to ~$85.74 on glut worries; gold -0.9% ~$3,852; AUD -0.6% to ~0.6735."
+  },
+  {
+   "symbols": [
+    "XAUUSD",
+    "BTCUSD",
+    "LIGHTCMDUSD"
+   ],
+   "headline": "The Close: Monday, November 16, 2026",
+   "source": "https://theweekendspread.substack.com/p/the-close-monday-november-16-2026",
+   "published_at": "2026-11-16T12:00:00+00:00",
+   "tone": -0.3,
+   "relevance": "medium",
+   "note": "Date-only source (time is placeholder). Gold spot hit lowest since Oct 2025; dollar at 19-month high; BTC $64,879 after weekend low near $62k."
+  }
+ ],
+ "views": {
+  "NVDAUSUSD": {
+   "tone": -0.5,
+   "event_risk": "high",
+   "reason": "CEO resignation, spy-probe fallout, possible tighter China export curbs."
+  },
+  "USATECHIDXUSD": {
+   "tone": -0.4,
+   "event_risk": "high",
+   "reason": "Chip-led selloff, VXN at yearly high, Anthropic IPO next week."
+  },
+  "USA500IDXUSD": {
+   "tone": -0.3,
+   "event_risk": "high",
+   "reason": "Tech weakness, rising yields, December Fed hike priced."
+  },
+  "AAPLUSUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No company-specific news found; broad tech weakness."
+  },
+  "MSFTUSUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No company-specific news found."
+  },
+  "AMZNUSUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No company-specific news found."
+  },
+  "GOOGLUSUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No company-specific news found."
+  },
+  "EURUSD": {
+   "tone": -0.2,
+   "event_risk": "normal",
+   "reason": "Dollar at 19-month high on Fed hike pricing."
+  },
+  "GBPUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Broad USD strength; no UK-specific news found."
+  },
+  "USDJPY": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "USD strength and Fed hike pricing; no BoJ-specific news found."
+  },
+  "AUDUSD": {
+   "tone": -0.3,
+   "event_risk": "normal",
+   "reason": "Weakest major Nov 16, risk-off."
+  },
+  "USDCHF": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No specific news found."
+  },
+  "USDCAD": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "Oil drop and USD strength; no BoC news found."
+  },
+  "BTCUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Near lowest since July, stabilising."
+  },
+  "ETHUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No specific news found."
+  },
+  "LIGHTCMDUSD": {
+   "tone": -0.3,
+   "event_risk": "normal",
+   "reason": "Supply-glut forecasts; WTI -3.2%."
+  },
+  "XAUUSD": {
+   "tone": -0.3,
+   "event_risk": "normal",
+   "reason": "One-year low on Fed hike bets and strong USD."
+  },
+  "DEUIDXEUR": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No specific news found."
+  },
+  "GBRIDXGBP": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No specific news found."
+  },
+  "JPNIDXJPY": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Global chip selloff spillover risk; no direct news found."
+  },
+  "MACRO": {
+   "tone": -0.2,
+   "event_risk": "high",
+   "reason": "December Fed hike priced; retail sales and industrial production due this week."
+  }
+ }
+}

@@ -1,0 +1,107 @@
+{
+ "date": "2026-11-17",
+ "made_at": "2026-11-18T00:59:26+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "US equities fell for a third session on Nov 17: S&P 500 -1%, Dow -1.6%, Nasdaq composite -0.7%, led by AI and software weakness. After the close NVIDIA reported Q3 FY27 revenue of $115.8B (+103% y/y) and EPS of $2.68 vs $2.48 consensus, and US stock futures rose. Brent fell 0.7% to $91.80 and is down about 16% over the past month. Bitcoin traded near $64-65k as a seven-session spot ETF outflow streak ended. No dated central-bank, gold, Ether, megacap (ex-NVDA) or European/Japanese index news was found in the window.",
+ "calendar": [
+  {
+   "when": "2026-11-20T00:00:00+00:00",
+   "event": "PBOC rate decision (per Investing.com central bank table)",
+   "region": "CN",
+   "importance": "low",
+   "symbols": [
+    "MACRO",
+    "AUDUSD"
+   ],
+   "source": "https://www.investing.com/central-banks/"
+  }
+ ],
+ "items": [
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "S&P 500 sinks 1%, Dow drops 1.6%, Nasdaq falls 0.7% as Nvidia and jittery AI stocks lead losses",
+   "source": "https://www.washingtonpost.com/business/2026/11/17/wall-street-stocks-dow-nasdaq/9f975f00-e2cf-11f1-a99e-b3e3805c6b8b_story.html",
+   "published_at": "2026-11-17T21:41:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "Third straight down session; cash close precedes NVIDIA results."
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "NVIDIA Q3 FY27 revenue $115.8B, up 103% y/y; Data Center $107.6B",
+   "source": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000088/q3fy27pr.htm",
+   "published_at": "2026-11-17T21:20:00+00:00",
+   "tone": 0.5,
+   "relevance": "high",
+   "note": "EPS $2.68 vs $2.48 consensus per MarketBeat; release time taken from the scheduled 16:20 ET slot on forex.com's calendar."
+  },
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD",
+    "NVDAUSUSD"
+   ],
+   "headline": "Stock futures rise as Nvidia gains on earnings beat and solid outlook",
+   "source": "https://www.cnbc.com/2026/11/17/stock-market-today-live-updates.html",
+   "published_at": "2026-11-17T23:04:13+00:00",
+   "tone": 0.3,
+   "relevance": "high",
+   "note": "Overnight futures reversing part of the cash-session losses."
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "Brent fell to 91.80 USD/Bbl on Nov 17, down 0.70%; down 16.21% over the past month",
+   "source": "https://tradingeconomics.com/commodity/brent-crude-oil",
+   "published_at": "2026-11-17T00:00:00+00:00",
+   "tone": -0.2,
+   "relevance": "medium",
+   "note": "Oil is still falling from elevated levels; no OPEC or inventory news found in the window."
+  },
+  {
+   "symbols": [
+    "BTCUSD"
+   ],
+   "headline": "Bitcoin at $65,016.66 at 8:15 a.m. ET, up about $1,004 from the prior morning",
+   "source": "https://fortune.com/article/price-of-bitcoin-11-17-2026/",
+   "published_at": "2026-11-17T13:15:00+00:00",
+   "tone": 0.1,
+   "relevance": "medium",
+   "note": "Price is stabilising near $64-65k; spot ETFs took $7.9M inflow after about $1.91B of outflows over seven sessions (Coinbase news)."
+  }
+ ],
+ "views": {
+  "NVDAUSUSD": {
+   "tone": 0.4,
+   "event_risk": "high",
+   "reason": "Beat on revenue and EPS with a strong outlook; shares up after hours following a down cash session."
+  },
+  "USATECHIDXUSD": {
+   "tone": 0.1,
+   "event_risk": "high",
+   "reason": "NVIDIA beat lifts futures, but software and AI selling persisted for three sessions."
+  },
+  "USA500IDXUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "Fell 1% in the cash session; futures firmer overnight."
+  },
+  "LIGHTCMDUSD": {
+   "tone": -0.2,
+   "event_risk": "normal",
+   "reason": "Brent down about 16% over a month and lower on the day."
+  },
+  "BTCUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "Range near $64-65k; ETF outflows have paused."
+  }
+ }
+}

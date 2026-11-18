@@ -1,22 +1,6 @@
 symbol,name,tone,event_risk,reason
-NVDAUSUSD,NVIDIA,-0.5,high,"CEO resignation, spy-probe fallout, possible tighter China export curbs."
-USATECHIDXUSD,Nasdaq 100 index,-0.4,high,"Chip-led selloff, VXN at yearly high, Anthropic IPO next week."
-USA500IDXUSD,S&P 500 index,-0.3,high,"Tech weakness, rising yields, December Fed hike priced."
-AAPLUSUSD,Apple,0.0,normal,No company-specific news found; broad tech weakness.
-MSFTUSUSD,Microsoft,0.0,normal,No company-specific news found.
-AMZNUSUSD,Amazon,0.0,normal,No company-specific news found.
-GOOGLUSUSD,Alphabet (Google),0.0,normal,No company-specific news found.
-EURUSD,Euro / US dollar,-0.2,normal,Dollar at 19-month high on Fed hike pricing.
-GBPUSD,British pound / US dollar,-0.1,normal,Broad USD strength; no UK-specific news found.
-USDJPY,US dollar / Japanese yen,0.1,normal,USD strength and Fed hike pricing; no BoJ-specific news found.
-AUDUSD,Australian dollar / US dollar,-0.3,normal,"Weakest major Nov 16, risk-off."
-USDCHF,US dollar / Swiss franc,0.0,normal,No specific news found.
-USDCAD,US dollar / Canadian dollar,0.1,normal,Oil drop and USD strength; no BoC news found.
-BTCUSD,Bitcoin,-0.1,normal,"Near lowest since July, stabilising."
-ETHUSD,Ethereum,0.0,normal,No specific news found.
-LIGHTCMDUSD,WTI crude oil,-0.3,normal,Supply-glut forecasts; WTI -3.2%.
-XAUUSD,Gold,-0.3,normal,One-year low on Fed hike bets and strong USD.
-DEUIDXEUR,DAX 40 index (Germany),0.0,normal,No specific news found.
-GBRIDXGBP,FTSE 100 index (UK),0.0,normal,No specific news found.
-JPNIDXJPY,Nikkei 225 index (Japan),-0.1,normal,Global chip selloff spillover risk; no direct news found.
-MACRO,MACRO,-0.2,high,December Fed hike priced; retail sales and industrial production due this week.
+NVDAUSUSD,NVIDIA,0.4,high,Beat on revenue and EPS with a strong outlook; shares up after hours following a down cash session.
+USATECHIDXUSD,Nasdaq 100 index,0.1,high,"NVIDIA beat lifts futures, but software and AI selling persisted for three sessions."
+USA500IDXUSD,S&P 500 index,0.0,normal,Fell 1% in the cash session; futures firmer overnight.
+LIGHTCMDUSD,WTI crude oil,-0.2,normal,Brent down about 16% over a month and lower on the day.
+BTCUSD,Bitcoin,0.0,normal,Range near $64-65k; ETF outflows have paused.

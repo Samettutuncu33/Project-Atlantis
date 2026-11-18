@@ -1,8 +1,8 @@
 agent,role,last,hours_ago,did
-News & market intelligence,daily brief + hourly breaking-news flash,2026-11-18T00:59:26+00:00,16.7,"daily brief 2026-11-17: 5 dated news items, 1 calendar events; no breaking-news flash yet"
-"AI analyst (daily, account E)","reads charts + news, predicts 5 days ahead",2026-11-18T01:00:03+00:00,16.7,"20 predictions for bar 2026-11-17 · track record: 0 predictions scored, none scored yet"
-"AI analyst (hourly, account F)",reads hourly charts + daily/weekly context + news,2026-11-18T17:42:09+00:00,0.0,"15 predictions for hour 2026-11-18T16 · track record: 160 predictions scored, hit rate 35%"
-Executor (scheduled run),"runs the simulation, checks, publishes, commits",2026-11-18T17:42:10+00:00,0.0,"accounts A–F replayed and reconciled; fills so far: A 0, B 4, C 0, D 5, E 2, F 29"
+News & market intelligence,daily brief + hourly breaking-news flash,2026-11-18T00:59:26+00:00,22.6,"daily brief 2026-11-17: 5 dated news items, 1 calendar events; no breaking-news flash yet"
+"AI analyst (daily, account E)","reads charts + news, predicts 5 days ahead",2026-11-18T01:00:03+00:00,22.6,"20 predictions for bar 2026-11-17 · track record: 0 predictions scored, none scored yet"
+"AI analyst (hourly, account F)",reads hourly charts + daily/weekly context + news,2026-11-18T23:36:22+00:00,0.0,"8 predictions for hour 2026-11-18T22 · track record: 175 predictions scored, hit rate 35%"
+Executor (scheduled run),"runs the simulation, checks, publishes, commits",2026-11-18T23:36:23+00:00,0.0,"accounts A–F replayed and reconciled; fills so far: A 0, B 4, C 0, D 5, E 2, F 31"
 Research loop (researcher → planner → tester),one tested improvement idea per week,2026-11-09,,latest: research/notes/2026-11-09-external-trading-ai-lessons.md
 Team · news,team: news and posts reported in the news (every 6 h),,,no file yet
 Team · history,team: what similar past setups did (daily),,,no file yet

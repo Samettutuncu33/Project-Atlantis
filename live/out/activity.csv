@@ -1,16 +1,17 @@
 at,agent,level,msg
-2026-11-18T23:36:23+00:00,learning,info,"Account E: 48,520 predictions scored so far, recent hit rate 38%"
-2026-11-18T23:36:23+00:00,learning,info,"Account F: 78,304 predictions scored so far, recent hit rate 38%"
-2026-11-18T23:36:23+00:00,checks,info,Run finished: 77 of 77 checks passed
-2026-11-18T23:36:22+00:00,analyst,info,"AI analyst (hourly, account F): 8 predictions for hour 2026-11-18T22 · track record: 175 predictions scored, hit rate 35%"
+2026-11-19T04:28:27+00:00,learning,info,"Account E: 48,540 predictions scored so far, recent hit rate 38%"
+2026-11-19T04:28:27+00:00,learning,info,"Account F: 78,379 predictions scored so far, recent hit rate 44%"
+2026-11-19T04:28:27+00:00,checks,info,Run finished: 77 of 77 checks passed
+2026-11-19T04:28:26+00:00,analyst,info,"AI analyst (daily, account E): 15 predictions for bar 2026-11-18 · track record: 0 predictions scored, none scored yet"
+2026-11-19T04:28:16+00:00,news,info,"News brief for 2026-11-18: 2 dated, sourced items kept of 2"
+2026-11-18T23:36:22+00:00,analyst,info,"AI analyst (hourly, account F): 8 predictions for hour 2026-11-18T22 · track record: 183 predictions scored, hit rate 36%"
+2026-11-18T23:00:00+00:00,broker,info,"Account F bought 0.2 Nikkei 225 index (Japan) at 58,901.6 (simulated)"
 2026-11-18T21:00:00+00:00,broker,info,"Account F sold 0.1 S&P 500 index at 7,321.18 (simulated)"
 2026-11-18T20:00:00+00:00,broker,info,"Account F bought 0.1 S&P 500 index at 7,321.45 (simulated)"
 2026-11-18T13:00:00+00:00,broker,info,"Account F bought 0.1 Nikkei 225 index (Japan) at 59,024.6 (simulated)"
 2026-11-18T07:00:00+00:00,broker,info,"Account F sold 0.1 Nikkei 225 index (Japan) at 59,131.4 (simulated)"
 2026-11-18T05:00:00+00:00,broker,info,"Account F bought 0.1 Nikkei 225 index (Japan) at 58,982.6 (simulated)"
 2026-11-18T03:00:00+00:00,broker,info,"Account F sold 0.1 Nikkei 225 index (Japan) at 58,709.5 (simulated)"
-2026-11-18T01:00:03+00:00,analyst,info,"AI analyst (daily, account E): 20 predictions for bar 2026-11-17 · track record: 0 predictions scored, none scored yet"
-2026-11-18T00:59:26+00:00,news,info,"News brief for 2026-11-17: 5 dated, sourced items kept of 5"
 2026-11-18T00:00:00+00:00,broker,info,"Account F sold 0.2 Nikkei 225 index (Japan) at 59,679.3 (simulated)"
 2026-11-17T16:00:00+00:00,broker,info,"Account F bought 0.6 Nikkei 225 index (Japan) at 58,409.7 (simulated)"
 2026-11-17T15:00:00+00:00,broker,info,"Account F sold 0.6 Nikkei 225 index (Japan) at 59,162.4 (simulated)"

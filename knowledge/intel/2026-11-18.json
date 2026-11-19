@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-18",
+ "made_at": "2026-11-19T04:28:16+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "Coverage is severely limited: only one dated source was retrieved before the search-tool limit was hit. US stocks were mixed on Nov 18, 2026: the S&P 500 fell 0.2%, its fifth straight losing session, while the Nasdaq Composite rose 0.4% to snap a four-day skid. Nvidia shares fell after an earnings report the source described as strong, and the headline reported a 560-point Dow drop. Energy was the weakest S&P 500 sector (-3.5%), and health care fell about 2% as UnitedHealth (-10%) and Humana (-13%) dropped on regulatory concerns. Nothing was retrieved for FX/central banks, crypto, oil fundamentals, gold, non-US indices, other megacaps or the economic calendar.",
+ "calendar": [],
+ "items": [
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD",
+    "NVDAUSUSD"
+   ],
+   "headline": "Markets News, Nov. 18, 2026: Dow Plunges 560 Points, S&P 500 Extends Losing Streak as Nvidia Stock Falls After Earnings; Nasdaq Snaps Skid",
+   "source": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
+   "published_at": "2026-11-18T21:15:00+00:00",
+   "tone": -0.2,
+   "relevance": "high",
+   "note": "Mixed US close: the S&P 500 fell 0.2% for a fifth straight loss, while the Nasdaq Composite rose 0.4%. Nvidia fell after a strong earnings report. Energy -3.5%, health care about -2%. The date comes from the headline; the time is an estimate around the US close."
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "Markets News, Nov. 18, 2026: S&P 500 Energy Sector dropped 3.5%, biggest sector decliner",
+   "source": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
+   "published_at": "2026-11-18T21:15:00+00:00",
+   "tone": -0.1,
+   "relevance": "low",
+   "note": "This is a proxy for oil only: the sector's weakness may reflect falling crude prices, but the source gives no direct crude price or inventory data. The headline paraphrases the same market-wrap article cited above."
+  }
+ ],
+ "views": {
+  "USA500IDXUSD": {
+   "tone": -0.2,
+   "event_risk": "normal",
+   "reason": "Five-session losing streak; Dow and health care weak (single source)."
+  },
+  "USATECHIDXUSD": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "Nasdaq Composite +0.4% snapped a four-day skid; Nasdaq 100 futures +0.5% per source."
+  },
+  "NVDAUSUSD": {
+   "tone": -0.1,
+   "event_risk": "high",
+   "reason": "Stock fell after earnings the source called strong; the post-earnings move may continue."
+  },
+  "MACRO": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No central bank, macro data or calendar information was retrieved because of the search limit."
+  }
+ }
+}

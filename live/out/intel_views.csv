@@ -1,6 +1,5 @@
 symbol,name,tone,event_risk,reason
-NVDAUSUSD,NVIDIA,0.4,high,Beat on revenue and EPS with a strong outlook; shares up after hours following a down cash session.
-USATECHIDXUSD,Nasdaq 100 index,0.1,high,"NVIDIA beat lifts futures, but software and AI selling persisted for three sessions."
-USA500IDXUSD,S&P 500 index,0.0,normal,Fell 1% in the cash session; futures firmer overnight.
-LIGHTCMDUSD,WTI crude oil,-0.2,normal,Brent down about 16% over a month and lower on the day.
-BTCUSD,Bitcoin,0.0,normal,Range near $64-65k; ETF outflows have paused.
+USA500IDXUSD,S&P 500 index,-0.2,normal,Five-session losing streak; Dow and health care weak (single source).
+USATECHIDXUSD,Nasdaq 100 index,0.1,normal,Nasdaq Composite +0.4% snapped a four-day skid; Nasdaq 100 futures +0.5% per source.
+NVDAUSUSD,NVIDIA,-0.1,high,Stock fell after earnings the source called strong; the post-earnings move may continue.
+MACRO,MACRO,0.0,normal,"No central bank, macro data or calendar information was retrieved because of the search limit."

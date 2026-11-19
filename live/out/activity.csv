@@ -1,10 +1,10 @@
 at,agent,level,msg
-2026-11-19T04:28:27+00:00,learning,info,"Account E: 48,540 predictions scored so far, recent hit rate 38%"
-2026-11-19T04:28:27+00:00,learning,info,"Account F: 78,379 predictions scored so far, recent hit rate 44%"
-2026-11-19T04:28:27+00:00,checks,info,Run finished: 77 of 77 checks passed
+2026-11-19T13:53:09+00:00,learning,info,"Account E: 48,540 predictions scored so far, recent hit rate 38%"
+2026-11-19T13:53:09+00:00,learning,info,"Account F: 78,514 predictions scored so far, recent hit rate 48%"
+2026-11-19T13:53:09+00:00,checks,info,Run finished: 77 of 77 checks passed
+2026-11-19T13:53:08+00:00,analyst,info,"AI analyst (hourly, account F): 11 predictions for hour 2026-11-19T12 · track record: 183 predictions scored, hit rate 36%"
 2026-11-19T04:28:26+00:00,analyst,info,"AI analyst (daily, account E): 15 predictions for bar 2026-11-18 · track record: 0 predictions scored, none scored yet"
 2026-11-19T04:28:16+00:00,news,info,"News brief for 2026-11-18: 2 dated, sourced items kept of 2"
-2026-11-18T23:36:22+00:00,analyst,info,"AI analyst (hourly, account F): 8 predictions for hour 2026-11-18T22 · track record: 183 predictions scored, hit rate 36%"
 2026-11-18T23:00:00+00:00,broker,info,"Account F bought 0.2 Nikkei 225 index (Japan) at 58,901.6 (simulated)"
 2026-11-18T21:00:00+00:00,broker,info,"Account F sold 0.1 S&P 500 index at 7,321.18 (simulated)"
 2026-11-18T20:00:00+00:00,broker,info,"Account F bought 0.1 S&P 500 index at 7,321.45 (simulated)"

@@ -1,0 +1,67 @@
+{
+ "made_at": "2026-11-20T04:46:12+00:00",
+ "agent": "atlantis",
+ "summary": "No agent is overdue; all four research files from 2026-11-19T23 are in force, but news evidence was thin (one Nov 17 item, nothing dated Nov 19) and the scanner gave no probabilities. History and papers agree only on USD strength against CHF and CAD, with small tilts, while Friday's UK, euro area and Canadian data and the UK-EU summit make GBP, EUR, CAD and European index direction two-sided. I approve only USDCHF, where two agents with evidence point the same way and no scheduled CHF event sits in the horizon. Next I want news to find sourced Nov 19-20 items on US equities, the Fed and the yen, and the scanner to confirm flash PMI timing.",
+ "decisions": {
+  "USDCHF": {
+   "approve": true,
+   "reason": "history 0.56 (59% of n=1852) and papers 0.52 (1-month trend +1.60 sigma) both lean up; no contradicting agent and no CHF event scheduled."
+  },
+  "USDCAD": {
+   "approve": false,
+   "reason": "history 0.60 and papers 0.52 lean up, but scanner flags Canadian retail sales on Nov 20, which makes direction near a coin flip."
+  },
+  "EURUSD": {
+   "approve": false,
+   "reason": "history 0.43 and papers 0.48 lean down, but scanner flags German PPI and euro area flash consumer confidence inside the horizon."
+  },
+  "USDJPY": {
+   "approve": false,
+   "reason": "only history (0.58) has evidence; other agents silent and the tilt is weak, not strong dated evidence."
+  },
+  "GBPUSD": {
+   "approve": false,
+   "reason": "history 0.48 is near 50 percent and scanner flags UK summit, Moody's review and retail sales."
+  },
+  "GBRIDXGBP": {
+   "approve": false,
+   "reason": "history 0.54 only, with UK Moody's review and UK-EU summit event risk."
+  },
+  "DEUIDXEUR": {
+   "approve": false,
+   "reason": "history 0.51 is no edge and euro area data on Nov 20 adds two-sided risk."
+  },
+  "USA500IDXUSD": {
+   "approve": false,
+   "reason": "news 0.54 rests on a single stale Nov 17 item and history 0.54 is a small tilt; evidence too thin to approve."
+  },
+  "USATECHIDXUSD": {
+   "approve": false,
+   "reason": "news 0.53 and history 0.52 are marginal and the news evidence is stale and unverified for Nov 19."
+  },
+  "JPNIDXJPY": {
+   "approve": false,
+   "reason": "history 0.53 only; no other agent has evidence."
+  },
+  "AUDUSD": {
+   "approve": false,
+   "reason": "history 0.51 and papers 0.48 disagree or show no edge."
+  },
+  "BTCUSD": {
+   "approve": false,
+   "reason": "history 0.48 and papers 0.48 are marginally down but no sourced evidence; edge too small."
+  },
+  "ETHUSD": {
+   "approve": false,
+   "reason": "history 0.50 and papers 0.48 show no real edge."
+  },
+  "LIGHTCMDUSD": {
+   "approve": false,
+   "reason": "history 0.54 only, no news or other evidence on oil."
+  },
+  "XAUUSD": {
+   "approve": false,
+   "reason": "history 0.50 and papers 0.49 show no edge."
+  }
+ }
+}

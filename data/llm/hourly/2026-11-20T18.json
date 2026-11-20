@@ -1,0 +1,16 @@
+{
+ "made_at": "2026-11-20T19:19:29+00:00",
+ "analyst": "claude-api:claude-opus-5-5",
+ "probs": {
+  "NVDAUSUSD": 0.52,
+  "BTCUSD": 0.51,
+  "ETHUSD": 0.51,
+  "USA500IDXUSD": 0.51,
+  "USATECHIDXUSD": 0.51,
+  "AUDUSD": 0.5,
+  "XAUUSD": 0.5,
+  "USDCAD": 0.5,
+  "AAPLUSUSD": 0.51,
+  "AMZNUSUSD": 0.51
+ }
+}

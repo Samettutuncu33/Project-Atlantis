@@ -1,0 +1,20 @@
+{
+ "made_at": "2026-11-20T13:01:56+00:00",
+ "agent": "news",
+ "summary": "Search coverage for Nov 19 and Nov 20 was empty, so the newest verified item is the Nov 18 US close: the S&P 500 slipped 0.2 percent for a fifth straight loss, the longest streak since June, while the Nasdaq Composite rose 0.4 percent and the Dow fell 1.1 percent. Indices are deeply oversold on the hourly bar, which supports only a small bounce lean. I found no dated, sourced evidence in range for central banks, crypto, oil, gold or FX, so those are left out.",
+ "probs": {
+  "USA500IDXUSD": 0.53,
+  "USATECHIDXUSD": 0.53
+ },
+ "evidence": [
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD"
+   ],
+   "claim": "On Wednesday Nov 18 2026 the S&P 500 slipped 0.2% (fifth straight losing session, longest since June), the Nasdaq Composite rose 0.4% and the Dow fell 1.1%.",
+   "source": "https://www.lanacion.com.ar/usa/how-major-us-stock-indexes-fared-wednesday-11182026-nid18112026/",
+   "published_at": "2026-11-18T22:00:00+00:00"
+  }
+ ]
+}

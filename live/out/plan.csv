@@ -35,33 +35,33 @@ E,USDCAD,0.5427,P(up 5d) 54%,0.0,none,,edge $0.44 <= cost $2.23
 E,USDCHF,0.5433,P(up 5d) 54%,0.0,none,,edge $0.63 <= cost $2.26
 E,USDJPY,0.5454,P(up 5d) 55%,0.0,none,,edge $0.50 <= cost $2.19
 E,XAUUSD,0.5489,P(up 5d) 55%,0.0,none,,Kelly size below half the minimum ticket
-F,AUDUSD,0.5108,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.10
-F,BTCUSD,0.5106,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,DEUIDXEUR,0.5114,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,ETHUSD,0.5098,P(up 5d) 51%,0.0,none,,edge $0.02 <= cost $2.25
-F,EURUSD,0.5109,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.05
-F,GBPUSD,0.5106,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.06
-F,GBRIDXGBP,0.5112,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,JPNIDXJPY,0.511,P(up 5d) 51%,0.4,none,,edge $0.03 > cost $0.02
+F,AUDUSD,0.5113,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.12
+F,BTCUSD,0.5114,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,DEUIDXEUR,0.5115,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,ETHUSD,0.5116,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.34
+F,EURUSD,0.5111,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.02
+F,GBPUSD,0.5109,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.07
+F,GBRIDXGBP,0.5115,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,JPNIDXJPY,0.5112,P(up 5d) 51%,0.4,none,,edge $0.03 > cost $0.02
 F,LIGHTCMDUSD,0.5108,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $0.10
-F,USA500IDXUSD,0.5113,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,USATECHIDXUSD,0.5114,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
-F,USDCAD,0.5114,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.15
-F,USDCHF,0.5114,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.15
-F,USDJPY,0.5114,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.04
-F,XAUUSD,0.5099,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,USA500IDXUSD,0.5113,P(up 5d) 51%,0.0,none,,edge $0.06 <= cost $0.07
+F,USATECHIDXUSD,0.5112,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
+F,USDCAD,0.5116,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.13
+F,USDCHF,0.5117,P(up 5d) 51%,0.0,none,,edge $0.04 <= cost $2.11
+F,USDJPY,0.5114,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.02
+F,XAUUSD,0.5101,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
 G,AUDUSD,0.495,P(up 5d) 50%,0.0,none,,Kelly size below half the minimum ticket
 G,BTCUSD,0.48,P(up 5d) 48%,0.0,none,,Kelly size below half the minimum ticket
 G,DEUIDXEUR,0.505,P(up 5d) 50%,0.0,none,,Kelly size below half the minimum ticket
-G,ETHUSD,0.49,P(up 5d) 49%,0.0,none,,edge $0.02 <= cost $2.13
-G,EURUSD,0.4553,P(up 5d) 46%,0.0,none,,edge $0.51 <= cost $2.15
+G,ETHUSD,0.49,P(up 5d) 49%,0.0,none,,edge $0.03 <= cost $2.13
+G,EURUSD,0.4553,P(up 5d) 46%,0.0,none,,edge $0.50 <= cost $2.07
 G,GBPUSD,0.49,P(up 5d) 49%,0.0,none,,Kelly size below half the minimum ticket
 G,GBRIDXGBP,0.52,P(up 5d) 52%,0.0,none,,Kelly size below half the minimum ticket
-G,JPNIDXJPY,0.515,P(up 5d) 52%,0.0,none,,edge $0.06 > cost $0.02; NOT TRADED: refused by Atlantis: history 0.53 only; no other agent has evidence.
-G,LIGHTCMDUSD,0.52,P(up 5d) 52%,0.0,none,,"edge $0.10 > cost $0.10; NOT TRADED: refused by Atlantis: history 0.54 only, no news or other evidence on oil."
-G,USA500IDXUSD,0.5397,P(up 5d) 54%,0.1,none,,edge $0.63 > cost $0.13
+G,JPNIDXJPY,0.515,P(up 5d) 52%,0.0,none,,edge $0.06 > cost $0.02; NOT TRADED: Atlantis has not reviewed this bar
+G,LIGHTCMDUSD,0.52,P(up 5d) 52%,0.0,none,,edge $0.13 > cost $0.10; NOT TRADED: Atlantis has not reviewed this bar
+G,USA500IDXUSD,0.5348,P(up 5d) 53%,0.1,none,,edge $0.47 > cost $0.14
 G,USATECHIDXUSD,0.5249,P(up 5d) 52%,0.0,none,,Kelly size below half the minimum ticket
-G,USDCAD,0.5595,P(up 5d) 56%,0.0,none,,edge $0.90 <= cost $2.45
-G,USDCHF,0.5398,P(up 5d) 54%,0.0,none,,edge $0.40 <= cost $2.24
-G,USDJPY,0.54,P(up 5d) 54%,0.0,none,,edge $0.41 <= cost $2.11
+G,USDCAD,0.5595,P(up 5d) 56%,0.0,none,,edge $0.88 <= cost $2.36
+G,USDCHF,0.5398,P(up 5d) 54%,0.0,none,,edge $0.39 <= cost $2.18
+G,USDJPY,0.54,P(up 5d) 54%,0.0,none,,edge $0.40 <= cost $2.07
 G,XAUUSD,0.495,P(up 5d) 50%,0.0,none,,Kelly size below half the minimum ticket

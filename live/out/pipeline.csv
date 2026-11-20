@@ -1,10 +1,10 @@
 stage,started_at,finished_at,status,detail
-controls,2026-11-20T11:27:17+00:00,2026-11-20T11:27:17+00:00,done,trading running
-market,2026-11-20T11:27:17+00:00,2026-11-20T11:27:30+00:00,done,"245 price files, last daily bar 2026-11-19"
-news,2026-11-20T11:23:19+00:00,2026-11-20T11:23:23+00:00,idle,brief for 2026-11-19 already written
-analyst,2026-11-20T11:23:28+00:00,2026-11-20T11:27:15+00:00,done,15 forecasts for 2026-11-20T10 ($0.03)
-simulation,2026-11-20T11:27:30+00:00,2026-11-20T11:42:13+00:00,done,0 new predictions (E); 210 new predictions (F); 0 new predictions (G)
-gate,2026-11-20T11:27:30+00:00,2026-11-20T11:42:13+00:00,done,0 orders rejected since the live start
-broker,2026-11-20T11:27:30+00:00,2026-11-20T11:42:13+00:00,done,"0 new fills this run, 45 in total"
-checks,2026-11-20T11:42:13+00:00,2026-11-20T11:42:13+00:00,done,79 of 79 passed
-commit,2026-11-20T11:42:13+00:00,2026-11-20T11:42:13+00:00,done,results saved to the GitHub repository
+controls,2026-11-20T13:25:54+00:00,2026-11-20T13:25:54+00:00,done,trading running
+market,2026-11-20T13:25:54+00:00,2026-11-20T13:26:34+00:00,done,"245 price files, last daily bar 2026-11-19"
+news,2026-11-20T13:25:54+00:00,2026-11-20T13:25:54+00:00,idle,not run this time
+analyst,2026-11-20T13:25:54+00:00,2026-11-20T13:25:54+00:00,idle,not run this time
+simulation,2026-11-20T13:26:34+00:00,2026-11-20T13:34:12+00:00,done,0 new predictions (E); 60 new predictions (F); 270 new predictions (G)
+gate,2026-11-20T13:26:34+00:00,2026-11-20T13:34:12+00:00,done,0 orders rejected since the live start
+broker,2026-11-20T13:26:34+00:00,2026-11-20T13:34:12+00:00,done,"2 new fills this run, 47 in total"
+checks,2026-11-20T13:34:12+00:00,2026-11-20T13:34:12+00:00,done,79 of 79 passed
+commit,2026-11-20T13:34:12+00:00,2026-11-20T13:34:12+00:00,done,results saved to the GitHub repository

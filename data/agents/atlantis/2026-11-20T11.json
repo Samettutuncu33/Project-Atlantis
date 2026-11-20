@@ -1,0 +1,43 @@
+{
+ "made_at": "2026-11-20T13:02:06+00:00",
+ "agent": "atlantis",
+ "summary": "Only the news agent was due and it found little: its newest verified item is the Nov 18 US close, so it tilts the two US indices slightly up and is silent elsewhere. History and papers agree on USDCAD and USDCHF up, and history and news agree on the oversold S&P 500 bouncing. The scanner gave no probabilities and flagged two-sided event risk for EUR, GBP, CAD and UK or European indices today (UK-EU summit, Moody's UK review, euro area confidence, Canadian retail sales). Next I want news to find dated FX, crypto and oil items, since coverage was empty for Nov 19 and 20.",
+ "decisions": {
+  "USDCAD": {
+   "approve": false,
+   "reason": "history 0.60 and papers 0.52 agree up, but Canadian retail sales for September is due inside the horizon, so direction is a coin flip"
+  },
+  "USDCHF": {
+   "approve": true,
+   "reason": "history 0.56 and papers 0.52 both point up and no scheduled Swiss event or contradicting agent"
+  },
+  "USA500IDXUSD": {
+   "approve": true,
+   "reason": "history 0.54 and news 0.53 agree up after five losing sessions (Nov 18 close); scanner found no contradicting event"
+  },
+  "USATECHIDXUSD": {
+   "approve": false,
+   "reason": "history 0.52 and news 0.53 are too weak to justify a new position"
+  },
+  "EURUSD": {
+   "approve": false,
+   "reason": "history 0.43 and papers 0.48 lean down but euro area flash confidence and the UK-EU summit make today two-sided"
+  },
+  "USDJPY": {
+   "approve": false,
+   "reason": "only history (0.58) has a view; no second agent"
+  },
+  "AUDUSD": {
+   "approve": false,
+   "reason": "history 0.51 and papers 0.48 disagree"
+  },
+  "BTCUSD": {
+   "approve": false,
+   "reason": "history and papers both 0.48, too weak, no dated evidence"
+  },
+  "ETHUSD": {
+   "approve": false,
+   "reason": "history 0.50 and papers 0.48 are flat to weak, no dated evidence"
+  }
+ }
+}

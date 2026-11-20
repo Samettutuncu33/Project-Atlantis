@@ -1,9 +1,10 @@
 at,agent,level,msg
-2026-11-20T19:19:30+00:00,learning,info,"Account E: 48,560 predictions scored so far, recent hit rate 35%"
-2026-11-20T19:19:30+00:00,learning,info,"Account F: 79,017 predictions scored so far, recent hit rate 33%"
-2026-11-20T19:19:30+00:00,learning,info,"Account G: 1,087 predictions scored so far, recent hit rate 33%"
-2026-11-20T19:19:30+00:00,checks,info,Run finished: 79 of 79 checks passed
-2026-11-20T19:19:29+00:00,analyst,info,"AI analyst (hourly, account F): 10 predictions for hour 2026-11-20T18 · track record: 223 predictions scored, hit rate 34%"
+2026-11-20T23:25:03+00:00,learning,info,"Account E: 48,560 predictions scored so far, recent hit rate 35%"
+2026-11-20T23:25:03+00:00,learning,info,"Account F: 79,072 predictions scored so far, recent hit rate 30%"
+2026-11-20T23:25:03+00:00,learning,info,"Account G: 1,257 predictions scored so far, recent hit rate 30%"
+2026-11-20T23:25:03+00:00,checks,info,Run finished: 79 of 79 checks passed
+2026-11-20T19:19:29+00:00,analyst,info,"AI analyst (hourly, account F): 10 predictions for hour 2026-11-20T18 · track record: 225 predictions scored, hit rate 35%"
+2026-11-20T16:00:00+00:00,broker,info,"Account G sold 0.1 S&P 500 index at 7,092.55 (simulated)"
 2026-11-20T12:00:00+00:00,broker,info,"Account G bought 0.1 S&P 500 index at 7,133.62 (simulated)"
 2026-11-20T09:00:00+00:00,broker,info,"Account G sold 0.1 S&P 500 index at 7,149.99 (simulated)"
 2026-11-20T00:16:06+00:00,analyst,info,"AI analyst (daily, account E): 15 predictions for bar 2026-11-19 · track record: 0 predictions scored, none scored yet"

@@ -1,0 +1,15 @@
+{
+ "made_at": "2026-11-20T23:25:00+00:00",
+ "agent": "atlantis",
+ "summary": "Only BTCUSD and ETHUSD are in this bar's universe. The news agent refreshed but found no article dated in the last 72 hours, so it gave no probabilities and there is no dated evidence for crypto. History (BTC 0.48, ETH 0.50) and papers (0.48 both) are within two points of a coin flip, and the measured history share for the current bucket is 47% (BTC) and 50% (ETH). Both coins are oversold (RSI 33 and 27) but the evidence is too weak to open or enlarge anything, so I refuse both. Next I want news to find dated crypto items (flows, ETF, regulatory) and the scanner to flag any weekend crypto catalysts.",
+ "decisions": {
+  "BTCUSD": {
+   "approve": false,
+   "reason": "history 0.48 and papers 0.48 are near a coin flip, news has no dated evidence, scanner silent"
+  },
+  "ETHUSD": {
+   "approve": false,
+   "reason": "history 0.50 and papers 0.48 are flat to weak, news has no dated evidence, scanner silent"
+  }
+ }
+}

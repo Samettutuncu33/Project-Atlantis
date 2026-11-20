@@ -8,83 +8,83 @@
   "agent_scanner"
  ],
  "eta": {
-  "fx_spot": 0.1714529855514453,
-  "crypto_fx": 0.2969652820844759,
-  "index_cfd": 0.19318462521319274,
-  "commodity_cfd": 0.4319739541845188,
-  "metal_cfd": 0.4319739541845188,
-  "stock_cfd": 0.8023560088723958
+  "fx_spot": 0.16177058494485333,
+  "crypto_fx": 0.2785018364183446,
+  "index_cfd": 0.18216554793459533,
+  "commodity_cfd": 0.40628875830060346,
+  "metal_cfd": 0.40628875830060346,
+  "stock_cfd": 0.4838388781303282
  },
  "rounds": {
-  "fx_spot": 438,
-  "crypto_fx": 146,
-  "index_cfd": 345,
-  "commodity_cfd": 69,
-  "metal_cfd": 69,
-  "stock_cfd": 20
+  "fx_spot": 492,
+  "crypto_fx": 166,
+  "index_cfd": 388,
+  "commodity_cfd": 78,
+  "metal_cfd": 78,
+  "stock_cfd": 55
  },
  "cum_loss": {
   "fx_spot": {
-   "agent_news": 109.5,
-   "agent_history": 109.5,
-   "agent_papers": 109.5,
-   "agent_scanner": 109.5,
-   "no_view": 109.5
+   "agent_news": 123.0,
+   "agent_history": 123.0,
+   "agent_papers": 123.0,
+   "agent_scanner": 123.0,
+   "no_view": 123.0
   },
   "crypto_fx": {
-   "agent_news": 36.5,
-   "agent_history": 36.5,
-   "agent_papers": 36.5,
-   "agent_scanner": 36.5,
-   "no_view": 36.5
+   "agent_news": 41.5,
+   "agent_history": 41.5,
+   "agent_papers": 41.5,
+   "agent_scanner": 41.5,
+   "no_view": 41.5
   },
   "index_cfd": {
-   "agent_news": 86.25,
-   "agent_history": 86.25,
-   "agent_papers": 86.25,
-   "agent_scanner": 86.25,
-   "no_view": 86.25
+   "agent_news": 97.0,
+   "agent_history": 97.0,
+   "agent_papers": 97.0,
+   "agent_scanner": 97.0,
+   "no_view": 97.0
   },
   "commodity_cfd": {
-   "agent_news": 17.25,
-   "agent_history": 17.25,
-   "agent_papers": 17.25,
-   "agent_scanner": 17.25,
-   "no_view": 17.25
+   "agent_news": 19.5,
+   "agent_history": 19.5,
+   "agent_papers": 19.5,
+   "agent_scanner": 19.5,
+   "no_view": 19.5
   },
   "metal_cfd": {
-   "agent_news": 17.25,
-   "agent_history": 17.25,
-   "agent_papers": 17.25,
-   "agent_scanner": 17.25,
-   "no_view": 17.25
+   "agent_news": 19.5,
+   "agent_history": 19.5,
+   "agent_papers": 19.5,
+   "agent_scanner": 19.5,
+   "no_view": 19.5
   },
   "stock_cfd": {
-   "agent_news": 5.0,
-   "agent_history": 5.0,
-   "agent_papers": 5.0,
-   "agent_scanner": 5.0,
-   "no_view": 5.0
+   "agent_news": 13.75,
+   "agent_history": 13.75,
+   "agent_papers": 13.75,
+   "agent_scanner": 13.75,
+   "no_view": 13.75
   }
  },
  "counts": {
   "fx_spot": {
-   "no_view": 438
+   "no_view": 492
   },
   "crypto_fx": {
-   "no_view": 146
+   "no_view": 166
   },
   "index_cfd": {
-   "no_view": 345
+   "no_view": 388
   },
   "commodity_cfd": {
-   "no_view": 69
+   "no_view": 78
   },
   "metal_cfd": {
-   "no_view": 69
+   "no_view": 78
   },
   "stock_cfd": {
-   "no_view": 20
+   "no_view": 55
   }
  },
  "hits": {

@@ -1,0 +1,55 @@
+{
+ "made_at": "2026-11-20T03:01:32+00:00",
+ "agent": "atlantis",
+ "summary": "No research agent was due this hour; all four files from 2026-11-19T23 are still in force. History and papers agree on a small USD/CHF upside lean with no dated event in the horizon, and news and history agree on a small S&P 500 bounce after the oversold Nov 17 selloff. USD/CAD is refused because Canadian retail sales fall inside the horizon, and EUR, GBP and the European indices are refused because of the UK-EU summit, Moody's UK review and euro area data. Everything else has agents split or silent. I want the news agent to find dated sources for Nov 19-20 (central banks, oil, gold, crypto) at its next run, since coverage was thin.",
+ "decisions": {
+  "USDCHF": {
+   "approve": true,
+   "reason": "history 0.56 and papers 0.52 both lean up; scanner lists no CHF event."
+  },
+  "USA500IDXUSD": {
+   "approve": true,
+   "reason": "news 0.54 (Nov 17 selloff, oversold) and history 0.54 agree; scanner found no contradicting event."
+  },
+  "USDCAD": {
+   "approve": false,
+   "reason": "Canadian retail sales in horizon (scanner) makes direction two-sided despite history 0.60."
+  },
+  "EURUSD": {
+   "approve": false,
+   "reason": "euro area consumer confidence and UK-EU events in horizon; papers and history lean different strengths."
+  },
+  "AUDUSD": {
+   "approve": false,
+   "reason": "history 0.51 and papers 0.48 disagree."
+  },
+  "BTCUSD": {
+   "approve": false,
+   "reason": "edge too small: history 0.48, papers 0.48, no news evidence."
+  },
+  "ETHUSD": {
+   "approve": false,
+   "reason": "history 0.50, papers 0.48; no real edge."
+  },
+  "USATECHIDXUSD": {
+   "approve": false,
+   "reason": "news 0.53 and history 0.52 too weak, evidence thin."
+  },
+  "XAUUSD": {
+   "approve": false,
+   "reason": "history 0.50, papers 0.49; no evidence."
+  },
+  "GBPUSD": {
+   "approve": false,
+   "reason": "UK-EU summit, Moody's review and UK data in horizon; coin flip."
+  },
+  "GBRIDXGBP": {
+   "approve": false,
+   "reason": "UK events in horizon despite history 0.54."
+  },
+  "USDJPY": {
+   "approve": false,
+   "reason": "only history (0.58); no second agent."
+  }
+ }
+}

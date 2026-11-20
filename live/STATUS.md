@@ -1,31 +1,31 @@
 # Atlantis status (SIMULATION ONLY)
 
-Last run: 2026-11-19T22:17:03+00:00 · last bar: 2026-11-18 · mode: **RUNNING** · Claude API spend this month: **$2.72**
+Last run: 2026-11-20T00:30:08+00:00 · last bar: 2026-11-19 · mode: **RUNNING** · Claude API spend this month: **$2.72**
 
 | Account | Strategy | Equity $ | Return % | Fills | Open positions | Max drawdown % |
 |---|---|---|---|---|---|---|
 | A | Trend 12m · conservative | 200.00 | +0.00 | 0 | 0 | 0.0 |
-| B | Trend 12m · min ticket | 169.62 | -15.19 | 4 | 4 | -15.2 |
+| B | Trend 12m · min ticket | 169.27 | -15.37 | 4 | 4 | -15.4 |
 | C | Breakout 55/20 · conservative | 200.00 | +0.00 | 0 | 0 | 0.0 |
-| D | Breakout 55/20 · min ticket | 251.06 | +25.53 | 5 | 3 | -1.2 |
-| E | Atlantis Adaptive · multi-asset, self-learning | 192.51 | -3.74 | 2 | 2 | -5.5 |
-| F | Atlantis Intraday · hourly, news + daily/weekly context | 196.82 | -1.59 | 33 | 1 | -3.9 |
+| D | Breakout 55/20 · min ticket | 251.55 | +25.78 | 5 | 3 | -1.2 |
+| E | Atlantis Adaptive · multi-asset, self-learning | 190.58 | -4.71 | 2 | 2 | -6.5 |
+| F | Atlantis Intraday · hourly, news + daily/weekly context | 196.36 | -1.82 | 33 | 1 | -4.0 |
 | G | Atlantis AI team · research agents decide, Atlantis approves | 200.00 | +0.00 | 0 | 0 | 0.0 |
 
 ## Open positions
 
 | Account | Name | Qty | Value $ | P&L $ |
 |---|---|---|---|---|
-| B | Euro / US dollar | -1000.0 | 1147.66 | 25.47 |
-| B | British pound / US dollar | 1000.0 | 1308.73 | -35.38 |
-| B | US dollar / Japanese yen | 1000.0 | 999.98 | 10.59 |
-| B | Australian dollar / US dollar | 1000.0 | 665.79 | -26.35 |
-| D | Euro / US dollar | -1000.0 | 1147.66 | 25.47 |
-| D | Australian dollar / US dollar | -1000.0 | 718.12 | 26.07 |
-| D | British pound / US dollar | -1000.0 | 1327.89 | 9.49 |
-| E | Nikkei 225 index (Japan) | 0.3 | 111.01 | -2.93 |
-| E | WTI crude oil | 1.0 | 81.99 | -4.48 |
-| F | Nikkei 225 index (Japan) | 0.4 | 144.87 | -2.8 |
+| B | Euro / US dollar | -1000.0 | 1147.58 | 25.39 |
+| B | British pound / US dollar | 1000.0 | 1308.58 | -35.53 |
+| B | US dollar / Japanese yen | 1000.0 | 999.98 | 10.8 |
+| B | Australian dollar / US dollar | 1000.0 | 665.55 | -26.59 |
+| D | Euro / US dollar | -1000.0 | 1147.58 | 25.39 |
+| D | Australian dollar / US dollar | -1000.0 | 718.47 | 26.42 |
+| D | British pound / US dollar | -1000.0 | 1328.18 | 9.78 |
+| E | Nikkei 225 index (Japan) | 0.3 | 108.29 | -5.62 |
+| E | WTI crude oil | 1.0 | 82.76 | -3.71 |
+| F | Nikkei 225 index (Japan) | 0.4 | 144.38 | -3.26 |
 
 ## Last fills
 

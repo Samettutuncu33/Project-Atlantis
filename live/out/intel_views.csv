@@ -1,5 +1,4 @@
 symbol,name,tone,event_risk,reason
-USA500IDXUSD,S&P 500 index,-0.2,normal,Five-session losing streak; Dow and health care weak (single source).
-USATECHIDXUSD,Nasdaq 100 index,0.1,normal,Nasdaq Composite +0.4% snapped a four-day skid; Nasdaq 100 futures +0.5% per source.
-NVDAUSUSD,NVIDIA,-0.1,high,Stock fell after earnings the source called strong; the post-earnings move may continue.
-MACRO,MACRO,0.0,normal,"No central bank, macro data or calendar information was retrieved because of the search limit."
+USA500IDXUSD,S&P 500 index,-0.2,high,"Multi-day sell-off, AI-stock jitters, hawkish Fed pricing."
+USATECHIDXUSD,Nasdaq 100 index,-0.2,high,Tech led losses; Nvidia volatile around earnings.
+NVDAUSUSD,NVIDIA,-0.1,high,"Earnings just reported, large swings."

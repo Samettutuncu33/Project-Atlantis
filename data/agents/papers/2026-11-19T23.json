@@ -1,0 +1,30 @@
+{
+ "made_at": "2026-11-20T00:05:00+00:00",
+ "agent": "papers",
+ "summary": "The library now holds one verified entry: time series momentum (Moskowitz, Ooi, Pedersen 2012), where past 1-12 month returns tend to continue. It is a monthly effect on diversified futures, so its 24-hour value is small and I tilt only 0.02 from 0.50. The tilt follows each instrument's 1-month trend where that trend is clearly one-sided (about 1 sigma or more). Other instruments are left out for lack of evidence.",
+ "probs": {
+  "AUDUSD": 0.48,
+  "BTCUSD": 0.48,
+  "ETHUSD": 0.48,
+  "EURUSD": 0.48,
+  "USDCAD": 0.52,
+  "USDCHF": 0.52,
+  "XAUUSD": 0.49
+ },
+ "evidence": [
+  {
+   "symbols": [
+    "AUDUSD",
+    "BTCUSD",
+    "ETHUSD",
+    "EURUSD",
+    "USDCAD",
+    "USDCHF",
+    "XAUUSD"
+   ],
+   "claim": "Moskowitz, Ooi, Pedersen find return persistence over 1 to 12 months across 58 futures (equity indices, currencies, commodities, bonds); it is a monthly effect, so only a small tilt applies to 24h.",
+   "source": "https://econpapers.repec.org/RePEc:eee:jfinec:v:104:y:2012:i:2:p:228-250",
+   "published_at": "2012-06-01T00:00:00+00:00"
+  }
+ ]
+}

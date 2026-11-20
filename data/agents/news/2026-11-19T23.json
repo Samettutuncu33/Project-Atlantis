@@ -1,0 +1,22 @@
+{
+ "made_at": "2026-11-20T00:00:00+00:00",
+ "agent": "news",
+ "summary": "Search coverage was thin and I could not verify anything dated on Nov 19. The only item inside the 72 hour window is the Nov 17 US selloff led by Nvidia and AI stocks, where the S&P 500 fell 1 percent, the Dow 1.6 percent and the Nasdaq Composite 0.7 percent. Indices are deeply oversold on the hourly bar, which gives a small bounce lean. I have no sourced evidence in range for central banks, crypto, oil, gold or FX, so those are left out.",
+ "probs": {
+  "USA500IDXUSD": 0.54,
+  "USATECHIDXUSD": 0.53,
+  "NVDAUSUSD": 0.52
+ },
+ "evidence": [
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD",
+    "NVDAUSUSD"
+   ],
+   "claim": "On Tuesday Nov 17 2026 Nvidia and other jittery AI stocks led broad Wall Street losses; S&P 500 fell 1%, Dow 1.6%, Nasdaq Composite 0.7%.",
+   "source": "https://www.lanacion.com.ar/usa/how-major-us-stock-indexes-fared-tuesday-11172026-nid17112026/",
+   "published_at": "2026-11-17T22:00:00+00:00"
+  }
+ ]
+}

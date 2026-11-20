@@ -1,0 +1,129 @@
+{
+ "made_at": "2026-11-20T00:15:04.243642+00:00",
+ "agent": "history",
+ "summary": "Probabilities come from the measured share of similar past hourly bars (same 24h trend and RSI bucket) that were higher 24 trading hours later. Most shares sit near 50 percent, so forecasts stay close to 0.50. The largest tilts are USDCAD up (65% of n=362), USDJPY and USDCHF up, and EURUSD down (39% of n=385). Estimates with n below 400 are shrunk toward 0.50.",
+ "probs": {
+  "AUDUSD": 0.51,
+  "BTCUSD": 0.48,
+  "DEUIDXEUR": 0.51,
+  "ETHUSD": 0.5,
+  "EURUSD": 0.43,
+  "GBPUSD": 0.48,
+  "GBRIDXGBP": 0.54,
+  "JPNIDXJPY": 0.53,
+  "LIGHTCMDUSD": 0.54,
+  "USA500IDXUSD": 0.54,
+  "USATECHIDXUSD": 0.52,
+  "USDCAD": 0.6,
+  "USDCHF": 0.56,
+  "USDJPY": 0.58,
+  "XAUUSD": 0.5
+ },
+ "evidence": [
+  {
+   "symbols": [
+    "AUDUSD"
+   ],
+   "claim": "Similar past bars were higher 24h later 51% of the time (n=2240).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "BTCUSD"
+   ],
+   "claim": "Similar past bars were higher 24h later 48% of the time (n=2508).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "DEUIDXEUR"
+   ],
+   "claim": "Similar past bars were higher 24h later 51% of the time (n=1987).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "ETHUSD"
+   ],
+   "claim": "Similar past bars were higher 24h later 50% of the time (n=2528).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "EURUSD"
+   ],
+   "claim": "Similar past bars were higher 24h later 39% of the time (n=385).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "GBPUSD"
+   ],
+   "claim": "Similar past bars were higher 24h later 48% of the time (n=2371).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "GBRIDXGBP"
+   ],
+   "claim": "Similar past bars were higher 24h later 55% of the time (n=1992).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "JPNIDXJPY"
+   ],
+   "claim": "Similar past bars were higher 24h later 53% of the time (n=1944).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "claim": "Similar past bars were higher 24h later 54% of the time (n=360).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "USA500IDXUSD"
+   ],
+   "claim": "Similar past bars were higher 24h later 54% of the time (n=1969).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "USATECHIDXUSD"
+   ],
+   "claim": "Similar past bars were higher 24h later 52% of the time (n=1991).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "USDCAD"
+   ],
+   "claim": "Similar past bars were higher 24h later 65% of the time (n=362).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "USDCHF"
+   ],
+   "claim": "Similar past bars were higher 24h later 57% of the time (n=2665).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "USDJPY"
+   ],
+   "claim": "Similar past bars were higher 24h later 59% of the time (n=2753).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "XAUUSD"
+   ],
+   "claim": "Similar past bars were higher 24h later 50% of the time (n=2225).",
+   "source": "atlantis:history"
+  }
+ ]
+}

@@ -31,3 +31,6 @@ No edits to past entries.
 - The 19:52 GitHub run reported prediction_ledger_append_only CRITICAL for E and F. The stored ledgers were kept (the check refused to overwrite them).
 - A full rebuild at 20:32 reproduced all stored records exactly (E 96,860; F 41), so the stored ledgers are correct and the 19:52 result was a one-off.
 - Hardening: a failed hourly price download no longer silently drops an hour, and a symbol that fails to load now stops the run instead of being skipped; the next run retries. The check now names the first differing record.
+
+## 2026-11-19 news context
+- 2026-11-19: Thin intel brief (page fetches blocked). US stocks sold off on 17 Nov (S&P 500 -1.030 7,340.53, lowest since July) amid AI-stock jitters around Nvidia earnings; Fed hike pricing for 9 Dec remains hawkish. Next listed: Japan CPI and UK retail sales 20 Nov, US GDP/PCE 25 Nov.

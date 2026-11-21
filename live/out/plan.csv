@@ -37,5 +37,5 @@ E,USDJPY,0.546,P(up 5d) 55%,0.0,none,,edge $0.59 <= cost $2.68
 E,XAUUSD,0.5485,P(up 5d) 55%,0.0,none,,Kelly size below half the minimum ticket
 F,BTCUSD,0.5106,P(up 5d) 51%,0.0,none,,Kelly size below half the minimum ticket
 F,ETHUSD,0.5112,P(up 5d) 51%,0.0,none,,edge $0.03 <= cost $2.36
-G,BTCUSD,0.48,P(up 5d) 48%,0.0,none,,Kelly size below half the minimum ticket
-G,ETHUSD,0.49,P(up 5d) 49%,0.0,none,,edge $0.03 <= cost $2.17
+G,BTCUSD,0.475,P(up 5d) 48%,0.0,none,,Kelly size below half the minimum ticket
+G,ETHUSD,0.485,P(up 5d) 48%,0.0,none,,edge $0.05 <= cost $2.18

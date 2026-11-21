@@ -88,10 +88,10 @@ G,FX,agent_news,0.2,0,0,0,,
 G,FX,agent_history,0.2,0,0,0,,
 G,FX,agent_papers,0.2,0,0,0,,
 G,FX,agent_scanner,0.2,0,0,0,,
-G,Crypto,no_view,0.2,166,0,0,,0.25
+G,Crypto,no_view,0.1989,168,0,0,,0.25
 G,Crypto,agent_news,0.2,0,0,0,,
-G,Crypto,agent_history,0.2,0,0,0,,
-G,Crypto,agent_papers,0.2,0,0,0,,
+G,Crypto,agent_history,0.2,2,1,1,1.0,20.9902
+G,Crypto,agent_papers,0.2011,2,2,2,1.0,20.9804
 G,Crypto,agent_scanner,0.2,0,0,0,,
 G,Indices,no_view,0.2,388,0,0,,0.25
 G,Indices,agent_news,0.2,0,0,0,,

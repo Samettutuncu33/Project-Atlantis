@@ -1,6 +1,6 @@
 # Atlantis status (SIMULATION ONLY)
 
-Last run: 2026-11-21T01:04:25+00:00 · last bar: 2026-11-20 · mode: **RUNNING** · Claude API spend this month: **$3.10**
+Last run: 2026-11-21T02:23:21+00:00 · last bar: 2026-11-20 · mode: **RUNNING** · Claude API spend this month: **$3.10**
 
 | Account | Strategy | Equity $ | Return % | Fills | Open positions | Max drawdown % |
 |---|---|---|---|---|---|---|

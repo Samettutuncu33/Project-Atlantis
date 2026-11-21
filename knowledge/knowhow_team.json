@@ -9,7 +9,7 @@
  ],
  "eta": {
   "fx_spot": 0.16177058494485333,
-  "crypto_fx": 0.2785018364183446,
+  "crypto_fx": 0.27683912402711436,
   "index_cfd": 0.18216554793459533,
   "commodity_cfd": 0.40628875830060346,
   "metal_cfd": 0.40628875830060346,
@@ -17,7 +17,7 @@
  },
  "rounds": {
   "fx_spot": 492,
-  "crypto_fx": 166,
+  "crypto_fx": 168,
   "index_cfd": 388,
   "commodity_cfd": 78,
   "metal_cfd": 78,
@@ -32,11 +32,11 @@
    "no_view": 123.0
   },
   "crypto_fx": {
-   "agent_news": 41.5,
-   "agent_history": 41.5,
-   "agent_papers": 41.5,
-   "agent_scanner": 41.5,
-   "no_view": 41.5
+   "agent_news": 41.98021030053427,
+   "agent_history": 41.9804,
+   "agent_papers": 41.960800000000006,
+   "agent_scanner": 41.98021030053427,
+   "no_view": 42.0
   },
   "index_cfd": {
    "agent_news": 97.0,
@@ -72,7 +72,9 @@
    "no_view": 492
   },
   "crypto_fx": {
-   "no_view": 166
+   "no_view": 168,
+   "agent_history": 2,
+   "agent_papers": 2
   },
   "index_cfd": {
    "no_view": 388
@@ -89,7 +91,10 @@
  },
  "hits": {
   "fx_spot": {},
-  "crypto_fx": {},
+  "crypto_fx": {
+   "agent_history": 1,
+   "agent_papers": 2
+  },
   "index_cfd": {},
   "commodity_cfd": {},
   "metal_cfd": {},
@@ -97,7 +102,10 @@
  },
  "directional": {
   "fx_spot": {},
-  "crypto_fx": {},
+  "crypto_fx": {
+   "agent_history": 1,
+   "agent_papers": 2
+  },
   "index_cfd": {},
   "commodity_cfd": {},
   "metal_cfd": {},
@@ -112,11 +120,11 @@
    "agent_scanner": 0.2
   },
   "crypto_fx": {
-   "no_view": 0.2,
-   "agent_news": 0.2,
-   "agent_history": 0.2,
-   "agent_papers": 0.2,
-   "agent_scanner": 0.2
+   "no_view": 0.19891237967508454,
+   "agent_news": 0.2000051242934728,
+   "agent_history": 0.1999946210533774,
+   "agent_papers": 0.20108275068459247,
+   "agent_scanner": 0.2000051242934728
   },
   "index_cfd": {
    "no_view": 0.2,
@@ -150,8 +158,10 @@
  "lessons": [
   "FX \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",
   "FX: currently trusts no_view most (20%).",
+  "Crypto \u00b7 agent_history: 1/1 directional calls correct (100%), Brier 0.2499, weight 20%",
+  "Crypto \u00b7 agent_papers: 2/2 directional calls correct (100%), Brier 0.2498, weight 20%",
   "Crypto \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",
-  "Crypto: currently trusts no_view most (20%).",
+  "Crypto: currently trusts agent_papers most (20%).",
   "Indices \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",
   "Indices: currently trusts no_view most (20%).",
   "Oil \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",

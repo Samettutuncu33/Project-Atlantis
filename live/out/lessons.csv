@@ -97,13 +97,15 @@ F,46,"Stocks · rule_trend: 3254/6564 directional calls correct (50%), Brier 0.2
 F,47,Stocks: currently trusts no_view most (36%).
 G,0,"FX · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
 G,1,FX: currently trusts no_view most (20%).
-G,2,"Crypto · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
-G,3,Crypto: currently trusts no_view most (20%).
-G,4,"Indices · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
-G,5,Indices: currently trusts no_view most (20%).
-G,6,"Oil · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
-G,7,Oil: currently trusts no_view most (20%).
-G,8,"Gold · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
-G,9,Gold: currently trusts no_view most (20%).
-G,10,"Stocks · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
-G,11,Stocks: currently trusts no_view most (20%).
+G,2,"Crypto · agent_history: 1/1 directional calls correct (100%), Brier 0.2499, weight 20%"
+G,3,"Crypto · agent_papers: 2/2 directional calls correct (100%), Brier 0.2498, weight 20%"
+G,4,"Crypto · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
+G,5,Crypto: currently trusts agent_papers most (20%).
+G,6,"Indices · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
+G,7,Indices: currently trusts no_view most (20%).
+G,8,"Oil · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
+G,9,Oil: currently trusts no_view most (20%).
+G,10,"Gold · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
+G,11,Gold: currently trusts no_view most (20%).
+G,12,"Stocks · no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%"
+G,13,Stocks: currently trusts no_view most (20%).

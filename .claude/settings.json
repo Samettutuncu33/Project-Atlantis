@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Artifact",
+      "ArtifactData",
+      "mcp__claude-code-remote__create_session",
+      "mcp__claude-code-remote__get_session",
+      "mcp__claude-code-remote__list_events"
+    ],
+    "deny": [
+      "mcp__Interactive_Brokers_IBKR__create_order_instruction",
+      "mcp__Interactive_Brokers_IBKR__delete_order_instruction",
+      "mcp__Interactive_Brokers_IBKR__get_order_instructions",
+      "mcp__Interactive_Brokers_IBKR__get_account_balances",
+      "mcp__Interactive_Brokers_IBKR__get_account_orders",
+      "mcp__Interactive_Brokers_IBKR__get_account_positions",
+      "mcp__Interactive_Brokers_IBKR__get_account_summary",
+      "mcp__Interactive_Brokers_IBKR__get_account_trades"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+ "made_at": "2026-11-21T01:01:16+00:00",
+ "agent": "history",
+ "summary": "Only BTCUSD and ETHUSD are in the briefing (weekend, other markets closed). Both are oversold (RSI 31 and 27) after a weak 20-hour trend, but similar past bars were higher 24 hours later in 47% and 49% of cases, which is no better than the all-bar base rate. Samples are large (n above 2500), so the figures are used as measured, and they give no tradable edge.",
+ "probs": {
+  "BTCUSD": 0.47,
+  "ETHUSD": 0.49
+ },
+ "evidence": [
+  {
+   "symbols": [
+    "BTCUSD"
+   ],
+   "claim": "Similar past hourly bars (same 24h trend and RSI bucket): up 47% of n=2518 after 24 trading hours (all bars: 47%).",
+   "source": "atlantis:history"
+  },
+  {
+   "symbols": [
+    "ETHUSD"
+   ],
+   "claim": "Similar past hourly bars (same 24h trend and RSI bucket): up 49% of n=2536 after 24 trading hours (all bars: 46%).",
+   "source": "atlantis:history"
+  }
+ ]
+}

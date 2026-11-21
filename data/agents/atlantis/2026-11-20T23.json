@@ -1,0 +1,15 @@
+{
+ "made_at": "2026-11-21T01:01:28+00:00",
+ "agent": "atlantis",
+ "summary": "Weekend bar: only BTCUSD and ETHUSD trade. History gives 0.47 and 0.49 from large samples, which is no edge. News (2026-11-20T22) and scanner found no dated, sourced evidence and give no probabilities; papers is not due. No two agents agree on a direction, so I approve nothing. I want news to find dated crypto items at its next run and the scanner to check the Monday calendar once it is published.",
+ "decisions": {
+  "BTCUSD": {
+   "approve": false,
+   "reason": "history 0.47 only; news and scanner have no dated evidence, so no agreement"
+  },
+  "ETHUSD": {
+   "approve": false,
+   "reason": "history 0.49 only; news and scanner have no dated evidence, so no agreement"
+  }
+ }
+}

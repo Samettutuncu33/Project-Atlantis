@@ -1,0 +1,109 @@
+{
+ "date": "2026-11-20",
+ "made_at": "2026-11-21T01:03:09+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "A broad sell-off in AI-linked stocks hit US equities on Nov 20; CNN reported the Nasdaq fell 5.28% and erased its gains for the year as investors moved into bonds. Nvidia reported a Q3 revenue beat ($115.8B, +103% YoY), but its board said it would not reinstate Jensen Huang as CEO, and the stock fell sharply. Bitcoin dropped to just under $60,000, more than 50% below its all-time high. Brent and WTI were on track for a third straight weekly decline as Hormuz crude flows normalised, and gold also fell. No dated calendar events for the next 5 trading days were found in the searches.",
+ "calendar": [],
+ "items": [
+  {
+   "symbols": [
+    "USATECHIDXUSD",
+    "USA500IDXUSD"
+   ],
+   "headline": "Nasdaq wipes out gains for the year as Anthropic IPO fails to quell AI nerves",
+   "source": "https://www.cnn.com/2026/11/20/investing/us-stocks-anthropic-ai",
+   "published_at": "2026-11-20T17:32:00+00:00",
+   "tone": -0.6,
+   "relevance": "high",
+   "note": "Nasdaq -5.28% on Friday; tech rout drove a flight to bonds and the longest US equity slide since 2020."
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Nvidia posts Q3 beat as revenue rose 103% YOY to $115.8B, board says it will not reinstate Jensen Huang as CEO",
+   "source": "https://finance.yahoo.com/technology/live/nvidia-earnings-live-nvidia-posts-q3-beat-board-says-it-will-not-reinstate-jensen-huang-as-ceo-221428433.html",
+   "published_at": "2026-11-18T09:18:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "Strong results overshadowed by leadership/governance issue; page shows NVDA -12.07%."
+  },
+  {
+   "symbols": [
+    "BTCUSD"
+   ],
+   "headline": "Bitcoin Fell More Than 20% in November. History Says This Happens Next.",
+   "source": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-fell-more-20-november-173502887.html",
+   "published_at": "2026-11-20T17:35:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "BTC just under $60,000, >50% below ~$126,000 ATH; risk-off alongside tech sell-off."
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "Oil prices set for third straight weekly decline on Middle East export flows",
+   "source": "https://www.cnbc.com/2026/11/20/oil-wti-brent-hormuz.html",
+   "published_at": "2026-11-20T05:01:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "Brent ~-4% and WTI ~-5% on the week; surplus expectations as Hormuz shipments return to pre-war levels."
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "Current price of oil as of November 20, 2026",
+   "source": "https://fortune.com/article/price-of-oil-11-20-2026/",
+   "published_at": "2026-11-20T12:40:00+00:00",
+   "tone": -0.1,
+   "relevance": "low",
+   "note": "Brent $92.83 at 7:15 ET, down 58 cents vs prior morning."
+  },
+  {
+   "symbols": [
+    "XAUUSD"
+   ],
+   "headline": "Gold Price Today on November 20, 2026",
+   "source": "https://www.aol.com/articles/gold-price-today-november-20-110915000.html",
+   "published_at": "2026-11-20T11:09:00+00:00",
+   "tone": -0.3,
+   "relevance": "medium",
+   "note": "Spot gold $3,586.45; gold fell despite the risk-off move in equities."
+  }
+ ],
+ "views": {
+  "USATECHIDXUSD": {
+   "tone": -0.5,
+   "event_risk": "high",
+   "reason": "AI-led rout, Nasdaq -5.28% Friday."
+  },
+  "USA500IDXUSD": {
+   "tone": -0.4,
+   "event_risk": "high",
+   "reason": "Broad tech sell-off; longest slide since 2020 per CNN."
+  },
+  "NVDAUSUSD": {
+   "tone": -0.4,
+   "event_risk": "high",
+   "reason": "Sharp post-earnings drop; CEO/governance uncertainty."
+  },
+  "BTCUSD": {
+   "tone": -0.3,
+   "event_risk": "normal",
+   "reason": "More than 20% down in November, under $60k."
+  },
+  "LIGHTCMDUSD": {
+   "tone": -0.3,
+   "event_risk": "normal",
+   "reason": "Third weekly decline; Hormuz flows normalised, surplus expectations."
+  },
+  "XAUUSD": {
+   "tone": -0.2,
+   "event_risk": "normal",
+   "reason": "Gold fell on Nov 20."
+  }
+ }
+}

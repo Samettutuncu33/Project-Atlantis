@@ -1,14 +1,14 @@
 # Atlantis status (SIMULATION ONLY)
 
-Last run: 2026-11-20T23:25:03+00:00 · last bar: 2026-11-19 · mode: **RUNNING** · Claude API spend this month: **$2.77**
+Last run: 2026-11-21T01:04:25+00:00 · last bar: 2026-11-20 · mode: **RUNNING** · Claude API spend this month: **$3.10**
 
 | Account | Strategy | Equity $ | Return % | Fills | Open positions | Max drawdown % |
 |---|---|---|---|---|---|---|
 | A | Trend 12m · conservative | 200.00 | +0.00 | 0 | 0 | 0.0 |
-| B | Trend 12m · min ticket | 157.01 | -21.50 | 4 | 4 | -21.5 |
+| B | Trend 12m · min ticket | 156.92 | -21.54 | 4 | 4 | -21.5 |
 | C | Breakout 55/20 · conservative | 200.00 | +0.00 | 0 | 0 | 0.0 |
-| D | Breakout 55/20 · min ticket | 254.39 | +27.20 | 5 | 3 | -1.2 |
-| E | Atlantis Adaptive · multi-asset, self-learning | 190.54 | -4.73 | 2 | 2 | -6.5 |
+| D | Breakout 55/20 · min ticket | 254.33 | +27.16 | 5 | 3 | -1.2 |
+| E | Atlantis Adaptive · multi-asset, self-learning | 185.64 | -7.18 | 2 | 2 | -8.9 |
 | F | Atlantis Intraday · hourly, news + daily/weekly context | 188.74 | -5.63 | 33 | 1 | -7.8 |
 | G | Atlantis AI team · research agents decide, Atlantis approves | 193.62 | -3.19 | 4 | 0 | -4.6 |
 
@@ -23,8 +23,8 @@ Last run: 2026-11-20T23:25:03+00:00 · last bar: 2026-11-19 · mode: **RUNNING**
 | D | Euro / US dollar | -1000.0 | 1147.45 | 25.26 |
 | D | Australian dollar / US dollar | -1000.0 | 721.95 | 29.9 |
 | D | British pound / US dollar | -1000.0 | 1327.67 | 9.27 |
-| E | Nikkei 225 index (Japan) | 0.3 | 109.08 | -5.66 |
-| E | WTI crude oil | 1.0 | 82.76 | -3.71 |
+| E | Nikkei 225 index (Japan) | 0.3 | 103.39 | -11.35 |
+| E | WTI crude oil | 1.0 | 83.56 | -2.91 |
 | F | Nikkei 225 index (Japan) | 0.4 | 137.86 | -10.86 |
 
 ## Last fills

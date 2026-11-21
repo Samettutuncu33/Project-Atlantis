@@ -1,4 +1,7 @@
 symbol,name,tone,event_risk,reason
-USA500IDXUSD,S&P 500 index,-0.2,high,"Multi-day sell-off, AI-stock jitters, hawkish Fed pricing."
-USATECHIDXUSD,Nasdaq 100 index,-0.2,high,Tech led losses; Nvidia volatile around earnings.
-NVDAUSUSD,NVIDIA,-0.1,high,"Earnings just reported, large swings."
+USATECHIDXUSD,Nasdaq 100 index,-0.5,high,"AI-led rout, Nasdaq -5.28% Friday."
+USA500IDXUSD,S&P 500 index,-0.4,high,Broad tech sell-off; longest slide since 2020 per CNN.
+NVDAUSUSD,NVIDIA,-0.4,high,Sharp post-earnings drop; CEO/governance uncertainty.
+BTCUSD,Bitcoin,-0.3,normal,"More than 20% down in November, under $60k."
+LIGHTCMDUSD,WTI crude oil,-0.3,normal,"Third weekly decline; Hormuz flows normalised, surplus expectations."
+XAUUSD,Gold,-0.2,normal,Gold fell on Nov 20.

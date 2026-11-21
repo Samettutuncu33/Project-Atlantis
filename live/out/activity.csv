@@ -1,14 +1,14 @@
 at,agent,level,msg
-2026-11-20T23:25:03+00:00,learning,info,"Account E: 48,560 predictions scored so far, recent hit rate 35%"
-2026-11-20T23:25:03+00:00,learning,info,"Account F: 79,072 predictions scored so far, recent hit rate 30%"
-2026-11-20T23:25:03+00:00,learning,info,"Account G: 1,257 predictions scored so far, recent hit rate 30%"
-2026-11-20T23:25:03+00:00,checks,info,Run finished: 79 of 79 checks passed
-2026-11-20T19:19:29+00:00,analyst,info,"AI analyst (hourly, account F): 10 predictions for hour 2026-11-20T18 · track record: 225 predictions scored, hit rate 35%"
+2026-11-21T01:04:25+00:00,learning,info,"Account E: 48,580 predictions scored so far, recent hit rate 33%"
+2026-11-21T01:04:25+00:00,learning,info,"Account F: 79,074 predictions scored so far, recent hit rate 30%"
+2026-11-21T01:04:25+00:00,learning,info,"Account G: 1,257 predictions scored so far, recent hit rate 30%"
+2026-11-21T01:04:25+00:00,checks,info,Run finished: 79 of 79 checks passed
+2026-11-21T01:04:24+00:00,analyst,info,"AI analyst (hourly, account F): 2 predictions for hour 2026-11-20T23 · track record: 225 predictions scored, hit rate 35%"
+2026-11-21T01:03:46+00:00,analyst,info,"AI analyst (daily, account E): 20 predictions for bar 2026-11-20 · track record: 20 predictions scored, hit rate 0%"
+2026-11-21T01:03:09+00:00,news,info,"News brief for 2026-11-20: 6 dated, sourced items kept of 6"
 2026-11-20T16:00:00+00:00,broker,info,"Account G sold 0.1 S&P 500 index at 7,092.55 (simulated)"
 2026-11-20T12:00:00+00:00,broker,info,"Account G bought 0.1 S&P 500 index at 7,133.62 (simulated)"
 2026-11-20T09:00:00+00:00,broker,info,"Account G sold 0.1 S&P 500 index at 7,149.99 (simulated)"
-2026-11-20T00:16:06+00:00,analyst,info,"AI analyst (daily, account E): 15 predictions for bar 2026-11-19 · track record: 0 predictions scored, none scored yet"
-2026-11-20T00:15:55+00:00,news,info,"News brief for 2026-11-19: 1 dated, sourced items kept of 1"
 2026-11-20T00:00:00+00:00,broker,info,"Account G bought 0.1 S&P 500 index at 7,172.75 (simulated)"
 2026-11-19T17:00:00+00:00,broker,info,"Account F sold 0.2 Nikkei 225 index (Japan) at 58,336.5 (simulated)"
 2026-11-18T23:00:00+00:00,broker,info,"Account F bought 0.2 Nikkei 225 index (Japan) at 58,901.6 (simulated)"

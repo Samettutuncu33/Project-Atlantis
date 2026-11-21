@@ -1,0 +1,8 @@
+{
+ "made_at": "2026-11-21T01:04:24+00:00",
+ "analyst": "claude-api:claude-opus-5-5",
+ "probs": {
+  "BTCUSD": 0.52,
+  "ETHUSD": 0.52
+ }
+}

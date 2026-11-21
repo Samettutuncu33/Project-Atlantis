@@ -11,7 +11,7 @@
  ],
  "eta": {
   "fx_spot": 0.022968704354156298,
-  "crypto_fx": 0.039318020955299376,
+  "crypto_fx": 0.03931411706600263,
   "index_cfd": 0.025735670992246176,
   "commodity_cfd": 0.05747217925370001,
   "metal_cfd": 0.05747217925370001,
@@ -19,7 +19,7 @@
  },
  "rounds": {
   "fx_spot": 29508,
-  "crypto_fx": 10070,
+  "crypto_fx": 10072,
   "index_cfd": 23504,
   "commodity_cfd": 4713,
   "metal_cfd": 4713,
@@ -36,13 +36,13 @@
    "ml_lightgbm": 7476.244374179862
   },
   "crypto_fx": {
-   "llm_analyst": 2511.055913420627,
-   "no_view": 2517.5,
-   "rule_trend": 2625.7799999999284,
-   "rule_breakout": 2582.3450744009983,
-   "rule_reversal": 2521.955161971108,
-   "ml_logistic": 2641.020185322609,
-   "ml_lightgbm": 2542.498915542103
+   "llm_analyst": 2511.4767698732717,
+   "no_view": 2518.0,
+   "rule_trend": 2626.4999999999286,
+   "rule_breakout": 2583.0088490254984,
+   "rule_reversal": 2522.277141552008,
+   "ml_logistic": 2641.4524199603093,
+   "ml_lightgbm": 2542.9001265111033
   },
   "index_cfd": {
    "llm_analyst": 5872.55683475382,
@@ -92,12 +92,12 @@
    "llm_analyst": 88
   },
   "crypto_fx": {
-   "no_view": 10070,
-   "rule_trend": 10070,
-   "rule_breakout": 10070,
-   "rule_reversal": 10070,
-   "ml_logistic": 10070,
-   "ml_lightgbm": 10070,
+   "no_view": 10072,
+   "rule_trend": 10072,
+   "rule_breakout": 10072,
+   "rule_reversal": 10072,
+   "ml_logistic": 10072,
+   "ml_lightgbm": 10072,
    "llm_analyst": 32
   },
   "index_cfd": {
@@ -149,9 +149,9 @@
   "crypto_fx": {
    "rule_trend": 4996,
    "rule_breakout": 4773,
-   "rule_reversal": 5271,
-   "ml_logistic": 5219,
-   "ml_lightgbm": 5183,
+   "rule_reversal": 5273,
+   "ml_logistic": 5221,
+   "ml_lightgbm": 5185,
    "llm_analyst": 8
   },
   "index_cfd": {
@@ -197,11 +197,11 @@
    "llm_analyst": 66
   },
   "crypto_fx": {
-   "rule_trend": 10068,
-   "rule_breakout": 10069,
-   "rule_reversal": 10058,
-   "ml_logistic": 10070,
-   "ml_lightgbm": 10069,
+   "rule_trend": 10070,
+   "rule_breakout": 10071,
+   "rule_reversal": 10060,
+   "ml_logistic": 10072,
+   "ml_lightgbm": 10071,
    "llm_analyst": 24
   },
   "index_cfd": {
@@ -248,13 +248,13 @@
    "llm_analyst": 0.39339071329223174
   },
   "crypto_fx": {
-   "no_view": 0.27762764797742123,
-   "rule_trend": 0.003931124475737317,
-   "rule_breakout": 0.021686735925537284,
-   "rule_reversal": 0.2330172926967737,
-   "ml_logistic": 0.002159143435088658,
-   "ml_lightgbm": 0.10389418559498186,
-   "llm_analyst": 0.35768386989445994
+   "no_view": 0.2767968186307365,
+   "rule_trend": 0.0038872502405318823,
+   "rule_breakout": 0.021488506899217164,
+   "rule_reversal": 0.2339556778706212,
+   "ml_logistic": 0.0021594657213880445,
+   "ml_lightgbm": 0.10399649968246666,
+   "llm_analyst": 0.3577157809550386
   },
   "index_cfd": {
    "no_view": 0.39497745386771127,
@@ -303,12 +303,12 @@
   "FX \u00b7 rule_trend: 14971/29506 directional calls correct (51%), Brier 0.2585, weight 0%",
   "FX: currently trusts no_view most (43%).",
   "Crypto \u00b7 llm_analyst: 8/24 directional calls correct (33%), Brier 0.2494, weight 36%",
-  "Crypto \u00b7 ml_lightgbm: 5183/10069 directional calls correct (51%), Brier 0.2525, weight 10%",
-  "Crypto \u00b7 ml_logistic: 5219/10070 directional calls correct (52%), Brier 0.2623, weight 0%",
+  "Crypto \u00b7 ml_lightgbm: 5185/10071 directional calls correct (51%), Brier 0.2525, weight 10%",
+  "Crypto \u00b7 ml_logistic: 5221/10072 directional calls correct (52%), Brier 0.2623, weight 0%",
   "Crypto \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 28%",
-  "Crypto \u00b7 rule_breakout: 4773/10069 directional calls correct (47%), Brier 0.2564, weight 2%",
-  "Crypto \u00b7 rule_reversal: 5271/10058 directional calls correct (52%), Brier 0.2504, weight 23%",
-  "Crypto \u00b7 rule_trend: 4996/10068 directional calls correct (50%), Brier 0.2608, weight 0%",
+  "Crypto \u00b7 rule_breakout: 4773/10071 directional calls correct (47%), Brier 0.2565, weight 2%",
+  "Crypto \u00b7 rule_reversal: 5273/10060 directional calls correct (52%), Brier 0.2504, weight 23%",
+  "Crypto \u00b7 rule_trend: 4996/10070 directional calls correct (50%), Brier 0.2608, weight 0%",
   "Crypto: currently trusts llm_analyst most (36%).",
   "Indices \u00b7 llm_analyst: 16/52 directional calls correct (31%), Brier 0.2499, weight 43%",
   "Indices \u00b7 ml_lightgbm: 11826/23501 directional calls correct (50%), Brier 0.2535, weight 5%",

@@ -8,56 +8,56 @@
   "agent_scanner"
  ],
  "eta": {
-  "fx_spot": 0.16079311022593637,
-  "crypto_fx": 0.2752058406044123,
-  "index_cfd": 0.18100302458688364,
-  "commodity_cfd": 0.40370912105587403,
-  "metal_cfd": 0.40370912105587403,
+  "fx_spot": 0.15796368498541713,
+  "crypto_fx": 0.27047415541416253,
+  "index_cfd": 0.17764460623998363,
+  "commodity_cfd": 0.39625538850645303,
+  "metal_cfd": 0.39625538850645303,
   "stock_cfd": 0.4838388781303282
  },
  "rounds": {
-  "fx_spot": 498,
-  "crypto_fx": 170,
-  "index_cfd": 393,
-  "commodity_cfd": 79,
-  "metal_cfd": 79,
+  "fx_spot": 516,
+  "crypto_fx": 176,
+  "index_cfd": 408,
+  "commodity_cfd": 82,
+  "metal_cfd": 82,
   "stock_cfd": 55
  },
  "cum_loss": {
   "fx_spot": {
-   "agent_news": 124.5,
-   "agent_history": 124.5,
-   "agent_papers": 124.5,
-   "agent_scanner": 124.5,
-   "no_view": 124.5
+   "agent_news": 129.42669071547306,
+   "agent_history": 130.09619999999998,
+   "agent_papers": 129.27220367112554,
+   "agent_scanner": 129.42669071547306,
+   "no_view": 129.0
   },
   "crypto_fx": {
-   "agent_news": 42.46034988108738,
-   "agent_history": 42.460800000000006,
-   "agent_papers": 42.42160000000001,
-   "agent_scanner": 42.46034988108738,
-   "no_view": 42.5
+   "agent_news": 43.9003525902823,
+   "agent_history": 43.902000000000015,
+   "agent_papers": 43.80400000000003,
+   "agent_scanner": 43.9003525902823,
+   "no_view": 44.0
   },
   "index_cfd": {
-   "agent_news": 98.25,
-   "agent_history": 98.25,
-   "agent_papers": 98.25,
-   "agent_scanner": 98.25,
-   "no_view": 98.25
+   "agent_news": 102.31262537043435,
+   "agent_history": 102.3821,
+   "agent_papers": 102.2267725117114,
+   "agent_scanner": 102.2267725117114,
+   "no_view": 102.0
   },
   "commodity_cfd": {
-   "agent_news": 19.75,
-   "agent_history": 19.75,
-   "agent_papers": 19.75,
-   "agent_scanner": 19.75,
-   "no_view": 19.75
+   "agent_news": 20.440758304059305,
+   "agent_history": 20.384800000000002,
+   "agent_papers": 20.440758304059305,
+   "agent_scanner": 20.440758304059305,
+   "no_view": 20.5
   },
   "metal_cfd": {
-   "agent_news": 19.75,
-   "agent_history": 19.75,
-   "agent_papers": 19.75,
-   "agent_scanner": 19.75,
-   "no_view": 19.75
+   "agent_news": 20.496708910169424,
+   "agent_history": 20.5,
+   "agent_papers": 20.490299999999998,
+   "agent_scanner": 20.496708910169424,
+   "no_view": 20.5
   },
   "stock_cfd": {
    "agent_news": 13.75,
@@ -69,83 +69,110 @@
  },
  "counts": {
   "fx_spot": {
-   "no_view": 498
+   "no_view": 516,
+   "agent_history": 18,
+   "agent_papers": 12
   },
   "crypto_fx": {
-   "no_view": 170,
-   "agent_history": 4,
-   "agent_papers": 4
+   "no_view": 176,
+   "agent_history": 10,
+   "agent_papers": 10
   },
   "index_cfd": {
-   "no_view": 393
+   "no_view": 408,
+   "agent_history": 13,
+   "agent_news": 6
   },
   "commodity_cfd": {
-   "no_view": 79
+   "no_view": 82,
+   "agent_history": 3
   },
   "metal_cfd": {
-   "no_view": 79
+   "no_view": 82,
+   "agent_history": 3,
+   "agent_papers": 3
   },
   "stock_cfd": {
    "no_view": 55
   }
  },
  "hits": {
-  "fx_spot": {},
-  "crypto_fx": {
-   "agent_history": 2,
-   "agent_papers": 4
+  "fx_spot": {
+   "agent_history": 0,
+   "agent_papers": 3
   },
-  "index_cfd": {},
-  "commodity_cfd": {},
-  "metal_cfd": {},
+  "crypto_fx": {
+   "agent_history": 5,
+   "agent_papers": 10
+  },
+  "index_cfd": {
+   "agent_history": 0,
+   "agent_news": 0
+  },
+  "commodity_cfd": {
+   "agent_history": 3
+  },
+  "metal_cfd": {
+   "agent_papers": 2
+  },
   "stock_cfd": {}
  },
  "directional": {
-  "fx_spot": {},
-  "crypto_fx": {
-   "agent_history": 2,
-   "agent_papers": 4
+  "fx_spot": {
+   "agent_history": 18,
+   "agent_papers": 12
   },
-  "index_cfd": {},
-  "commodity_cfd": {},
-  "metal_cfd": {},
+  "crypto_fx": {
+   "agent_history": 5,
+   "agent_papers": 10
+  },
+  "index_cfd": {
+   "agent_history": 13,
+   "agent_news": 6
+  },
+  "commodity_cfd": {
+   "agent_history": 3
+  },
+  "metal_cfd": {
+   "agent_papers": 3
+  },
   "stock_cfd": {}
  },
  "weights": {
   "fx_spot": {
-   "no_view": 0.2,
-   "agent_news": 0.2,
-   "agent_history": 0.2,
-   "agent_papers": 0.2,
-   "agent_scanner": 0.2
+   "no_view": 0.2141990137283287,
+   "agent_news": 0.20023745069499538,
+   "agent_history": 0.18014206004301567,
+   "agent_papers": 0.20518402483866477,
+   "agent_scanner": 0.20023745069499538
   },
   "crypto_fx": {
-   "no_view": 0.19783957407318142,
-   "agent_news": 0.20001020987718812,
-   "agent_history": 0.1999854350762171,
-   "agent_papers": 0.20215457109622514,
-   "agent_scanner": 0.20001020987718812
+   "no_view": 0.19470627694514353,
+   "agent_news": 0.20002536827951453,
+   "agent_history": 0.1999362604793474,
+   "agent_papers": 0.20530672601647995,
+   "agent_scanner": 0.20002536827951453
   },
   "index_cfd": {
-   "no_view": 0.2,
-   "agent_news": 0.2,
-   "agent_history": 0.2,
-   "agent_papers": 0.2,
-   "agent_scanner": 0.2
+   "no_view": 0.20827329433133418,
+   "agent_news": 0.1970219061906872,
+   "agent_history": 0.19460524620037642,
+   "agent_papers": 0.2000497766388011,
+   "agent_scanner": 0.2000497766388011
   },
   "commodity_cfd": {
-   "no_view": 0.2,
-   "agent_news": 0.2,
-   "agent_history": 0.2,
-   "agent_papers": 0.2,
-   "agent_scanner": 0.2
+   "no_view": 0.19539019097100163,
+   "agent_news": 0.20003120509461553,
+   "agent_history": 0.20451619374515181,
+   "agent_papers": 0.20003120509461553,
+   "agent_scanner": 0.20003120509461553
   },
   "metal_cfd": {
-   "no_view": 0.2,
-   "agent_news": 0.2,
-   "agent_history": 0.2,
-   "agent_papers": 0.2,
-   "agent_scanner": 0.2
+   "no_view": 0.19974189355406727,
+   "agent_news": 0.20000254929542707,
+   "agent_history": 0.19974189355406727,
+   "agent_papers": 0.2005111143010112,
+   "agent_scanner": 0.20000254929542707
   },
   "stock_cfd": {
    "no_view": 0.2,
@@ -156,18 +183,25 @@
   }
  },
  "lessons": [
-  "FX \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",
-  "FX: currently trusts no_view most (20%).",
-  "Crypto \u00b7 agent_history: 2/2 directional calls correct (100%), Brier 0.2498, weight 20%",
-  "Crypto \u00b7 agent_papers: 4/4 directional calls correct (100%), Brier 0.2495, weight 20%",
-  "Crypto \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",
-  "Crypto: currently trusts agent_papers most (20%).",
-  "Indices \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",
-  "Indices: currently trusts no_view most (20%).",
+  "FX \u00b7 agent_history: 0/18 directional calls correct (0%), Brier 0.2521, weight 18%",
+  "FX \u00b7 agent_papers: 3/12 directional calls correct (25%), Brier 0.2505, weight 21%",
+  "FX \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 21%",
+  "FX: currently trusts no_view most (21%).",
+  "Crypto \u00b7 agent_history: 5/5 directional calls correct (100%), Brier 0.2494, weight 20%",
+  "Crypto \u00b7 agent_papers: 10/10 directional calls correct (100%), Brier 0.2489, weight 21%",
+  "Crypto \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 19%",
+  "Crypto: currently trusts agent_papers most (21%).",
+  "Indices \u00b7 agent_history: 0/13 directional calls correct (0%), Brier 0.2509, weight 19%",
+  "Indices \u00b7 agent_news: 0/6 directional calls correct (0%), Brier 0.2508, weight 20%",
+  "Indices \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 21%",
+  "Indices: currently trusts no_view most (21%).",
+  "Oil \u00b7 agent_history: 3/3 directional calls correct (100%), Brier 0.2486, weight 20%",
   "Oil \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",
-  "Oil: currently trusts no_view most (20%).",
+  "Oil: currently trusts agent_history most (20%).",
+  "Gold \u00b7 agent_history: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",
+  "Gold \u00b7 agent_papers: 2/3 directional calls correct (67%), Brier 0.2499, weight 20%",
   "Gold \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",
-  "Gold: currently trusts no_view most (20%).",
+  "Gold: currently trusts agent_papers most (20%).",
   "Stocks \u00b7 no_view: 0/0 directional calls correct (n/a), Brier 0.2500, weight 20%",
   "Stocks: currently trusts no_view most (20%)."
  ]

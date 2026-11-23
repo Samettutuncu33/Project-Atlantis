@@ -1,0 +1,35 @@
+{
+ "made_at": "2026-11-23T04:34:51+00:00",
+ "agent": "atlantis",
+ "summary": "History and papers agree in direction on BTCUSD, ETHUSD, EURUSD, XAUUSD (lower) and USDCAD, USDCHF (higher), but both edges are small and statistical. News and scanner have no verifiable dated evidence, so event risk is unquantified. I approve only those six where two agents agree and none contradicts; the rest are refused (AUDUSD disagrees, others have a single source). Next: news and scanner should find dated catalysts for the next 24 hours, and papers needs more verified rules.",
+ "decisions": {
+  "BTCUSD": {
+   "approve": true,
+   "reason": "history and papers agree on direction; no contradicting agent; news/scanner silent"
+  },
+  "ETHUSD": {
+   "approve": true,
+   "reason": "history and papers agree on direction; no contradicting agent; news/scanner silent"
+  },
+  "EURUSD": {
+   "approve": true,
+   "reason": "history and papers agree on direction; no contradicting agent; news/scanner silent"
+  },
+  "XAUUSD": {
+   "approve": true,
+   "reason": "history and papers agree on direction; no contradicting agent; news/scanner silent"
+  },
+  "USDCAD": {
+   "approve": true,
+   "reason": "history and papers agree on direction; no contradicting agent; news/scanner silent"
+  },
+  "USDCHF": {
+   "approve": true,
+   "reason": "history and papers agree on direction; no contradicting agent; news/scanner silent"
+  },
+  "AUDUSD": {
+   "approve": false,
+   "reason": "history 0.51 and papers 0.48 disagree"
+  }
+ }
+}

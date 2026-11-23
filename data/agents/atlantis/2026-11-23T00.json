@@ -1,0 +1,43 @@
+{
+ "made_at": "2026-11-23T01:44:43+00:00",
+ "agent": "atlantis",
+ "summary": "News and scanner found no dated, sourced evidence (nothing inside 72h; no verified 2026 calendar), so event risk is unquantified. History and papers agree on BTC, ETH, EUR, gold (down) and USDCAD, USDCHF (up), all with weak tilts of 0.02-0.08 from 0.50; I approve those six and let the code's cost and risk gate decide. Others are refused for disagreement or a single source. I want news to find dated items with timestamps and the scanner to confirm this week's calendar (Thanksgiving 26 Nov thins liquidity).",
+ "decisions": {
+  "BTCUSD": {
+   "approve": true,
+   "reason": "history and papers both lean down (history shrunk measured share, papers 1-month trend tilt); news and scanner silent"
+  },
+  "ETHUSD": {
+   "approve": true,
+   "reason": "history and papers both lean down (history shrunk measured share, papers 1-month trend tilt); news and scanner silent"
+  },
+  "EURUSD": {
+   "approve": true,
+   "reason": "history and papers both lean down (history shrunk measured share, papers 1-month trend tilt); news and scanner silent"
+  },
+  "XAUUSD": {
+   "approve": true,
+   "reason": "history and papers both lean down (history shrunk measured share, papers 1-month trend tilt); news and scanner silent"
+  },
+  "USDCAD": {
+   "approve": true,
+   "reason": "history and papers both lean up (history shrunk measured share, papers 1-month trend tilt); news and scanner silent"
+  },
+  "USDCHF": {
+   "approve": true,
+   "reason": "history and papers both lean up (history shrunk measured share, papers 1-month trend tilt); news and scanner silent"
+  },
+  "AUDUSD": {
+   "approve": false,
+   "reason": "history 0.51 up, papers 0.48 down: agents disagree"
+  },
+  "USDJPY": {
+   "approve": false,
+   "reason": "history 0.58 only; no second agent with evidence"
+  },
+  "GBPUSD": {
+   "approve": false,
+   "reason": "history 0.47 only; no second agent with evidence"
+  }
+ }
+}

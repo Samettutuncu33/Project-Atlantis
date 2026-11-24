@@ -1,0 +1,161 @@
+{
+ "date": "2026-11-23",
+ "made_at": "2026-11-24T04:27:12+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "US equities rebounded sharply on Nov 23 after Friday's sell-off left the S&P 500 in correction; the S&P 500 closed +4.73% at 7,237 and the Nasdaq Composite +6.51% at 24,090. Nvidia rose 31.48% to $165.05 after its board reinstated Jensen Huang as CEO, lifting AI and chip names; US futures were modestly higher Monday evening. Bitcoin was about $61,134 on Nov 23, slightly up on the day but well below mid-November levels. Upcoming risk: US consumer confidence (Nov 24), Dell earnings (Nov 24), October core PCE and Q3 GDP (Nov 25) in a holiday-shortened week, and an OPEC+ meeting on Nov 29. No dated last-72h items were found for non-US central banks, FX, gold, Ether, Amazon, oil inventories, or the DAX/FTSE/Nikkei.",
+ "calendar": [
+  {
+   "when": "2026-11-24T15:00:00+00:00",
+   "event": "US Conference Board Consumer Confidence (Nov), forecast 92.1 vs 91.7 prior",
+   "region": "US",
+   "importance": "medium",
+   "symbols": [
+    "MACRO",
+    "USA500IDXUSD",
+    "EURUSD"
+   ],
+   "source": "https://heygotrade.com/en/news/weekly-economic-outlook-2026-11-23"
+  },
+  {
+   "when": "2026-11-24T00:00:00+00:00",
+   "event": "Dell Technologies earnings after close (consensus EPS $6.63, revenue $50.63B)",
+   "region": "US",
+   "importance": "medium",
+   "symbols": [
+    "USATECHIDXUSD",
+    "NVDAUSUSD"
+   ],
+   "source": "https://heygotrade.com/en/news/weekly-economic-outlook-2026-11-23"
+  },
+  {
+   "when": "2026-11-25T13:30:00+00:00",
+   "event": "US October core PCE (forecast +0.3% m/m) and Q3 GDP",
+   "region": "US",
+   "importance": "high",
+   "symbols": [
+    "MACRO",
+    "EURUSD",
+    "USDJPY",
+    "USA500IDXUSD",
+    "USATECHIDXUSD",
+    "XAUUSD"
+   ],
+   "source": "https://heygotrade.com/en/news/weekly-economic-outlook-2026-11-23"
+  },
+  {
+   "when": "2026-11-29T00:00:00+00:00",
+   "event": "OPEC+ ministerial meeting (42nd ONOMM, 69th JMMC)",
+   "region": "GLOBAL",
+   "importance": "high",
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "source": "https://admiralmarkets.com/analytics/traders-blog/opec-meeting-november-29-2026-preview"
+  }
+ ],
+ "items": [
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Stock Market Today, Nov. 23: Nvidia Surges 31%, Adding Nearly $1 Trillion in Market Value as Jensen Huang Reclaims CEO Role",
+   "source": "https://www.fool.com/coverage/stock-market-today/2026/11/23/stock-market-today-nov-23-nvidia-surges-31-adding-nearly-usd1-trillion-in-market-value-as-jensen-huang-reclaims-ceo-role/",
+   "published_at": "2026-11-23T00:00:00+00:00",
+   "tone": 0.6,
+   "relevance": "high",
+   "note": "Leadership reversal triggered a record one-day rebound; volatility is very high after Friday's close near the 52-week low."
+  },
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Stock Market Today, Nov. 23: Advanced Micro Devices Climbs on AI-Chip Rebound After Nvidia Reinstates Jensen Huang as CEO",
+   "source": "https://www.fool.com/coverage/stock-market-today/2026/11/23/stock-market-today-nov-23-advanced-micro-devices-climbs-on-ai-chip-rebound-after-nvidia-reinstates-jensen-huang-as-ceo/",
+   "published_at": "2026-11-23T00:00:00+00:00",
+   "tone": 0.4,
+   "relevance": "high",
+   "note": "S&P 500 closed at 7,237 (+4.73%) and the Nasdaq Composite at 24,090 (+6.51%)."
+  },
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD",
+    "NVDAUSUSD"
+   ],
+   "headline": "Stock futures inch higher as traders see whether Nvidia can extend rally from Jensen Huang's return: Live updates",
+   "source": "https://www.cnbc.com/2026/11/23/stock-market-today-live-updates.html",
+   "published_at": "2026-11-23T23:05:57+00:00",
+   "tone": 0.2,
+   "relevance": "high",
+   "note": "Follow-through check after Friday's correction close; record Nvidia options activity."
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "MSFTUSUSD",
+    "GOOGLUSUSD"
+   ],
+   "headline": "Nvidia Market Cap Passes Microsoft, Alphabet for No. 2",
+   "source": "https://financefeeds.com/nvidia-market-cap-second-microsoft-alphabet/",
+   "published_at": "2026-11-23T00:00:00+00:00",
+   "tone": 0.2,
+   "relevance": "medium",
+   "note": "Market-cap ranking changes: NVDA $4.01T, MSFT $3.71T, GOOGL $3.45T."
+  },
+  {
+   "symbols": [
+    "BTCUSD"
+   ],
+   "headline": "Current price of Bitcoin for November 23, 2026",
+   "source": "https://fortune.com/article/price-of-bitcoin-11-23-2026/",
+   "published_at": "2026-11-23T12:45:00+00:00",
+   "tone": -0.1,
+   "relevance": "medium",
+   "note": "BTC about $61,134, +$400 on the day but in a multi-week downtrend. Timestamp is the 7:45 a.m. ET price time, not a confirmed publication time."
+  }
+ ],
+ "views": {
+  "NVDAUSUSD": {
+   "tone": 0.3,
+   "event_risk": "high",
+   "reason": "Record +31% rebound on CEO reinstatement; extreme volatility and Dell earnings and PCE ahead."
+  },
+  "USA500IDXUSD": {
+   "tone": 0.2,
+   "event_risk": "high",
+   "reason": "Sharp rebound from correction; PCE and GDP on Nov 25 in a holiday-shortened week."
+  },
+  "USATECHIDXUSD": {
+   "tone": 0.3,
+   "event_risk": "high",
+   "reason": "AI-led relief rally; Nasdaq Composite +6.51%."
+  },
+  "MSFTUSUSD": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "Lifted by broad tech rebound; no company-specific dated news found."
+  },
+  "GOOGLUSUSD": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "Lifted by broad tech rebound; no company-specific dated news found."
+  },
+  "BTCUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Stabilizing near $61k after a November decline."
+  },
+  "LIGHTCMDUSD": {
+   "tone": 0.0,
+   "event_risk": "high",
+   "reason": "OPEC+ meeting Nov 29 after a sharp November sell-off; no dated last-72h oil news found."
+  },
+  "MACRO": {
+   "tone": 0.0,
+   "event_risk": "high",
+   "reason": "US core PCE and GDP on Nov 25."
+  }
+ }
+}

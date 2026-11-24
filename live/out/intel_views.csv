@@ -1,7 +1,9 @@
 symbol,name,tone,event_risk,reason
-USATECHIDXUSD,Nasdaq 100 index,-0.5,high,"AI-led rout, Nasdaq -5.28% Friday."
-USA500IDXUSD,S&P 500 index,-0.4,high,Broad tech sell-off; longest slide since 2020 per CNN.
-NVDAUSUSD,NVIDIA,-0.4,high,Sharp post-earnings drop; CEO/governance uncertainty.
-BTCUSD,Bitcoin,-0.3,normal,"More than 20% down in November, under $60k."
-LIGHTCMDUSD,WTI crude oil,-0.3,normal,"Third weekly decline; Hormuz flows normalised, surplus expectations."
-XAUUSD,Gold,-0.2,normal,Gold fell on Nov 20.
+NVDAUSUSD,NVIDIA,0.3,high,Record +31% rebound on CEO reinstatement; extreme volatility and Dell earnings and PCE ahead.
+USA500IDXUSD,S&P 500 index,0.2,high,Sharp rebound from correction; PCE and GDP on Nov 25 in a holiday-shortened week.
+USATECHIDXUSD,Nasdaq 100 index,0.3,high,AI-led relief rally; Nasdaq Composite +6.51%.
+MSFTUSUSD,Microsoft,0.1,normal,Lifted by broad tech rebound; no company-specific dated news found.
+GOOGLUSUSD,Alphabet (Google),0.1,normal,Lifted by broad tech rebound; no company-specific dated news found.
+BTCUSD,Bitcoin,-0.1,normal,Stabilizing near $61k after a November decline.
+LIGHTCMDUSD,WTI crude oil,0.0,high,OPEC+ meeting Nov 29 after a sharp November sell-off; no dated last-72h oil news found.
+MACRO,MACRO,0.0,high,US core PCE and GDP on Nov 25.

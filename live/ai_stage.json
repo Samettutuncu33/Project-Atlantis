@@ -1,14 +1,14 @@
 {
  "news": {
-  "started_at": "2026-11-24T04:25:07+00:00",
-  "finished_at": "2026-11-24T04:27:12+00:00",
-  "status": "done",
-  "detail": "5 dated items kept of 5 ($0.39)"
+  "started_at": "2026-11-24T15:12:57+00:00",
+  "finished_at": "2026-11-24T15:13:02+00:00",
+  "status": "idle",
+  "detail": "brief for 2026-11-23 already written"
  },
  "analyst": {
-  "started_at": "2026-11-24T04:27:26+00:00",
-  "finished_at": "2026-11-24T04:28:40+00:00",
+  "started_at": "2026-11-24T15:13:07+00:00",
+  "finished_at": "2026-11-24T15:33:35+00:00",
   "status": "done",
-  "detail": "15 forecasts for 2026-11-24T03 ($0.03)"
+  "detail": "17 forecasts for 2026-11-24T14 ($0.03)"
  }
 }

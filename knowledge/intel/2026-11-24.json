@@ -1,0 +1,168 @@
+{
+ "date": "2026-11-24",
+ "made_at": "2026-11-25T00:19:01+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "US stocks surged on Monday Nov 23 after Nvidia reinstated Jensen Huang as CEO (S&P 500 +4.73%, Nasdaq Composite +6.51%), then partly reversed on Tuesday: S&P 500 -0.50%, Nasdaq -1.48%, while the Dow closed above 50,000 for the first time on a rotation into value stocks. Nvidia fell 5.86% to $155.38 on Tuesday. Crypto stayed weak: Bitcoin was near $60k and Ether near $1,700, with spot Ether ETF outflows continuing. Brent was about $89 ahead of the Nov 29 OPEC+ meeting, and gold rebounded from 14-month lows. US PCE inflation data is due Wednesday Nov 25 while markets price Fed hike risk.",
+ "calendar": [
+  {
+   "when": "2026-11-25T00:00:00+00:00",
+   "event": "US PCE inflation release",
+   "region": "US",
+   "importance": "high",
+   "symbols": [
+    "MACRO",
+    "EURUSD",
+    "USDJPY",
+    "XAUUSD",
+    "USA500IDXUSD",
+    "USATECHIDXUSD"
+   ],
+   "source": "https://helious.io/calendar/2026-11"
+  },
+  {
+   "when": "2026-11-29T00:00:00+00:00",
+   "event": "OPEC+ meeting",
+   "region": "Global",
+   "importance": "high",
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "source": "https://financefeeds.com/brent-crude-oil-price-89-08-tuesday-24-percent-monthly-slide-opec-plus-29-november-bull-92-bear-86/"
+  }
+ ],
+ "items": [
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Stock Market Today, Nov. 24: Tech Sell-Off Drags Nasdaq as Dow Gains on Value Rotation",
+   "source": "https://www.fool.com/coverage/stock-market-today/2026/11/24/stock-market-today-nov-24-tech-sell-off-drags-nasdaq-as-dow-gains-on-value-rotation/",
+   "published_at": "2026-11-24T21:00:00+00:00",
+   "tone": -0.2,
+   "relevance": "high",
+   "note": "S&P 500 -0.50%, Nasdaq -1.48% as AI momentum cooled after Monday's surge. Publication time is approximate (around the close)."
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Stock Market Midday, Nov. 24: Nvidia Drops 9% as Wall Street's Historic AI Rally Loses Momentum",
+   "source": "https://finance.yahoo.com/markets/stocks/articles/stock-market-midday-nov-24-174502979.html",
+   "published_at": "2026-11-24T17:45:00+00:00",
+   "tone": -0.3,
+   "relevance": "high",
+   "note": "Reversal after the Huang-reinstatement rally; NVDA closed -5.86% at $155.38."
+  },
+  {
+   "symbols": [
+    "AAPLUSUSD",
+    "AMZNUSUSD",
+    "NVDAUSUSD"
+   ],
+   "headline": "Stock Market Today, Nov. 24: Nvidia Gives Back $240 Billion in Market Value Despite Wall Street Upgrade Signaling 29% Upside",
+   "source": "https://www.fool.com/coverage/stock-market-today/2026/11/24/stock-market-today-nov-24-nvidia-gives-back-usd240-billion-in-market-value-despite-wall-street-upgrade-signaling-29-upside/",
+   "published_at": "2026-11-24T21:00:00+00:00",
+   "tone": 0.0,
+   "relevance": "medium",
+   "note": "AAPL about +1.4% to $354.07, AMZN about -1.2% to $252.29. Publication time is approximate (around the close)."
+  },
+  {
+   "symbols": [
+    "BTCUSD"
+   ],
+   "headline": "Bitcoin slips back toward $60,000 as Jensen Huang's Nvidia return rally fizzles",
+   "source": "https://www.theblock.co/",
+   "published_at": "2026-11-24T14:00:00+00:00",
+   "tone": -0.2,
+   "relevance": "high",
+   "note": "Risk rebound did not reach crypto; spot BTC ETFs had a fourth straight week of outflows."
+  },
+  {
+   "symbols": [
+    "ETHUSD"
+   ],
+   "headline": "Current price of Ethereum for November 24, 2026",
+   "source": "https://fortune.com/article/price-of-ethereum-11-24-2026/",
+   "published_at": "2026-11-24T13:00:00+00:00",
+   "tone": -0.2,
+   "relevance": "medium",
+   "note": "ETH about $1,703; spot Ether ETFs lost about $391M over six sessions."
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "Brent Crude Price $89.08: 24% Monthly Slide Before OPEC+",
+   "source": "https://financefeeds.com/brent-crude-oil-price-89-08-tuesday-24-percent-monthly-slide-opec-plus-29-november-bull-92-bear-86/",
+   "published_at": "2026-11-24T16:00:00+00:00",
+   "tone": -0.1,
+   "relevance": "high",
+   "note": "Steep monthly decline ahead of the Nov 29 OPEC+ decision."
+  },
+  {
+   "symbols": [
+    "XAUUSD"
+   ],
+   "headline": "Gold price today, Tuesday, November 24, 2026: Gold prices improve, lift from 14-month lows",
+   "source": "https://finance.yahoo.com/personal-finance/investing/article/gold-price-today-tuesday-november-24-2026-gold-prices-improve-lift-from-14-month-lows-121821092.html",
+   "published_at": "2026-11-24T12:18:00+00:00",
+   "tone": 0.1,
+   "relevance": "medium",
+   "note": "Rebound from 14-month lows; Fed hike pricing and PCE are the key drivers."
+  }
+ ],
+ "views": {
+  "NVDAUSUSD": {
+   "tone": -0.1,
+   "event_risk": "high",
+   "reason": "Extreme volatility after the CEO reinstatement: about +31% on Monday, -5.9% on Tuesday."
+  },
+  "USATECHIDXUSD": {
+   "tone": -0.1,
+   "event_risk": "high",
+   "reason": "AI-led swings plus PCE on Nov 25."
+  },
+  "USA500IDXUSD": {
+   "tone": 0.0,
+   "event_risk": "high",
+   "reason": "Rotation into value names offset tech losses; PCE due."
+  },
+  "AAPLUSUSD": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "Rose on Tuesday's rotation."
+  },
+  "AMZNUSUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Fell with tech."
+  },
+  "GOOGLUSUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "-0.85% on Nov 24."
+  },
+  "BTCUSD": {
+   "tone": -0.2,
+   "event_risk": "normal",
+   "reason": "ETF outflows; lagging equities."
+  },
+  "ETHUSD": {
+   "tone": -0.2,
+   "event_risk": "normal",
+   "reason": "Below $1,700 at times; ETF outflows."
+  },
+  "LIGHTCMDUSD": {
+   "tone": -0.1,
+   "event_risk": "high",
+   "reason": "Monthly slide; OPEC+ meeting on Nov 29."
+  },
+  "XAUUSD": {
+   "tone": 0.0,
+   "event_risk": "high",
+   "reason": "Off lows, but Fed hike pricing and PCE weigh."
+  }
+ }
+}

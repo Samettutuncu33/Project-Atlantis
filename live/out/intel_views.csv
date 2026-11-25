@@ -1,9 +1,11 @@
 symbol,name,tone,event_risk,reason
-NVDAUSUSD,NVIDIA,0.3,high,Record +31% rebound on CEO reinstatement; extreme volatility and Dell earnings and PCE ahead.
-USA500IDXUSD,S&P 500 index,0.2,high,Sharp rebound from correction; PCE and GDP on Nov 25 in a holiday-shortened week.
-USATECHIDXUSD,Nasdaq 100 index,0.3,high,AI-led relief rally; Nasdaq Composite +6.51%.
-MSFTUSUSD,Microsoft,0.1,normal,Lifted by broad tech rebound; no company-specific dated news found.
-GOOGLUSUSD,Alphabet (Google),0.1,normal,Lifted by broad tech rebound; no company-specific dated news found.
-BTCUSD,Bitcoin,-0.1,normal,Stabilizing near $61k after a November decline.
-LIGHTCMDUSD,WTI crude oil,0.0,high,OPEC+ meeting Nov 29 after a sharp November sell-off; no dated last-72h oil news found.
-MACRO,MACRO,0.0,high,US core PCE and GDP on Nov 25.
+NVDAUSUSD,NVIDIA,-0.1,high,"Extreme volatility after the CEO reinstatement: about +31% on Monday, -5.9% on Tuesday."
+USATECHIDXUSD,Nasdaq 100 index,-0.1,high,AI-led swings plus PCE on Nov 25.
+USA500IDXUSD,S&P 500 index,0.0,high,Rotation into value names offset tech losses; PCE due.
+AAPLUSUSD,Apple,0.1,normal,Rose on Tuesday's rotation.
+AMZNUSUSD,Amazon,-0.1,normal,Fell with tech.
+GOOGLUSUSD,Alphabet (Google),-0.1,normal,-0.85% on Nov 24.
+BTCUSD,Bitcoin,-0.2,normal,ETF outflows; lagging equities.
+ETHUSD,Ethereum,-0.2,normal,"Below $1,700 at times; ETF outflows."
+LIGHTCMDUSD,WTI crude oil,-0.1,high,Monthly slide; OPEC+ meeting on Nov 29.
+XAUUSD,Gold,0.0,high,"Off lows, but Fed hike pricing and PCE weigh."

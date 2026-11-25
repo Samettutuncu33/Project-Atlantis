@@ -1,5 +1,3 @@
 when,event,region,importance,symbols,source
-2026-11-24T15:00:00+00:00,"US Conference Board Consumer Confidence (Nov), forecast 92.1 vs 91.7 prior",US,medium,"MACRO, USA500IDXUSD, EURUSD",https://heygotrade.com/en/news/weekly-economic-outlook-2026-11-23
-2026-11-24T00:00:00+00:00,"Dell Technologies earnings after close (consensus EPS $6.63, revenue $50.63B)",US,medium,"USATECHIDXUSD, NVDAUSUSD",https://heygotrade.com/en/news/weekly-economic-outlook-2026-11-23
-2026-11-25T13:30:00+00:00,US October core PCE (forecast +0.3% m/m) and Q3 GDP,US,high,"MACRO, EURUSD, USDJPY, USA500IDXUSD, USATECHIDXUSD, XAUUSD",https://heygotrade.com/en/news/weekly-economic-outlook-2026-11-23
-2026-11-29T00:00:00+00:00,"OPEC+ ministerial meeting (42nd ONOMM, 69th JMMC)",GLOBAL,high,LIGHTCMDUSD,https://admiralmarkets.com/analytics/traders-blog/opec-meeting-november-29-2026-preview
+2026-11-25T00:00:00+00:00,US PCE inflation release,US,high,"MACRO, EURUSD, USDJPY, XAUUSD, USA500IDXUSD, USATECHIDXUSD",https://helious.io/calendar/2026-11
+2026-11-29T00:00:00+00:00,OPEC+ meeting,Global,high,LIGHTCMDUSD,https://financefeeds.com/brent-crude-oil-price-89-08-tuesday-24-percent-monthly-slide-opec-plus-29-november-bull-92-bear-86/

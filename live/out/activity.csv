@@ -1,17 +1,19 @@
 at,agent,level,msg
-2026-11-24T15:33:37+00:00,learning,info,"Account E: 48,600 predictions scored so far, recent hit rate 33%"
-2026-11-24T15:33:37+00:00,learning,info,"Account F: 79,692 predictions scored so far, recent hit rate 37%"
-2026-11-24T15:33:37+00:00,learning,info,"Account G: 1,319 predictions scored so far, recent hit rate 37%"
-2026-11-24T15:33:37+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-24T15:33:37+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-24T15:33:37+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-24T15:33:37+00:00,checks,error,Run finished: 79 of 82 checks passed
-2026-11-24T15:33:35+00:00,analyst,info,"AI analyst (hourly, account F): 17 predictions for hour 2026-11-24T14 · track record: 265 predictions scored, hit rate 40%"
+2026-11-25T00:25:44+00:00,learning,info,"Account E: 48,620 predictions scored so far, recent hit rate 32%"
+2026-11-25T00:25:44+00:00,learning,info,"Account F: 79,850 predictions scored so far, recent hit rate 36%"
+2026-11-25T00:25:44+00:00,learning,info,"Account G: 1,319 predictions scored so far, recent hit rate 36%"
+2026-11-25T00:25:44+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-25T00:25:44+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-25T00:25:44+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-25T00:25:44+00:00,checks,error,Run finished: 79 of 82 checks passed
+2026-11-25T00:25:43+00:00,analyst,info,"AI analyst (hourly, account F): 15 predictions for hour 2026-11-24T23 · track record: 282 predictions scored, hit rate 40%"
+2026-11-25T00:20:20+00:00,analyst,info,"AI analyst (daily, account E): 20 predictions for bar 2026-11-24 · track record: 52 predictions scored, hit rate 39%"
+2026-11-25T00:19:01+00:00,news,info,"News brief for 2026-11-24: 7 dated, sourced items kept of 7"
+2026-11-24T23:00:00+00:00,broker,info,"Account F bought 0.2 Nikkei 225 index (Japan) at 57,424.5 (simulated)"
+2026-11-24T18:00:00+00:00,broker,info,"Account F sold 0.1 Nikkei 225 index (Japan) at 57,517.4 (simulated)"
 2026-11-24T12:00:00+00:00,broker,info,"Account F sold 0.1 S&P 500 index at 7,188.89 (simulated)"
 2026-11-24T11:00:00+00:00,broker,info,"Account F bought 0.1 Nikkei 225 index (Japan) at 57,742.5 (simulated)"
 2026-11-24T11:00:00+00:00,broker,info,"Account F bought 0.1 S&P 500 index at 7,181.88 (simulated)"
-2026-11-24T04:27:26+00:00,analyst,info,"AI analyst (daily, account E): 20 predictions for bar 2026-11-23 · track record: 32 predictions scored, hit rate 5%"
-2026-11-24T04:27:12+00:00,news,info,"News brief for 2026-11-23: 5 dated, sourced items kept of 5"
 2026-11-24T01:00:00+00:00,broker,info,"Account F sold 0.1 Nikkei 225 index (Japan) at 58,959.3 (simulated)"
 2026-11-23T21:00:00+00:00,broker,info,"Account F bought 0.1 Nikkei 225 index (Japan) at 57,924.6 (simulated)"
 2026-11-23T19:00:00+00:00,broker,info,"Account F bought 0.1 Nikkei 225 index (Japan) at 57,889.5 (simulated)"
@@ -57,5 +59,3 @@ at,agent,level,msg
 2026-11-10T16:00:00+00:00,broker,info,"Account F sold 0.1 S&P 500 index at 7,489.6 (simulated)"
 2026-11-10T15:00:00+00:00,broker,info,"Account F sold 0.2 Nikkei 225 index (Japan) at 60,458.4 (simulated)"
 2026-11-10T15:00:00+00:00,broker,info,"Account F bought 0.1 S&P 500 index at 7,529.33 (simulated)"
-2026-11-10T12:00:00+00:00,broker,info,"Account F bought 0.3 Nikkei 225 index (Japan) at 60,121.6 (simulated)"
-2026-11-10T00:00:00+00:00,broker,info,Account B sold 1000 Euro / US dollar at 1.12219 (simulated)

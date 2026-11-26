@@ -1,14 +1,14 @@
 at,agent,level,msg
-2026-11-25T19:12:01+00:00,learning,info,"Account E: 48,620 predictions scored so far, recent hit rate 32%"
-2026-11-25T19:12:01+00:00,learning,info,"Account F: 80,160 predictions scored so far, recent hit rate 34%"
-2026-11-25T19:12:01+00:00,learning,info,"Account G: 1,319 predictions scored so far, recent hit rate 34%"
-2026-11-25T19:12:01+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-25T19:12:01+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-25T19:12:01+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-25T19:12:01+00:00,checks,error,Run finished: 79 of 82 checks passed
-2026-11-25T19:11:59+00:00,analyst,info,"AI analyst (hourly, account F): 14 predictions for hour 2026-11-25T17 · track record: 312 predictions scored, hit rate 38%"
-2026-11-25T00:20:20+00:00,analyst,info,"AI analyst (daily, account E): 20 predictions for bar 2026-11-24 · track record: 52 predictions scored, hit rate 39%"
-2026-11-25T00:19:01+00:00,news,info,"News brief for 2026-11-24: 7 dated, sourced items kept of 7"
+2026-11-26T02:21:23+00:00,learning,info,"Account E: 48,640 predictions scored so far, recent hit rate 29%"
+2026-11-26T02:21:23+00:00,learning,info,"Account F: 80,268 predictions scored so far, recent hit rate 45%"
+2026-11-26T02:21:23+00:00,learning,info,"Account G: 1,319 predictions scored so far, recent hit rate 45%"
+2026-11-26T02:21:23+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-26T02:21:23+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-26T02:21:23+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-26T02:21:23+00:00,checks,error,Run finished: 79 of 82 checks passed
+2026-11-26T02:21:22+00:00,analyst,info,"AI analyst (hourly, account F): 15 predictions for hour 2026-11-26T01 · track record: 324 predictions scored, hit rate 40%"
+2026-11-26T02:15:46+00:00,analyst,info,"AI analyst (daily, account E): 20 predictions for bar 2026-11-25 · track record: 67 predictions scored, hit rate 34%"
+2026-11-26T02:14:25+00:00,news,info,"News brief for 2026-11-25: 8 dated, sourced items kept of 8"
 2026-11-24T23:00:00+00:00,broker,info,"Account F bought 0.2 Nikkei 225 index (Japan) at 57,424.5 (simulated)"
 2026-11-24T18:00:00+00:00,broker,info,"Account F sold 0.1 Nikkei 225 index (Japan) at 57,517.4 (simulated)"
 2026-11-24T12:00:00+00:00,broker,info,"Account F sold 0.1 S&P 500 index at 7,188.89 (simulated)"

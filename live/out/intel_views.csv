@@ -1,11 +1,16 @@
 symbol,name,tone,event_risk,reason
-NVDAUSUSD,NVIDIA,-0.1,high,"Extreme volatility after the CEO reinstatement: about +31% on Monday, -5.9% on Tuesday."
-USATECHIDXUSD,Nasdaq 100 index,-0.1,high,AI-led swings plus PCE on Nov 25.
-USA500IDXUSD,S&P 500 index,0.0,high,Rotation into value names offset tech losses; PCE due.
-AAPLUSUSD,Apple,0.1,normal,Rose on Tuesday's rotation.
-AMZNUSUSD,Amazon,-0.1,normal,Fell with tech.
-GOOGLUSUSD,Alphabet (Google),-0.1,normal,-0.85% on Nov 24.
-BTCUSD,Bitcoin,-0.2,normal,ETF outflows; lagging equities.
-ETHUSD,Ethereum,-0.2,normal,"Below $1,700 at times; ETF outflows."
-LIGHTCMDUSD,WTI crude oil,-0.1,high,Monthly slide; OPEC+ meeting on Nov 29.
-XAUUSD,Gold,0.0,high,"Off lows, but Fed hike pricing and PCE weigh."
+NVDAUSUSD,NVIDIA,-0.4,high,Two-day AI selloff; closed -3.91% at $149.30 on inflation and tariff worries.
+USATECHIDXUSD,Nasdaq 100 index,-0.3,high,Nasdaq 100 briefly touched bear-market territory (-20% from Oct high) before recovering.
+USA500IDXUSD,S&P 500 index,-0.1,normal,"Closed -0.3% at 7,182.78 with broad breadth positive; Thanksgiving holiday thins trading."
+AMZNUSUSD,Amazon,-0.2,normal,Fell 3.14% in AI-linked selloff.
+GOOGLUSUSD,Alphabet (Google),-0.2,normal,Class A fell 2.13%.
+MSFTUSUSD,Microsoft,-0.1,normal,Fell 1.25%.
+AAPLUSUSD,Apple,0.0,normal,No dated Apple-specific news found.
+LIGHTCMDUSD,WTI crude oil,0.2,high,WTI +~3% to ~$85.22 after Houthi strike on Saudi refinery.
+XAUUSD,Gold,0.1,normal,"+0.5% to ~$3,574 as yields fell."
+BTCUSD,Bitcoin,-0.1,normal,Near $59-60k after a decline from the prior day; slight rebound with stocks.
+ETHUSD,Ethereum,0.0,normal,No dated Ether-specific news found.
+EURUSD,Euro / US dollar,0.0,normal,Dollar index -0.12%; Eurozone CPI due Dec 1.
+USDJPY,US dollar / Japanese yen,-0.1,normal,US 10y yield fell ~7bp to 4.86%.
+AUDUSD,Australian dollar / US dollar,0.0,normal,Australian GDP Dec 2 and RBA Governor speech Dec 1 ahead.
+USDCAD,US dollar / Canadian dollar,0.0,normal,Canada GDP Nov 30; oil strength.

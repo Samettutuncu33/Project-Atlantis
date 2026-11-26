@@ -1,0 +1,266 @@
+{
+ "date": "2026-11-25",
+ "made_at": "2026-11-26T02:14:25+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "On Nov 25, 2026 an AI-led selloff briefly took the Nasdaq 100 down 20% from its October high, triggered by hot core PCE inflation and new tariff proposals; stocks then recovered most losses, with the S&P 500 closing -0.3% at 7,182.78 and the Dow +0.3%. NVIDIA fell 3.91% to $149.30; Amazon, Alphabet and Microsoft also declined. The US 10-year yield fell to ~4.86%, the dollar index eased ~0.12%, WTI rose ~3% to ~$85.22 after a Houthi refinery strike, gold rose ~0.5% to ~$3,574 and Bitcoin held near $59-60k. In the latest central bank round, the Fed and BoJ held rates while the BoE hiked 25bp to 4%. US markets are closed Nov 26 for Thanksgiving; next week brings Canadian GDP, Eurozone CPI, US ISM Manufacturing, Australian GDP and US ADP.",
+ "calendar": [
+  {
+   "when": "2026-11-30T00:00:00+00:00",
+   "event": "Canada GDP",
+   "region": "CA",
+   "importance": "medium",
+   "symbols": [
+    "USDCAD"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  },
+  {
+   "when": "2026-11-30T00:00:00+00:00",
+   "event": "China CFLP Manufacturing & Non-Manufacturing PMI",
+   "region": "CN",
+   "importance": "medium",
+   "symbols": [
+    "AUDUSD",
+    "MACRO"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  },
+  {
+   "when": "2026-12-01T00:00:00+00:00",
+   "event": "Eurozone CPI (flash)",
+   "region": "EU",
+   "importance": "high",
+   "symbols": [
+    "EURUSD",
+    "DEUIDXEUR"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  },
+  {
+   "when": "2026-12-01T00:00:00+00:00",
+   "event": "US ISM Manufacturing PMI",
+   "region": "US",
+   "importance": "high",
+   "symbols": [
+    "USA500IDXUSD",
+    "EURUSD",
+    "USDJPY"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  },
+  {
+   "when": "2026-12-01T00:00:00+00:00",
+   "event": "RBA Governor speech",
+   "region": "AU",
+   "importance": "medium",
+   "symbols": [
+    "AUDUSD"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  },
+  {
+   "when": "2026-12-02T00:00:00+00:00",
+   "event": "Australia GDP",
+   "region": "AU",
+   "importance": "high",
+   "symbols": [
+    "AUDUSD"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  },
+  {
+   "when": "2026-12-02T00:00:00+00:00",
+   "event": "US ADP Employment Report",
+   "region": "US",
+   "importance": "medium",
+   "symbols": [
+    "USA500IDXUSD",
+    "EURUSD"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  }
+ ],
+ "items": [
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD",
+    "USA500IDXUSD"
+   ],
+   "headline": "Stock Market Today, Nov. 25: Nvidia Slides 3.9% as the Market Considers Hot PCE Inflation Data and New Tariff Proposals",
+   "source": "https://www.fool.com/coverage/stock-market-today/2026/11/25/stock-market-today-nov-25-nvidia-slides-3-9-as-the-market-considers-hot-pce-inflation-data-and-new-tariff-proposals/",
+   "published_at": "2026-11-25T21:46:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "NVDA closed $149.30 (-3.91%); S&P 500 7,183 (-0.25%), Nasdaq Composite 23,586 (-0.62%); hot PCE and tariff proposals cited."
+  },
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "How major US stock indexes fared Wednesday 11/25/2026",
+   "source": "https://abcnews.com/Business/wireStory/major-us-stock-indexes-fared-wednesday-11252026-138453529",
+   "published_at": "2026-11-25T00:00:00+00:00",
+   "tone": -0.1,
+   "relevance": "high",
+   "note": "S&P 500 -0.3% to 7,182.78, Dow +0.3% to 50,182.95 after recovering steep early losses. Date-only; no time given."
+  },
+  {
+   "symbols": [
+    "USATECHIDXUSD",
+    "XAUUSD",
+    "LIGHTCMDUSD",
+    "BTCUSD",
+    "EURUSD",
+    "USDJPY"
+   ],
+   "headline": "Financial & Forex Market Recap: Nov. 25, 2026",
+   "source": "https://www.babypips.com/news/daily-financial-forex-market-recap-2026-11-25",
+   "published_at": "2026-11-25T00:00:00+00:00",
+   "tone": -0.1,
+   "relevance": "high",
+   "note": "Nasdaq 100 briefly -20% from Oct high; 10y yield ~4.86%; DXY -0.12% at 103.70; WTI +2.99% to $85.22 on Houthi strike on Saudi refinery; gold $3,574 (+0.5%); BTC $60,194. Date-only; no time given."
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Stocks mixed as Wall Street erases sharp decline: Nvidia down 6%",
+   "source": "https://weisradio.com/2026/11/25/stocks-mixed-as-wall-street-erases-sharp-decline-nvidia-down-6/",
+   "published_at": "2026-11-25T19:34:00+00:00",
+   "tone": -0.3,
+   "relevance": "medium",
+   "note": "Intraday report that NVDA extended prior-day losses, erasing much of the gains after Huang's reinstatement. 2:34 PM timestamp assumed to be ET."
+  },
+  {
+   "symbols": [
+    "AMZNUSUSD",
+    "GOOGLUSUSD",
+    "MSFTUSUSD",
+    "NVDAUSUSD"
+   ],
+   "headline": "U.S. markets reversed gains on Nov 25; Nvidia fell 3.91%, HP surged 11.49%",
+   "source": "https://www.kucoin.com/news/flash/us-markets-reverse-gains-on-nov-25-nvidia-falls-3-91-hp-surges-11-49",
+   "published_at": "2026-11-25T00:00:00+00:00",
+   "tone": -0.3,
+   "relevance": "medium",
+   "note": "Amazon -3.14%, Alphabet A -2.13%, Microsoft -1.25% in the AI-linked selloff. Date-only; no time given."
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Tech stocks are volatile as AI fears overshadow Huang's Nvidia return",
+   "source": "https://www.cnn.com/2026/11/25/business/ai-sell-off-despite-huang-nvidia-return",
+   "published_at": "2026-11-25T00:00:00+00:00",
+   "tone": -0.3,
+   "relevance": "medium",
+   "note": "NVDA -3.9%; Sandisk -5.6%, Micron -4.5%; AI-spending fears dominate. Date-only; no time given."
+  },
+  {
+   "symbols": [
+    "BTCUSD",
+    "ETHUSD"
+   ],
+   "headline": "Current price of Bitcoin for November 25, 2026",
+   "source": "https://fortune.com/article/price-of-bitcoin-11-25-2026/",
+   "published_at": "2026-11-25T00:00:00+00:00",
+   "tone": -0.2,
+   "relevance": "medium",
+   "note": "BTC $58,564 at 6:45 a.m. ET, down $1,894 from the prior morning and ~$28.8k lower year over year. Date-only publication; no time given."
+  },
+  {
+   "symbols": [
+    "MACRO",
+    "GBPUSD",
+    "USDJPY"
+   ],
+   "headline": "Central Bank Commentary (November 2026): Federal Reserve, Bank of England and Bank of Japan",
+   "source": "https://gianlucabenigno.substack.com/p/central-bank-commentary-november",
+   "published_at": "2026-11-24T00:00:00+00:00",
+   "tone": 0.0,
+   "relevance": "medium",
+   "note": "Fed and BoJ held rates; BoE raised Bank Rate 25bp to 4%. Date-only; no time given."
+  }
+ ],
+ "views": {
+  "NVDAUSUSD": {
+   "tone": -0.4,
+   "event_risk": "high",
+   "reason": "Two-day AI selloff; closed -3.91% at $149.30 on inflation and tariff worries."
+  },
+  "USATECHIDXUSD": {
+   "tone": -0.3,
+   "event_risk": "high",
+   "reason": "Nasdaq 100 briefly touched bear-market territory (-20% from Oct high) before recovering."
+  },
+  "USA500IDXUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Closed -0.3% at 7,182.78 with broad breadth positive; Thanksgiving holiday thins trading."
+  },
+  "AMZNUSUSD": {
+   "tone": -0.2,
+   "event_risk": "normal",
+   "reason": "Fell 3.14% in AI-linked selloff."
+  },
+  "GOOGLUSUSD": {
+   "tone": -0.2,
+   "event_risk": "normal",
+   "reason": "Class A fell 2.13%."
+  },
+  "MSFTUSUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Fell 1.25%."
+  },
+  "AAPLUSUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No dated Apple-specific news found."
+  },
+  "LIGHTCMDUSD": {
+   "tone": 0.2,
+   "event_risk": "high",
+   "reason": "WTI +~3% to ~$85.22 after Houthi strike on Saudi refinery."
+  },
+  "XAUUSD": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "+0.5% to ~$3,574 as yields fell."
+  },
+  "BTCUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Near $59-60k after a decline from the prior day; slight rebound with stocks."
+  },
+  "ETHUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No dated Ether-specific news found."
+  },
+  "EURUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "Dollar index -0.12%; Eurozone CPI due Dec 1."
+  },
+  "USDJPY": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "US 10y yield fell ~7bp to 4.86%."
+  },
+  "AUDUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "Australian GDP Dec 2 and RBA Governor speech Dec 1 ahead."
+  },
+  "USDCAD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "Canada GDP Nov 30; oil strength."
+  }
+ }
+}

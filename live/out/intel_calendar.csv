@@ -1,3 +1,8 @@
 when,event,region,importance,symbols,source
-2026-11-25T00:00:00+00:00,US PCE inflation release,US,high,"MACRO, EURUSD, USDJPY, XAUUSD, USA500IDXUSD, USATECHIDXUSD",https://helious.io/calendar/2026-11
-2026-11-29T00:00:00+00:00,OPEC+ meeting,Global,high,LIGHTCMDUSD,https://financefeeds.com/brent-crude-oil-price-89-08-tuesday-24-percent-monthly-slide-opec-plus-29-november-bull-92-bear-86/
+2026-11-30T00:00:00+00:00,Canada GDP,CA,medium,USDCAD,https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-11-30T00:00:00+00:00,China CFLP Manufacturing & Non-Manufacturing PMI,CN,medium,"AUDUSD, MACRO",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-12-01T00:00:00+00:00,Eurozone CPI (flash),EU,high,"EURUSD, DEUIDXEUR",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-12-01T00:00:00+00:00,US ISM Manufacturing PMI,US,high,"USA500IDXUSD, EURUSD, USDJPY",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-12-01T00:00:00+00:00,RBA Governor speech,AU,medium,AUDUSD,https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-12-02T00:00:00+00:00,Australia GDP,AU,high,AUDUSD,https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-12-02T00:00:00+00:00,US ADP Employment Report,US,medium,"USA500IDXUSD, EURUSD",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/

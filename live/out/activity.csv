@@ -1,12 +1,12 @@
 at,agent,level,msg
-2026-11-27T03:27:51+00:00,learning,info,"Account E: 48,655 predictions scored so far, recent hit rate 30%"
-2026-11-27T03:27:51+00:00,learning,info,"Account F: 80,619 predictions scored so far, recent hit rate 36%"
-2026-11-27T03:27:51+00:00,learning,info,"Account G: 1,319 predictions scored so far, recent hit rate 36%"
-2026-11-27T03:27:51+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-27T03:27:51+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-27T03:27:51+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-27T03:27:51+00:00,checks,error,Run finished: 79 of 82 checks passed
-2026-11-27T03:27:50+00:00,analyst,info,"AI analyst (hourly, account F): 15 predictions for hour 2026-11-27T02 · track record: 354 predictions scored, hit rate 43%"
+2026-11-27T13:12:19+00:00,learning,info,"Account E: 48,655 predictions scored so far, recent hit rate 30%"
+2026-11-27T13:12:19+00:00,learning,info,"Account F: 80,769 predictions scored so far, recent hit rate 41%"
+2026-11-27T13:12:19+00:00,learning,info,"Account G: 1,319 predictions scored so far, recent hit rate 41%"
+2026-11-27T13:12:19+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-27T13:12:19+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-27T13:12:19+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-27T13:12:19+00:00,checks,error,Run finished: 79 of 82 checks passed
+2026-11-27T13:12:17+00:00,analyst,info,"AI analyst (hourly, account F): 20 predictions for hour 2026-11-27T12 · track record: 369 predictions scored, hit rate 44%"
 2026-11-27T03:22:39+00:00,analyst,info,"AI analyst (daily, account E): 20 predictions for bar 2026-11-26 · track record: 79 predictions scored, hit rate 34%"
 2026-11-27T03:22:28+00:00,news,info,"News brief for 2026-11-26: 8 dated, sourced items kept of 8"
 2026-11-26T17:00:00+00:00,broker,info,"Account F bought 0.7 Nikkei 225 index (Japan) at 57,691.6 (simulated)"

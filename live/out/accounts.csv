@@ -1,8 +1,8 @@
 account,name,strategy,sizing,start_capital,equity,return_pct,cash,unrealised,realised,commissions,financing,conversion_fees,spread_cost_est,fills,rejects,open_positions,max_drawdown_pct,halted
 A,Trend 12m · conservative,tsmom_12m,conservative,200.0,200.0,0.0,200.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0,0,0.0,False
-B,Trend 12m · min ticket,tsmom_12m,min_ticket,200.0,168.89,-15.56,194.57,-25.68,0.0,4.0,1.4327,0.0,0.1,4,0,4,-21.54,False
+B,Trend 12m · min ticket,tsmom_12m,min_ticket,200.0,173.27,-13.37,194.57,-21.3,0.0,4.0,1.4327,0.0,0.1,4,0,4,-21.54,False
 C,Breakout 55/20 · conservative,donchian_55_20,conservative,200.0,200.0,0.0,200.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0,0,0.0,False
-D,Breakout 55/20 · min ticket,donchian_55_20,min_ticket,200.0,244.95,22.48,189.49,55.46,-4.6,5.0,0.8991,0.0115,0.1,5,0,3,-7.58,False
-E,"Atlantis Adaptive · multi-asset, self-learning",adaptive,"half Kelly, edge > cost",200.0,192.91,-3.55,199.85,-6.94,0.0,0.0,0.1472,0.0,0.03,2,0,2,-8.92,False
-F,"Atlantis Intraday · hourly, news + daily/weekly context",intraday,"half Kelly, edge > cost",200.0,199.68,-0.16,197.16,2.52,-2.5,0.0,0.2674,0.0712,0.56,49,0,1,-7.8,False
+D,Breakout 55/20 · min ticket,donchian_55_20,min_ticket,200.0,245.33,22.67,189.49,55.84,-4.6,5.0,0.8991,0.0115,0.1,5,0,3,-7.44,False
+E,"Atlantis Adaptive · multi-asset, self-learning",adaptive,"half Kelly, edge > cost",200.0,192.92,-3.54,199.85,-6.93,0.0,0.0,0.1472,0.0,0.03,2,0,2,-8.92,False
+F,"Atlantis Intraday · hourly, news + daily/weekly context",intraday,"half Kelly, edge > cost",200.0,202.4,1.2,197.16,5.24,-2.5,0.0,0.2674,0.0712,0.56,49,0,1,-7.8,False
 G,"Atlantis AI team · research agents decide, Atlantis approves",team,"half Kelly, edge > cost",200.0,193.62,-3.19,193.62,0.0,-6.38,0.0,0.0,0.0,0.1,4,0,0,-4.62,False

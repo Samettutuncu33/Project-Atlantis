@@ -42,3 +42,6 @@
 {"at": "2026-11-26T02:15:46+00:00", "task": "daily_analyst", "model": "claude-opus-5-5", "input_tokens": 4168, "cache_read": 0, "output_tokens": 848, "web_searches": 0, "usd": 0.0336}
 {"at": "2026-11-26T02:21:22+00:00", "task": "hourly_analyst", "model": "claude-opus-5-5", "input_tokens": 3378, "cache_read": 0, "output_tokens": 723, "web_searches": 0, "usd": 0.028}
 {"at": "2026-11-26T11:37:58+00:00", "task": "hourly_analyst", "model": "claude-opus-5-5", "input_tokens": 3380, "cache_read": 0, "output_tokens": 829, "web_searches": 0, "usd": 0.0301}
+{"at": "2026-11-27T03:22:28+00:00", "task": "news", "model": "claude-opus-5-5", "input_tokens": 89480, "cache_read": 0, "output_tokens": 5676, "web_searches": 6, "usd": 0.5314}
+{"at": "2026-11-27T03:22:39+00:00", "task": "daily_analyst", "model": "claude-opus-5-5", "input_tokens": 3622, "cache_read": 0, "output_tokens": 806, "web_searches": 0, "usd": 0.0306}
+{"at": "2026-11-27T03:27:50+00:00", "task": "hourly_analyst", "model": "claude-opus-5-5", "input_tokens": 3333, "cache_read": 0, "output_tokens": 769, "web_searches": 0, "usd": 0.0287}

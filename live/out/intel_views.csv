@@ -1,16 +1,13 @@
 symbol,name,tone,event_risk,reason
-NVDAUSUSD,NVIDIA,-0.4,high,Two-day AI selloff; closed -3.91% at $149.30 on inflation and tariff worries.
-USATECHIDXUSD,Nasdaq 100 index,-0.3,high,Nasdaq 100 briefly touched bear-market territory (-20% from Oct high) before recovering.
-USA500IDXUSD,S&P 500 index,-0.1,normal,"Closed -0.3% at 7,182.78 with broad breadth positive; Thanksgiving holiday thins trading."
-AMZNUSUSD,Amazon,-0.2,normal,Fell 3.14% in AI-linked selloff.
-GOOGLUSUSD,Alphabet (Google),-0.2,normal,Class A fell 2.13%.
-MSFTUSUSD,Microsoft,-0.1,normal,Fell 1.25%.
-AAPLUSUSD,Apple,0.0,normal,No dated Apple-specific news found.
-LIGHTCMDUSD,WTI crude oil,0.2,high,WTI +~3% to ~$85.22 after Houthi strike on Saudi refinery.
-XAUUSD,Gold,0.1,normal,"+0.5% to ~$3,574 as yields fell."
-BTCUSD,Bitcoin,-0.1,normal,Near $59-60k after a decline from the prior day; slight rebound with stocks.
-ETHUSD,Ethereum,0.0,normal,No dated Ether-specific news found.
-EURUSD,Euro / US dollar,0.0,normal,Dollar index -0.12%; Eurozone CPI due Dec 1.
-USDJPY,US dollar / Japanese yen,-0.1,normal,US 10y yield fell ~7bp to 4.86%.
-AUDUSD,Australian dollar / US dollar,0.0,normal,Australian GDP Dec 2 and RBA Governor speech Dec 1 ahead.
-USDCAD,US dollar / Canadian dollar,0.0,normal,Canada GDP Nov 30; oil strength.
+NVDAUSUSD,NVIDIA,-0.4,high,S&P Global downgrade warning; AI chip sentiment weak
+USATECHIDXUSD,Nasdaq 100 index,-0.2,high,Briefly entered bear market; hot inflation and Fed hike risk
+USA500IDXUSD,S&P 500 index,-0.1,normal,Mixed close; holiday-thin trading
+DEUIDXEUR,DAX 40 index (Germany),-0.2,normal,AI/tech selloff in Europe; HICP flash 1 Dec
+JPNIDXJPY,Nikkei 225 index (Japan),0.1,normal,"APAC rebound, but BoJ hawkish comments"
+USDJPY,US dollar / Japanese yen,-0.1,normal,BoJ Tamura hawkish; yields and dollar retreated
+LIGHTCMDUSD,WTI crude oil,0.3,high,Gulf supply incidents; OPEC+ meeting 29 Nov
+XAUUSD,Gold,-0.1,normal,Near 15-month low on rate-hike bets
+BTCUSD,Bitcoin,-0.1,normal,~$60.7k; continued ETF outflows
+ETHUSD,Ethereum,0.0,normal,No specific news found
+EURUSD,Euro / US dollar,0.0,high,Eurozone HICP flash 1 Dec
+AUDUSD,Australian dollar / US dollar,0.0,normal,Bullock speech and China PMI on 1 Dec

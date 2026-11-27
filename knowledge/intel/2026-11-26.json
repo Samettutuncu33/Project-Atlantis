@@ -1,0 +1,228 @@
+{
+ "date": "2026-11-26",
+ "made_at": "2026-11-27T03:22:28+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "US cash markets were closed on 26 Nov for Thanksgiving after a volatile Wednesday: the Nasdaq 100 briefly fell 20% below its October record before recovering to close down 0.6%, with the S&P 500 down 0.3%, against a hot inflation print and tariff concerns. Nvidia fell 3.9% after S&P Global warned of a possible credit downgrade over governance. European tech fell on AI and rate worries; APAC stocks rose afterwards. Brent rose about 2% toward $96.6 on Gulf supply incidents ahead of the 29 Nov OPEC+ meeting. Gold is near a 15-month low around $3,570-3,600, and BTC is around $60.6-60.9k with continued ETF outflows. Items marked T00:00Z are dated by day only.",
+ "calendar": [
+  {
+   "when": "2026-11-29T00:00:00+00:00",
+   "event": "OPEC+ meeting (last of 2026)",
+   "region": "GLOBAL",
+   "importance": "high",
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "source": "https://www.newsminimalist.com/articles/brent-price-range-for-the-week-opec-decision-and-supply-risks-beddd6de"
+  },
+  {
+   "when": "2026-12-01T00:00:00+00:00",
+   "event": "China RatingDog Manufacturing PMI",
+   "region": "CN",
+   "importance": "medium",
+   "symbols": [
+    "AUDUSD",
+    "MACRO"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  },
+  {
+   "when": "2026-12-01T00:00:00+00:00",
+   "event": "RBA Governor Bullock speech",
+   "region": "AU",
+   "importance": "medium",
+   "symbols": [
+    "AUDUSD"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  },
+  {
+   "when": "2026-12-01T00:00:00+00:00",
+   "event": "Eurozone HICP / Core HICP flash",
+   "region": "EU",
+   "importance": "high",
+   "symbols": [
+    "EURUSD",
+    "DEUIDXEUR"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  },
+  {
+   "when": "2026-12-01T15:00:00+00:00",
+   "event": "US JOLTS (October)",
+   "region": "US",
+   "importance": "medium",
+   "symbols": [
+    "MACRO",
+    "USA500IDXUSD"
+   ],
+   "source": "https://www.bls.gov/schedule/news_release/current_year.asp"
+  },
+  {
+   "when": "2026-12-01T00:00:00+00:00",
+   "event": "US ISM Manufacturing PMI (week of 30 Nov per calendar)",
+   "region": "US",
+   "importance": "high",
+   "symbols": [
+    "MACRO",
+    "USA500IDXUSD"
+   ],
+   "source": "https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/"
+  }
+ ],
+ "items": [
+  {
+   "symbols": [
+    "USATECHIDXUSD",
+    "USA500IDXUSD"
+   ],
+   "headline": "Nasdaq 100 briefly hits bear market territory before paring losses",
+   "source": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---nasdaq-briefly-hits-bear-market-territory-before-paring-losses---26-november-2026-26112026",
+   "published_at": "2026-11-26T00:00:00+00:00",
+   "tone": -0.3,
+   "relevance": "high",
+   "note": "S&P -0.3%, NDX -0.6% on 25 Nov; hot inflation and tariff concerns. Date-only timestamp."
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD"
+   ],
+   "headline": "Nvidia falls 3.9% as S&P Global warns of potential credit rating downgrade over governance",
+   "source": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---nasdaq-briefly-hits-bear-market-territory-before-paring-losses---26-november-2026-26112026",
+   "published_at": "2026-11-26T00:00:00+00:00",
+   "tone": -0.4,
+   "relevance": "high",
+   "note": "Governance/credit risk plus AI-chip sentiment pressure. Date-only timestamp."
+  },
+  {
+   "symbols": [
+    "JPNIDXJPY",
+    "USATECHIDXUSD",
+    "MACRO"
+   ],
+   "headline": "APAC stocks higher after Wall St rebound; WSJ's Timiraos on Fed Chair Warsh's choice on rate hikes",
+   "source": "https://www.newsquawk.com/headlines/newsquawk-daily-european-opening-news---26th-november-2026",
+   "published_at": "2026-11-26T06:32:00+00:00",
+   "tone": 0.1,
+   "relevance": "high",
+   "note": "Possible Fed tightening is a risk for USD and equities; US closed for Thanksgiving."
+  },
+  {
+   "symbols": [
+    "USDJPY"
+   ],
+   "headline": "BoJ's Tamura envisages 25bp hikes every few months, possibly 50bp if inflation risks materialise",
+   "source": "https://www.newsquawk.com/headlines/newsquawk-daily-european-opening-news---26th-november-2026",
+   "published_at": "2026-11-26T06:32:00+00:00",
+   "tone": -0.2,
+   "relevance": "medium",
+   "note": "Hawkish BoJ comments support JPY (negative for USDJPY)."
+  },
+  {
+   "symbols": [
+    "DEUIDXEUR"
+   ],
+   "headline": "European equities fall on renewed AI concerns; ASML -5.8%, Infineon -6.5%",
+   "source": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---nasdaq-briefly-hits-bear-market-territory-before-paring-losses---26-november-2026-26112026",
+   "published_at": "2026-11-26T00:00:00+00:00",
+   "tone": -0.3,
+   "relevance": "medium",
+   "note": "Tech weakness in DAX constituents. Date-only timestamp."
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "Brent gains 2.07% on 26 Nov as OPEC+ weighs 2027 quotas",
+   "source": "https://www.nationthailand.com/news/world/40073981",
+   "published_at": "2026-11-26T00:00:00+00:00",
+   "tone": 0.4,
+   "relevance": "high",
+   "note": "Hormuz mine strike reports and Jazan refinery attack; OPEC+ meets 29 Nov. Date-only timestamp."
+  },
+  {
+   "symbols": [
+    "XAUUSD"
+   ],
+   "headline": "Silver climbs 1.1% as gold holds near $3,579 after Wednesday's 15-month low",
+   "source": "https://www.usagold.com/daily-precious-metals-market-report-november-26-2026/",
+   "published_at": "2026-11-26T00:00:00+00:00",
+   "tone": -0.1,
+   "relevance": "medium",
+   "note": "Gold weak on rate-hike bets; date-only timestamp."
+  },
+  {
+   "symbols": [
+    "BTCUSD",
+    "ETHUSD"
+   ],
+   "headline": "Bitcoin trades at $60,621 in Nov. 26 market observation",
+   "source": "https://www.tokenpost.com/news/investing/62782",
+   "published_at": "2026-11-26T12:20:00+00:00",
+   "tone": -0.1,
+   "relevance": "medium",
+   "note": "Saxo notes a seventh day of bitcoin ETF outflows."
+  }
+ ],
+ "views": {
+  "NVDAUSUSD": {
+   "tone": -0.4,
+   "event_risk": "high",
+   "reason": "S&P Global downgrade warning; AI chip sentiment weak"
+  },
+  "USATECHIDXUSD": {
+   "tone": -0.2,
+   "event_risk": "high",
+   "reason": "Briefly entered bear market; hot inflation and Fed hike risk"
+  },
+  "USA500IDXUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Mixed close; holiday-thin trading"
+  },
+  "DEUIDXEUR": {
+   "tone": -0.2,
+   "event_risk": "normal",
+   "reason": "AI/tech selloff in Europe; HICP flash 1 Dec"
+  },
+  "JPNIDXJPY": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "APAC rebound, but BoJ hawkish comments"
+  },
+  "USDJPY": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "BoJ Tamura hawkish; yields and dollar retreated"
+  },
+  "LIGHTCMDUSD": {
+   "tone": 0.3,
+   "event_risk": "high",
+   "reason": "Gulf supply incidents; OPEC+ meeting 29 Nov"
+  },
+  "XAUUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "Near 15-month low on rate-hike bets"
+  },
+  "BTCUSD": {
+   "tone": -0.1,
+   "event_risk": "normal",
+   "reason": "~$60.7k; continued ETF outflows"
+  },
+  "ETHUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "No specific news found"
+  },
+  "EURUSD": {
+   "tone": 0.0,
+   "event_risk": "high",
+   "reason": "Eurozone HICP flash 1 Dec"
+  },
+  "AUDUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "Bullock speech and China PMI on 1 Dec"
+  }
+ }
+}

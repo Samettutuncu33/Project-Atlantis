@@ -1,8 +1,7 @@
 when,event,region,importance,symbols,source
-2026-11-30T00:00:00+00:00,Canada GDP,CA,medium,USDCAD,https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
-2026-11-30T00:00:00+00:00,China CFLP Manufacturing & Non-Manufacturing PMI,CN,medium,"AUDUSD, MACRO",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
-2026-12-01T00:00:00+00:00,Eurozone CPI (flash),EU,high,"EURUSD, DEUIDXEUR",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
-2026-12-01T00:00:00+00:00,US ISM Manufacturing PMI,US,high,"USA500IDXUSD, EURUSD, USDJPY",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
-2026-12-01T00:00:00+00:00,RBA Governor speech,AU,medium,AUDUSD,https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
-2026-12-02T00:00:00+00:00,Australia GDP,AU,high,AUDUSD,https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
-2026-12-02T00:00:00+00:00,US ADP Employment Report,US,medium,"USA500IDXUSD, EURUSD",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-11-29T00:00:00+00:00,OPEC+ meeting (last of 2026),GLOBAL,high,LIGHTCMDUSD,https://www.newsminimalist.com/articles/brent-price-range-for-the-week-opec-decision-and-supply-risks-beddd6de
+2026-12-01T00:00:00+00:00,China RatingDog Manufacturing PMI,CN,medium,"AUDUSD, MACRO",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-12-01T00:00:00+00:00,RBA Governor Bullock speech,AU,medium,AUDUSD,https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-12-01T00:00:00+00:00,Eurozone HICP / Core HICP flash,EU,high,"EURUSD, DEUIDXEUR",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-12-01T15:00:00+00:00,US JOLTS (October),US,medium,"MACRO, USA500IDXUSD",https://www.bls.gov/schedule/news_release/current_year.asp
+2026-12-01T00:00:00+00:00,US ISM Manufacturing PMI (week of 30 Nov per calendar),US,high,"MACRO, USA500IDXUSD",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/

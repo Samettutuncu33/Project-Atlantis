@@ -1,14 +1,18 @@
 at,agent,level,msg
-2026-11-27T13:12:19+00:00,learning,info,"Account E: 48,655 predictions scored so far, recent hit rate 30%"
-2026-11-27T13:12:19+00:00,learning,info,"Account F: 80,769 predictions scored so far, recent hit rate 41%"
-2026-11-27T13:12:19+00:00,learning,info,"Account G: 1,319 predictions scored so far, recent hit rate 41%"
-2026-11-27T13:12:19+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-27T13:12:19+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-27T13:12:19+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
-2026-11-27T13:12:19+00:00,checks,error,Run finished: 79 of 82 checks passed
-2026-11-27T13:12:17+00:00,analyst,info,"AI analyst (hourly, account F): 20 predictions for hour 2026-11-27T12 · track record: 369 predictions scored, hit rate 44%"
-2026-11-27T03:22:39+00:00,analyst,info,"AI analyst (daily, account E): 20 predictions for bar 2026-11-26 · track record: 79 predictions scored, hit rate 34%"
-2026-11-27T03:22:28+00:00,news,info,"News brief for 2026-11-26: 8 dated, sourced items kept of 8"
+2026-11-28T04:12:41+00:00,learning,info,"Account E: 48,675 predictions scored so far, recent hit rate 33%"
+2026-11-28T04:12:41+00:00,learning,info,"Account F: 80,913 predictions scored so far, recent hit rate 35%"
+2026-11-28T04:12:41+00:00,learning,info,"Account G: 1,319 predictions scored so far, recent hit rate 35%"
+2026-11-28T04:12:41+00:00,checks,error,data:spread_outlier: NVDAUSUSD 2026-11-27 close spread > 10x trailing same-weekday median
+2026-11-28T04:12:41+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-28T04:12:41+00:00,checks,error,data:spread_outlier: NVDAUSUSD 2026-11-27 close spread > 10x trailing same-weekday median
+2026-11-28T04:12:41+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-28T04:12:41+00:00,checks,error,data:spread_outlier: NVDAUSUSD 2026-11-27 close spread > 10x trailing same-weekday median
+2026-11-28T04:12:41+00:00,checks,error,data:return_outlier: NVDAUSUSD 2026-11-23 |log return| > 8 robust sigma
+2026-11-28T04:12:41+00:00,checks,error,Run finished: 79 of 85 checks passed
+2026-11-28T04:12:40+00:00,analyst,info,"AI analyst (hourly, account F): 2 predictions for hour 2026-11-27T23 · track record: 386 predictions scored, hit rate 46%"
+2026-11-28T04:06:38+00:00,analyst,info,"AI analyst (daily, account E): 20 predictions for bar 2026-11-27 · track record: 97 predictions scored, hit rate 42%"
+2026-11-28T04:06:25+00:00,news,info,"News brief for 2026-11-27: 8 dated, sourced items kept of 8"
+2026-11-27T16:00:00+00:00,broker,info,"Account F sold 0.2 Nikkei 225 index (Japan) at 58,699.4 (simulated)"
 2026-11-26T17:00:00+00:00,broker,info,"Account F bought 0.7 Nikkei 225 index (Japan) at 57,691.6 (simulated)"
 2026-11-26T16:00:00+00:00,broker,info,"Account F sold 0.7 Nikkei 225 index (Japan) at 57,828.4 (simulated)"
 2026-11-26T15:00:00+00:00,broker,info,"Account F bought 0.2 Nikkei 225 index (Japan) at 57,818.7 (simulated)"
@@ -55,7 +59,3 @@ at,agent,level,msg
 2026-11-13T04:00:00+00:00,broker,info,"Account F bought 0.7 Nikkei 225 index (Japan) at 61,237.6 (simulated)"
 2026-11-13T03:00:00+00:00,broker,info,"Account F sold 0.7 Nikkei 225 index (Japan) at 61,747.3 (simulated)"
 2026-11-12T00:00:00+00:00,broker,info,"Account F bought 0.7 Nikkei 225 index (Japan) at 61,400.5 (simulated)"
-2026-11-11T21:00:00+00:00,broker,info,"Account F sold 0.7 Nikkei 225 index (Japan) at 61,942.5 (simulated)"
-2026-11-11T16:00:00+00:00,broker,info,"Account F bought 0.7 Nikkei 225 index (Japan) at 62,117.6 (simulated)"
-2026-11-11T13:00:00+00:00,broker,info,"Account F sold 0.5 Nikkei 225 index (Japan) at 61,785.4 (simulated)"
-2026-11-11T00:00:00+00:00,broker,info,Account D bought 1000 US dollar / Japanese yen at 158.717 (simulated)

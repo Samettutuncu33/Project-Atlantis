@@ -1,0 +1,203 @@
+{
+ "date": "2026-11-27",
+ "made_at": "2026-11-28T04:06:25+00:00",
+ "agent": "atlantis-news-analyst (api)",
+ "summary": "US equities rebounded strongly on Nov 27, led by AI and semiconductor stocks; the S&P 500 gained 5.6% for the week, its best since April 2025. Gold rose roughly 2-3.75% and the US 10-year yield eased to 4.85%. Markets price about a 95% chance of a December Fed hike, and ECB officials (Nagel) signal further tightening after the BoE hike to 4%. Brent fell about 1.5% to ~$95 before Sunday's OPEC+ meeting on Nov 29. Bitcoin closed near $60.3k. Next week brings US ISM manufacturing (Dec 1), ISM services (Dec 3) and the November jobs report (Dec 4).",
+ "calendar": [
+  {
+   "when": "2026-11-29T00:00:00+00:00",
+   "event": "OPEC+ ministerial meeting (42nd ONOMM, JMMC)",
+   "region": "GLOBAL",
+   "importance": "high",
+   "symbols": [
+    "LIGHTCMDUSD",
+    "USDCAD"
+   ],
+   "source": "https://admiralmarkets.com/analytics/traders-blog/opec-meeting-november-29-2026-preview"
+  },
+  {
+   "when": "2026-12-01T15:00:00+00:00",
+   "event": "US ISM Manufacturing PMI (Nov)",
+   "region": "US",
+   "importance": "high",
+   "symbols": [
+    "USA500IDXUSD",
+    "EURUSD",
+    "USDJPY"
+   ],
+   "source": "https://tokenpost.com/news/investing/63938"
+  },
+  {
+   "when": "2026-12-01T15:00:00+00:00",
+   "event": "US JOLTS job openings",
+   "region": "US",
+   "importance": "medium",
+   "symbols": [
+    "MACRO"
+   ],
+   "source": "https://fedratecalc.com/us-economic-calendar/december-2026/"
+  },
+  {
+   "when": "2026-12-03T15:00:00+00:00",
+   "event": "US ISM Services PMI (Nov)",
+   "region": "US",
+   "importance": "medium",
+   "symbols": [
+    "USA500IDXUSD",
+    "EURUSD"
+   ],
+   "source": "https://tokenpost.com/news/investing/63938"
+  },
+  {
+   "when": "2026-12-04T13:30:00+00:00",
+   "event": "US Nonfarm Payrolls (Nov)",
+   "region": "US",
+   "importance": "high",
+   "symbols": [
+    "EURUSD",
+    "USDJPY",
+    "GBPUSD",
+    "XAUUSD",
+    "USA500IDXUSD",
+    "USATECHIDXUSD"
+   ],
+   "source": "https://tokenpost.com/news/investing/63938"
+  }
+ ],
+ "items": [
+  {
+   "symbols": [
+    "USA500IDXUSD",
+    "USATECHIDXUSD"
+   ],
+   "headline": "Markets News, Nov. 27, 2026: Major Indexes Surge as AI Stocks Rally; Dow Posts Best Week Since 2022",
+   "source": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-major-indexes-140450439.html",
+   "published_at": "2026-11-27T21:00:00+00:00",
+   "tone": 0.5,
+   "relevance": "high",
+   "note": "S&P +5.6% on week; chips led; recovery from prior week's heavy losses"
+  },
+  {
+   "symbols": [
+    "AMZNUSUSD"
+   ],
+   "headline": "Amazon climbed 4% to lead Dow advancers on Nov 27",
+   "source": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-major-indexes-140450439.html",
+   "published_at": "2026-11-27T21:00:00+00:00",
+   "tone": 0.3,
+   "relevance": "medium",
+   "note": "Mega-cap rebound"
+  },
+  {
+   "symbols": [
+    "NVDAUSUSD"
+   ],
+   "headline": "Stock Market Nov 27, 2026: Chips Lead, All Sectors Rise (Nvidia +0.80%)",
+   "source": "https://currentlogic.substack.com/p/dispersion-brief-nov-27-2026",
+   "published_at": "2026-11-27T22:00:00+00:00",
+   "tone": 0.1,
+   "relevance": "medium",
+   "note": "Nvidia lagged peer chip stocks in rebound"
+  },
+  {
+   "symbols": [
+    "XAUUSD"
+   ],
+   "headline": "Stock Market Today, Nov. 27: S&P 500 Posts Best Week in 19 Months; gold jumped 3.75% to $3,668.50",
+   "source": "https://www.fool.com/coverage/stock-market-today/2026/11/27/stock-market-today-nov-27-s-and-p-500-posts-best-week-in-19-months-as-ai-stocks-rebound/",
+   "published_at": "2026-11-27T21:30:00+00:00",
+   "tone": 0.4,
+   "relevance": "high",
+   "note": "Gold rebound; 10y yield down to 4.85%"
+  },
+  {
+   "symbols": [
+    "MACRO",
+    "EURUSD",
+    "GBPUSD"
+   ],
+   "headline": "Middle East energy shock pushes global central banks back into rate-hike cycle",
+   "source": "https://www.nation.com.pk/27-Nov-2026/middle-east-energy-shock-pushes-global-central-banks-back-rate-hike-cycle",
+   "published_at": "2026-11-27T12:00:00+00:00",
+   "tone": 0.0,
+   "relevance": "high",
+   "note": "BoE at 4%; ~95% priced Dec Fed hike; ECB hike expected"
+  },
+  {
+   "symbols": [
+    "EURUSD",
+    "DEUIDXEUR"
+   ],
+   "headline": "ECB's Nagel Signals Inflation to Stay Above 3% in 2027, Says May Have to Do More on Rates",
+   "source": "https://www.roic.ai/news/ecbs-nagel-signals-inflation-to-stay-above-3-in-2027-bolstering-case-for-december-hike-11-27-2026",
+   "published_at": "2026-11-27T12:00:00+00:00",
+   "tone": 0.2,
+   "relevance": "medium",
+   "note": "Hawkish ECB; tone refers to EURUSD"
+  },
+  {
+   "symbols": [
+    "LIGHTCMDUSD"
+   ],
+   "headline": "Oil Slips 1.52% Before OPEC+ Meeting as Petrobras Gains",
+   "source": "https://www.riotimesonline.com/oil-markets-latam-friday-november-27-2026/",
+   "published_at": "2026-11-27T22:00:00+00:00",
+   "tone": -0.2,
+   "relevance": "high",
+   "note": "Supply-glut worries vs Middle East risk; OPEC+ Nov 29"
+  },
+  {
+   "symbols": [
+    "BTCUSD"
+   ],
+   "headline": "Bitcoin closes Nov 27 at 60,341.47 (range 59,007-62,085)",
+   "source": "https://finance.yahoo.com/quote/BTC-USD/history/",
+   "published_at": "2026-11-27T23:59:00+00:00",
+   "tone": 0.0,
+   "relevance": "low",
+   "note": "Price data only"
+  }
+ ],
+ "views": {
+  "USA500IDXUSD": {
+   "tone": 0.4,
+   "event_risk": "high",
+   "reason": "Strong weekly rebound; ISM and NFP next week"
+  },
+  "USATECHIDXUSD": {
+   "tone": 0.4,
+   "event_risk": "high",
+   "reason": "AI/chip-led rally after volatile week"
+  },
+  "NVDAUSUSD": {
+   "tone": 0.1,
+   "event_risk": "normal",
+   "reason": "Lagged chip peers (+0.8%)"
+  },
+  "AMZNUSUSD": {
+   "tone": 0.3,
+   "event_risk": "normal",
+   "reason": "+4% leading Dow"
+  },
+  "XAUUSD": {
+   "tone": 0.3,
+   "event_risk": "high",
+   "reason": "Sharp rebound, falling yields; NFP Dec 4"
+  },
+  "LIGHTCMDUSD": {
+   "tone": -0.1,
+   "event_risk": "high",
+   "reason": "OPEC+ meeting Nov 29; glut concerns"
+  },
+  "EURUSD": {
+   "tone": 0.1,
+   "event_risk": "high",
+   "reason": "Hawkish ECB vs priced Fed hike"
+  },
+  "BTCUSD": {
+   "tone": 0.0,
+   "event_risk": "normal",
+   "reason": "Range-bound near $60k"
+  }
+ }
+}

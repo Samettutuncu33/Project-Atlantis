@@ -1,7 +1,6 @@
 when,event,region,importance,symbols,source
-2026-11-29T00:00:00+00:00,OPEC+ meeting (last of 2026),GLOBAL,high,LIGHTCMDUSD,https://www.newsminimalist.com/articles/brent-price-range-for-the-week-opec-decision-and-supply-risks-beddd6de
-2026-12-01T00:00:00+00:00,China RatingDog Manufacturing PMI,CN,medium,"AUDUSD, MACRO",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
-2026-12-01T00:00:00+00:00,RBA Governor Bullock speech,AU,medium,AUDUSD,https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
-2026-12-01T00:00:00+00:00,Eurozone HICP / Core HICP flash,EU,high,"EURUSD, DEUIDXEUR",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
-2026-12-01T15:00:00+00:00,US JOLTS (October),US,medium,"MACRO, USA500IDXUSD",https://www.bls.gov/schedule/news_release/current_year.asp
-2026-12-01T00:00:00+00:00,US ISM Manufacturing PMI (week of 30 Nov per calendar),US,high,"MACRO, USA500IDXUSD",https://www.litefinance.org/blog/analysts-opinions/weekly-economic-calendar-for-30112026-06122026/
+2026-11-29T00:00:00+00:00,"OPEC+ ministerial meeting (42nd ONOMM, JMMC)",GLOBAL,high,"LIGHTCMDUSD, USDCAD",https://admiralmarkets.com/analytics/traders-blog/opec-meeting-november-29-2026-preview
+2026-12-01T15:00:00+00:00,US ISM Manufacturing PMI (Nov),US,high,"USA500IDXUSD, EURUSD, USDJPY",https://tokenpost.com/news/investing/63938
+2026-12-01T15:00:00+00:00,US JOLTS job openings,US,medium,MACRO,https://fedratecalc.com/us-economic-calendar/december-2026/
+2026-12-03T15:00:00+00:00,US ISM Services PMI (Nov),US,medium,"USA500IDXUSD, EURUSD",https://tokenpost.com/news/investing/63938
+2026-12-04T13:30:00+00:00,US Nonfarm Payrolls (Nov),US,high,"EURUSD, USDJPY, GBPUSD, XAUUSD, USA500IDXUSD, USATECHIDXUSD",https://tokenpost.com/news/investing/63938
